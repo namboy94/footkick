@@ -1,0 +1,46 @@
+stages:
+  - clonemirror
+  - cleanup
+
+clone_master:
+  stage: clonemirror
+  only:
+    - master
+  script:
+    - cd
+    - git clone git@gitlab.namibsun.net:namboy94/footkick.git
+    - git clone git@gitlab.namibsun.net:namboy94/footkick.wiki.git
+
+    - cd footkick
+
+    - git push -u git@gitlab.com:namboy94/footkick.git master
+    - git push -u git@github.com:namboy94/footkick.git master
+    - git push -u git@bitbucket.org:namboy94/footkick.git master
+
+    - cd ../footkick.wiki
+
+    - git push -u git@gitlab.com:namboy94/footkick.wiki.git master
+    - git push -u git@github.com:namboy94/footkick.wiki.git master
+    - git push -u git@bitbucket.org:namboy94/footkick.git/wiki master
+
+clone_develop:
+  stage: clonemirror
+  only:
+    - develop
+  script:
+    - cd
+    - git clone -b develop git@gitlab.namibsun.net:namboy94/footkick.git footkick
+
+    - cd footkick
+
+    - git push -u git@gitlab.com:namboy94/footkick.git develop
+    - git push -u git@github.com:namboy94/footkick.git develop
+    - git push -u git@bitbucket.org:namboy94/footkick.git develop
+
+cleanup:
+  stage: cleanup
+  when: always
+  script:
+    - cd
+    - rm -rf footkick
+    - rm -rf footkick.wiki
