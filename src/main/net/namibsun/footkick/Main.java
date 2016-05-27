@@ -34,13 +34,19 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        // Gets Bundesliga
-        ArrayList<Team> bundesligaTeams = FootballHtmlParser.getLeagueInformation("germany", "bundesliga");
-        ArrayList<Match> bundesligaMatches = FootballHtmlParser.getMatchdayInformation("germany", "bundesliga");
-
-        System.out.println(bundesligaMatches.get(3).homeTeam);
-        System.out.println(bundesligaTeams.get(4).position);
-        System.out.println(bundesligaTeams.get(17).teamName);
+        if (args.length != 3){
+            System.out.println("Invalid amount of parameters");
+            System.out.println("Usage: <country>, <league>, [table|matchday]");
+        }
+        else if (!args[2].toLowerCase().equals("matchday") && !args[2].toLowerCase().equals("table")) {
+            System.out.println("Invalid mode");
+            System.out.println("Please use either 'table' or 'matchday'");
+        }
+        else {
+            String country = args[0];
+            String league = args[1];
+            // Get info and print
+        }
 
 
     }
