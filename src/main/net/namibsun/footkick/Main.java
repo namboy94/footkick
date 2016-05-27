@@ -38,6 +38,10 @@ public class Main {
         ArrayList<Team> bundesligaTeams = FootballHtmlParser.getLeagueInformation("germany", "bundesliga");
         ArrayList<Match> bundesligaMatches = FootballHtmlParser.getMatchdayInformation("germany", "bundesliga");
 
+        System.out.println(bundesligaMatches.get(3).homeTeam);
+        System.out.println(bundesligaTeams.get(4).position);
+        System.out.println(bundesligaTeams.get(17).teamName);
+
 
     }
 
