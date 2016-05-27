@@ -27,6 +27,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import javax.print.Doc;
+import javax.swing.text.html.HTML;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -35,18 +37,32 @@ import java.util.ArrayList;
  */
 public class FootballHtmlParser {
 
-    public static ArrayList<Team> getLeagueInformation(String country, String league) {
+    Document htmlPage;
+
+    /**
+     * Constructor for the FootballHtmlParser class that initializes class variables used by
+     * methods to get the league and matchday information
+     * @param country The country to be parsed
+     * @param league The league to be parsed
+     * @throws IOException when the selected country/league could not be read.
+     */
+    public FootballHtmlParser(String country, String league) throws IOException {
 
         String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
+        this.htmlPage = Jsoup.connect(livescoreUrl).get();
 
-        Document jsoupDocument = null;
-        try {
-            jsoupDocument = Jsoup.connect(livescoreUrl).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    }
 
-        assert jsoupDocument != null;
+    public ArrayList<Team> getLeagueInformation() {
+        return FootballHtmlParser.scrapeLeagueInformation(this.htmlPage);
+    }
+
+    public ArrayList<Match> getMatchdayInformation() {
+        return FootballHtmlParser.scrapeMatchdayInformation(this.htmlPage);
+    }
+
+    public static ArrayList<Team> scrapeLeagueInformation(Document jsoupDocument) {
+
         Elements leagueTeams = jsoupDocument.select(".team");
         Elements leagueStats = jsoupDocument.select(".pts");
 
@@ -58,37 +74,27 @@ public class FootballHtmlParser {
 
         while (teamPositionIndex < leagueTeams.size() && statsPositionIndex < leagueStats.size()) {
             Team team = new Team(leagueTeams.get(teamPositionIndex).text(),
-                                 leagueStats.get(statsPositionIndex).text(),
-                                 leagueStats.get(statsPositionIndex + 1).text(),
-                                 leagueStats.get(statsPositionIndex + 2).text(),
-                                 leagueStats.get(statsPositionIndex + 3).text(),
-                                 leagueStats.get(statsPositionIndex + 4).text(),
-                                 leagueStats.get(statsPositionIndex + 5).text(),
-                                 leagueStats.get(statsPositionIndex + 6).text(),
-                                 leagueStats.get(statsPositionIndex + 7).text(),
-                                 "" + teamPositionIndex);
+                    leagueStats.get(statsPositionIndex).text(),
+                    leagueStats.get(statsPositionIndex + 1).text(),
+                    leagueStats.get(statsPositionIndex + 2).text(),
+                    leagueStats.get(statsPositionIndex + 3).text(),
+                    leagueStats.get(statsPositionIndex + 4).text(),
+                    leagueStats.get(statsPositionIndex + 5).text(),
+                    leagueStats.get(statsPositionIndex + 6).text(),
+                    leagueStats.get(statsPositionIndex + 7).text(),
+                    "" + teamPositionIndex);
             teams.add(team);
             teamPositionIndex++;
             statsPositionIndex += 8;
         }
 
         return teams;
-
     }
 
-    public static ArrayList<Match> getMatchdayInformation(String country, String league) {
+    public static ArrayList<Match> scrapeMatchdayInformation(Document jsoupDocument) {
 
         ArrayList<Match> matches = new ArrayList<>();
-        String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
 
-        Document jsoupDocument = null;
-        try {
-            jsoupDocument = Jsoup.connect(livescoreUrl).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        assert jsoupDocument != null;
         Elements matchdayTeams = jsoupDocument.select(".ply");
         Elements matchdayTimes = jsoupDocument.select(".min");
         Elements matchdayScores = jsoupDocument.select(".sco");
@@ -103,6 +109,31 @@ public class FootballHtmlParser {
         }
 
         return matches;
+    }
+
+    public static ArrayList<Team> getLeagueInformation(String country, String league) {
+
+        String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
+
+        try {
+            Document jsoupDocument = Jsoup.connect(livescoreUrl).get();
+            return FootballHtmlParser.scrapeLeagueInformation(jsoupDocument);
+        } catch (IOException e) {
+            return new ArrayList<>();
+        }
+
+    }
+
+    public static ArrayList<Match> getMatchdayInformation(String country, String league) {
+
+        String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
+
+        try {
+            Document jsoupDocument = Jsoup.connect(livescoreUrl).get();
+            return FootballHtmlParser.scrapeMatchdayInformation(jsoupDocument);
+        } catch (IOException e) {
+            return new ArrayList<>();
+        }
 
     }
 }
