@@ -21,28 +21,30 @@ This file is part of jfworks.
     along with jfworks. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package net.namibsun.footkick;
-
-import net.namibsun.footkick.scraper.*;
-
-import java.util.ArrayList;
+package net.namibsun.footkick.scraper;
 
 /**
- * The Main Java Class
+ * Class that models a single football match
  */
-public class Main {
+public class Match {
 
-    public static void main(String[] args) throws Exception {
+    public String homeTeam;
+    public String awayTeam;
+    public String time;
+    public String score;
 
-        // Gets Bundesliga
-        ArrayList<Team> bundesligaTeams = FootballHtmlParser.getLeagueInformation("germany", "bundesliga");
-        ArrayList<Match> bundesligaMatches = FootballHtmlParser.getMatchdayInformation("germany", "bundesliga");
-
-        System.out.println(bundesligaMatches.get(3).homeTeam);
-        System.out.println(bundesligaTeams.get(4).position);
-        System.out.println(bundesligaTeams.get(17).teamName);
-
-
+    /**
+     * Constructor that stores the match information in public variables
+     * @param homeTeam the home team of the match
+     * @param awayTeam the away team of the match
+     * @param time the time left until the match starts or the current minute if the match is in progress
+     * @param score the current score of the match
+     */
+    Match(String homeTeam, String awayTeam, String time, String score) {
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
+        this.time = time;
+        this.score = score;
     }
 
 }
