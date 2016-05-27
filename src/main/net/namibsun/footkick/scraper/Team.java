@@ -37,7 +37,6 @@ public class Team {
     public String goalsAgainst;
     public String goalDifference;
     public String points;
-    public String position;
 
     /**
      * Constructor that Creates a new Team with the necessary attributes
@@ -50,7 +49,6 @@ public class Team {
      * @param goalsAgainst how often the team has conceded a goal
      * @param goalDifference the goal difference of the team
      * @param points how many points the team has earned so far
-     * @param position which position in the league th team is currently in
      */
     Team(String teamName,
          String matches,
@@ -60,8 +58,7 @@ public class Team {
          String goalsFor,
          String goalsAgainst,
          String goalDifference,
-         String points,
-         String position) {
+         String points) {
 
         this.teamName = teamName;
         this.matches = matches;
@@ -72,7 +69,6 @@ public class Team {
         this.goalsAgainst = goalsAgainst;
         this.goalDifference = goalDifference;
         this.points = points;
-        this.position = position;
 
     }
 

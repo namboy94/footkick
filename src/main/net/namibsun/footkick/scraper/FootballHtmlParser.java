@@ -27,8 +27,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import javax.print.Doc;
-import javax.swing.text.html.HTML;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -53,14 +51,27 @@ public class FootballHtmlParser {
 
     }
 
+    /**
+     * Gets the league information for an initialized FootballHtmlParser object
+     * @return the league information
+     */
     public ArrayList<Team> getLeagueInformation() {
         return FootballHtmlParser.scrapeLeagueInformation(this.htmlPage);
     }
 
+    /**
+     * Gets the matchday information for an initialized FootballHtmlParser object
+     * @return the matchday information
+     */
     public ArrayList<Match> getMatchdayInformation() {
         return FootballHtmlParser.scrapeMatchdayInformation(this.htmlPage);
     }
 
+    /**
+     * Scrapes a jsoup Document for league table information
+     * @param jsoupDocument the jsoup Document to parse
+     * @return an array list of parsed teams
+     */
     public static ArrayList<Team> scrapeLeagueInformation(Document jsoupDocument) {
 
         Elements leagueTeams = jsoupDocument.select(".team");
@@ -81,8 +92,7 @@ public class FootballHtmlParser {
                     leagueStats.get(statsPositionIndex + 4).text(),
                     leagueStats.get(statsPositionIndex + 5).text(),
                     leagueStats.get(statsPositionIndex + 6).text(),
-                    leagueStats.get(statsPositionIndex + 7).text(),
-                    "" + teamPositionIndex);
+                    leagueStats.get(statsPositionIndex + 7).text());
             teams.add(team);
             teamPositionIndex++;
             statsPositionIndex += 8;
@@ -91,6 +101,11 @@ public class FootballHtmlParser {
         return teams;
     }
 
+    /**
+     * Scrapes a jsoup Document object for matchday information
+     * @param jsoupDocument the jsoup Document to be parsed
+     * @return an array list of parsed matches
+     */
     public static ArrayList<Match> scrapeMatchdayInformation(Document jsoupDocument) {
 
         ArrayList<Match> matches = new ArrayList<>();
@@ -111,6 +126,12 @@ public class FootballHtmlParser {
         return matches;
     }
 
+    /**
+     * Gets the league information for a given country and league in a static context
+     * @param country the country to be searched for
+     * @param league the league to be searched for
+     * @return an array list of teams in the league table. If empty, the parsing failed
+     */
     public static ArrayList<Team> getLeagueInformation(String country, String league) {
 
         String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
@@ -124,6 +145,12 @@ public class FootballHtmlParser {
 
     }
 
+    /**
+     * Gets the matchday information or a given country and league in a static context
+     * @param country the country to be searched for
+     * @param league the league to be searched for
+     * @return an array list of matches on the current match day. If empty, the parsing failed
+     */
     public static ArrayList<Match> getMatchdayInformation(String country, String league) {
 
         String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
