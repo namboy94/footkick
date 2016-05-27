@@ -23,9 +23,7 @@ This file is part of jfworks.
 
 package net.namibsun.footkick;
 
-import net.namibsun.footkick.scraper.*;
-
-import java.util.ArrayList;
+import net.namibsun.footkick.structures.LeagueTable;
 
 /**
  * The Main Java Class
@@ -45,7 +43,12 @@ public class Main {
         else {
             String country = args[0];
             String league = args[1];
-            // Get info and print
+            String mode = args[2];
+
+            if (mode.equals("table")) {
+                LeagueTable leagueTable = new LeagueTable(country, league);
+                System.out.println(leagueTable.toMonoSpaceString());
+            }
         }
 
 
