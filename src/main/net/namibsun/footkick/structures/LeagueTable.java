@@ -31,6 +31,21 @@ public class LeagueTable {
     }
 
     /**
+     * Alternate constructor that does not parse the league table itself, but rather gets the
+     * team objects given via parameter
+     * @param country the country of the league table
+     * @param league the league of the league table
+     * @param teams the teams in the league table
+     */
+    public LeagueTable(String country, String league, ArrayList<Team> teams) {
+
+        this.country = country;
+        this.league = league;
+        this.teams = teams;
+
+    }
+
+    /**
      * Converts the league into a monospaced string
      * @return the formatted league table string
      */
