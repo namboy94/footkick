@@ -23,12 +23,21 @@ This file is part of jfworks.
 
 package net.namibsun.footkick;
 
+import net.namibsun.footkick.scraper.*;
+
+import java.util.ArrayList;
+
 /**
  * The Main Java Class
  */
 public class Main {
 
     public static void main(String[] args) throws Exception {
+
+        // Gets Bundesliga
+        ArrayList<Team> bundesligaTeams = FootballHtmlParser.getLeagueInformation("germany", "bundesliga");
+        ArrayList<Match> bundesligaMatches = FootballHtmlParser.getMatchdayInformation("germany", "bundesliga");
+
 
     }
 
