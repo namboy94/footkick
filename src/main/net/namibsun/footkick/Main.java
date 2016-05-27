@@ -24,6 +24,7 @@ This file is part of jfworks.
 package net.namibsun.footkick;
 
 import net.namibsun.footkick.structures.LeagueTable;
+import net.namibsun.footkick.structures.MatchDay;
 
 /**
  * The Main Java Class
@@ -48,6 +49,10 @@ public class Main {
             if (mode.equals("table")) {
                 LeagueTable leagueTable = new LeagueTable(country, league);
                 System.out.println(leagueTable.toMonoSpaceString());
+            }
+            else if (mode.equals("matchday")) {
+                MatchDay matchDay = new MatchDay(country, league);
+                System.out.println(matchDay.toMonoSpaceString());
             }
         }
 

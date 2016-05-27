@@ -16,15 +16,24 @@ public class LeagueTable {
     String league;
     ArrayList<Team> teams;
 
+    /**
+     * Constructor that automatically parses the league table for the specified country an league
+     * @param country the country to be used
+     * @param league the league to be used
+     * @throws IOException if the parsing failed
+     */
     public LeagueTable(String country, String league) throws IOException{
 
         this.country = country;
         this.league = league;
-        FootballHtmlParser parser = new FootballHtmlParser(country, league);
-        this.teams = parser.getLeagueInformation();
+        this.teams = FootballHtmlParser.getLeagueInformation(country, league);
 
     }
 
+    /**
+     * Converts the league into a monospaced string
+     * @return the formatted league table string
+     */
     public String toMonoSpaceString() {
 
         int longestTeamName = 0;
