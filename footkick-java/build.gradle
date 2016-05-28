@@ -20,24 +20,22 @@ This file is part of footkick.
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
+//noinspection GrUnresolvedAccess
+apply plugin: 'java'
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
+//noinspection GroovyUnusedAssignment
+version = 0.1
 
-allprojects {
-    repositories {
-        jcenter()
+//noinspection GroovyAssignabilityCheck
+jar {
+    manifest {
+        attributes 'Main-Class': 'net.namibsun.footkick.Main'
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+//noinspection GroovyAssignabilityCheck
+dependencies {
+    compile "org.jsoup:jsoup:1.9.2"
+
+    testCompile 'junit:junit:4.12'
 }

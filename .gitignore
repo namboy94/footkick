@@ -1,3 +1,5 @@
 .idea/
-footkick.iml
-build
+build/
+footkick-java/.gradle/
+footkick-java/build/
+footkick-java/footkick-java.iml
