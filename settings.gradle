@@ -1,4 +1,4 @@
 rootProject.name = 'footkick'
 include ':footkick-java'
-//include 'footkick-android'
+include 'footkick-android'
 
