@@ -35,18 +35,45 @@ import java.util.ArrayList;
  */
 public class FootballHtmlParser {
 
-    public static ArrayList<Team> getLeagueInformation(String country, String league) {
+    Document htmlPage;
+
+    /**
+     * Constructor for the FootballHtmlParser class that initializes class variables used by
+     * methods to get the league and matchday information
+     * @param country The country to be parsed
+     * @param league The league to be parsed
+     * @throws IOException when the selected country/league could not be read.
+     */
+    public FootballHtmlParser(String country, String league) throws IOException {
 
         String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
+        this.htmlPage = Jsoup.connect(livescoreUrl).get();
 
-        Document jsoupDocument = null;
-        try {
-            jsoupDocument = Jsoup.connect(livescoreUrl).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    }
 
-        assert jsoupDocument != null;
+    /**
+     * Gets the league information for an initialized FootballHtmlParser object
+     * @return the league information
+     */
+    public ArrayList<Team> getLeagueInformation() {
+        return FootballHtmlParser.scrapeLeagueInformation(this.htmlPage);
+    }
+
+    /**
+     * Gets the matchday information for an initialized FootballHtmlParser object
+     * @return the matchday information
+     */
+    public ArrayList<Match> getMatchdayInformation() {
+        return FootballHtmlParser.scrapeMatchdayInformation(this.htmlPage);
+    }
+
+    /**
+     * Scrapes a jsoup Document for league table information
+     * @param jsoupDocument the jsoup Document to parse
+     * @return an array list of parsed teams
+     */
+    public static ArrayList<Team> scrapeLeagueInformation(Document jsoupDocument) {
+
         Elements leagueTeams = jsoupDocument.select(".team");
         Elements leagueStats = jsoupDocument.select(".pts");
 
@@ -58,37 +85,31 @@ public class FootballHtmlParser {
 
         while (teamPositionIndex < leagueTeams.size() && statsPositionIndex < leagueStats.size()) {
             Team team = new Team(leagueTeams.get(teamPositionIndex).text(),
-                                 leagueStats.get(statsPositionIndex).text(),
-                                 leagueStats.get(statsPositionIndex + 1).text(),
-                                 leagueStats.get(statsPositionIndex + 2).text(),
-                                 leagueStats.get(statsPositionIndex + 3).text(),
-                                 leagueStats.get(statsPositionIndex + 4).text(),
-                                 leagueStats.get(statsPositionIndex + 5).text(),
-                                 leagueStats.get(statsPositionIndex + 6).text(),
-                                 leagueStats.get(statsPositionIndex + 7).text(),
-                                 "" + teamPositionIndex);
+                    leagueStats.get(statsPositionIndex).text(),
+                    leagueStats.get(statsPositionIndex + 1).text(),
+                    leagueStats.get(statsPositionIndex + 2).text(),
+                    leagueStats.get(statsPositionIndex + 3).text(),
+                    leagueStats.get(statsPositionIndex + 4).text(),
+                    leagueStats.get(statsPositionIndex + 5).text(),
+                    leagueStats.get(statsPositionIndex + 6).text(),
+                    leagueStats.get(statsPositionIndex + 7).text());
             teams.add(team);
             teamPositionIndex++;
             statsPositionIndex += 8;
         }
 
         return teams;
-
     }
 
-    public static ArrayList<Match> getMatchdayInformation(String country, String league) {
+    /**
+     * Scrapes a jsoup Document object for matchday information
+     * @param jsoupDocument the jsoup Document to be parsed
+     * @return an array list of parsed matches
+     */
+    public static ArrayList<Match> scrapeMatchdayInformation(Document jsoupDocument) {
 
         ArrayList<Match> matches = new ArrayList<>();
-        String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
 
-        Document jsoupDocument = null;
-        try {
-            jsoupDocument = Jsoup.connect(livescoreUrl).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        assert jsoupDocument != null;
         Elements matchdayTeams = jsoupDocument.select(".ply");
         Elements matchdayTimes = jsoupDocument.select(".min");
         Elements matchdayScores = jsoupDocument.select(".sco");
@@ -103,6 +124,43 @@ public class FootballHtmlParser {
         }
 
         return matches;
+    }
+
+    /**
+     * Gets the league information for a given country and league in a static context
+     * @param country the country to be searched for
+     * @param league the league to be searched for
+     * @return an array list of teams in the league table. If empty, the parsing failed
+     */
+    public static ArrayList<Team> getLeagueInformation(String country, String league) {
+
+        String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
+
+        try {
+            Document jsoupDocument = Jsoup.connect(livescoreUrl).get();
+            return FootballHtmlParser.scrapeLeagueInformation(jsoupDocument);
+        } catch (IOException e) {
+            return new ArrayList<>();
+        }
+
+    }
+
+    /**
+     * Gets the matchday information or a given country and league in a static context
+     * @param country the country to be searched for
+     * @param league the league to be searched for
+     * @return an array list of matches on the current match day. If empty, the parsing failed
+     */
+    public static ArrayList<Match> getMatchdayInformation(String country, String league) {
+
+        String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
+
+        try {
+            Document jsoupDocument = Jsoup.connect(livescoreUrl).get();
+            return FootballHtmlParser.scrapeMatchdayInformation(jsoupDocument);
+        } catch (IOException e) {
+            return new ArrayList<>();
+        }
 
     }
 }

@@ -23,9 +23,9 @@ This file is part of jfworks.
 
 package net.namibsun.footkick;
 
-import net.namibsun.footkick.scraper.*;
-
-import java.util.ArrayList;
+import net.namibsun.footkick.structures.League;
+import net.namibsun.footkick.structures.LeagueTable;
+import net.namibsun.footkick.structures.MatchDay;
 
 /**
  * The Main Java Class
@@ -34,14 +34,36 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        // Gets Bundesliga
-        ArrayList<Team> bundesligaTeams = FootballHtmlParser.getLeagueInformation("germany", "bundesliga");
-        ArrayList<Match> bundesligaMatches = FootballHtmlParser.getMatchdayInformation("germany", "bundesliga");
+        if (args.length != 3){
+            System.out.println("Invalid amount of parameters");
+            System.out.println("Usage: <country>, <league>, [table|matchday|summary]");
+        }
+        else if (!args[2].toLowerCase().equals("matchday")
+                && !args[2].toLowerCase().equals("table")
+                && !args[2].toLowerCase().equals("summary")) {
+            System.out.println("Invalid mode");
+            System.out.println("Please use either 'table', 'matchday' or 'summary'");
+        }
+        else {
+            String country = args[0];
+            String league = args[1];
+            String mode = args[2];
 
-        System.out.println(bundesligaMatches.get(3).homeTeam);
-        System.out.println(bundesligaTeams.get(4).position);
-        System.out.println(bundesligaTeams.get(17).teamName);
-
+            switch (mode) {
+                case "table":
+                    LeagueTable leagueTable = new LeagueTable(country, league);
+                    System.out.println(leagueTable.toMonoSpaceString());
+                    break;
+                case "matchday":
+                    MatchDay matchDay = new MatchDay(country, league);
+                    System.out.println(matchDay.toMonoSpaceString());
+                    break;
+                case "summary":
+                    League leagueObject = new League(country, league);
+                    System.out.println(leagueObject.toMonoSpaceString());
+                    break;
+            }
+        }
 
     }
 
