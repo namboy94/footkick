@@ -23,6 +23,9 @@ This file is part of footkick.
 //noinspection GrUnresolvedAccess
 apply plugin: 'java'
 
+sourceCompatibility= 1.7
+targetCompatibility= 1.7
+
 //noinspection GroovyUnusedAssignment
 version = 0.1
 

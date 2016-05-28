@@ -20,11 +20,11 @@ This file is part of footkick.
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package net.namibsun.footkick;
+package net.namibsun.footkick_java;
 
-import net.namibsun.footkick.structures.League;
-import net.namibsun.footkick.structures.LeagueTable;
-import net.namibsun.footkick.structures.MatchDay;
+import net.namibsun.footkick_java.structures.League;
+import net.namibsun.footkick_java.structures.LeagueTable;
+import net.namibsun.footkick_java.structures.MatchDay;
 
 /**
  * The Main Java Class

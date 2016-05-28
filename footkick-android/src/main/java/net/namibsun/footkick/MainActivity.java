@@ -23,6 +23,7 @@ This file is part of footkick.
 package net.namibsun.footkick;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,19 +34,33 @@ import android.view.MenuItem;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import net.namibsun.footkick_java.structures.League;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //REMOVE THIS
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TableLayout table = (TableLayout) findViewById(R.id.table);
-        TableRow newRow = new TableRow(table.getContext());
-        TextView text = new TextView(table.getContext());
-        text.setText("TEst");
-        newRow.addView(text);
-        table.addView(newRow);
+        try {
+            League league = new League("germany", "bundesliga");
+            TableLayout table = (TableLayout) findViewById(R.id.table);
+            TableRow newRow = new TableRow(table.getContext());
+            TextView text = new TextView(table.getContext());
+            text.setText(league.toMonoSpaceString());
+            newRow.addView(text);
+            table.addView(newRow);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

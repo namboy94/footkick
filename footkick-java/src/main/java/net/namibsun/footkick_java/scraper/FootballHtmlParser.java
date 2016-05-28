@@ -20,7 +20,7 @@ This file is part of footkick.
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package net.namibsun.footkick.scraper;
+package net.namibsun.footkick_java.scraper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

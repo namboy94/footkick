@@ -19,9 +19,9 @@ This file is part of footkick.
     You should have received a copy of the GNU General Public License
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
-package net.namibsun.footkick.structures;
+package net.namibsun.footkick_java.structures;
 
-import net.namibsun.footkick.scraper.FootballHtmlParser;
+import net.namibsun.footkick_java.scraper.FootballHtmlParser;
 
 import java.io.IOException;
 
