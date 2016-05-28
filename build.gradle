@@ -20,10 +20,8 @@ This file is part of footkick.
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-//noinspection GrUnresolvedAccess
 apply plugin: 'java'
 
-//noinspection GroovyUnusedAssignment
 version = 0.1
 
 //noinspection GroovyAssignabilityCheck
@@ -37,7 +35,6 @@ repositories {
     jcenter()
 }
 
-//noinspection GroovyAssignabilityCheck
 dependencies {
     compile "org.jsoup:jsoup:1.9.2"
 
