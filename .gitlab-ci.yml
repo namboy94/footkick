@@ -45,10 +45,10 @@ build_jar:
     - master
   script:
     - cd
-    - cd footkick
+    - cd footkick/footkick-java
     - gradle build
-    - mv build/libs/* ../footkick.wiki/builds/jar
-    - cd ../footkick.wiki
+    - mv build/libs/* ../../footkick.wiki/builds/jar
+    - cd ../../footkick.wiki
     - git add --all
     - git commit -m "Added build"
 
