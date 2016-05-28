@@ -23,6 +23,7 @@ This file is part of jfworks.
 
 package net.namibsun.footkick;
 
+import net.namibsun.footkick.structures.League;
 import net.namibsun.footkick.structures.LeagueTable;
 import net.namibsun.footkick.structures.MatchDay;
 
@@ -46,6 +47,10 @@ public class Main {
             String league = args[1];
             String mode = args[2];
 
+            League leagueObject = new League(country, league);
+            System.out.println(leagueObject.toMonoSpaceString());
+
+            /*
             if (mode.equals("table")) {
                 LeagueTable leagueTable = new LeagueTable(country, league);
                 System.out.println(leagueTable.toMonoSpaceString());
@@ -53,7 +58,7 @@ public class Main {
             else if (mode.equals("matchday")) {
                 MatchDay matchDay = new MatchDay(country, league);
                 System.out.println(matchDay.toMonoSpaceString());
-            }
+            }*/
         }
 
 
