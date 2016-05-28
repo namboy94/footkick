@@ -1,5 +1,7 @@
 stages:
   - clonemirror
+  - build
+  - upload
   - cleanup
 
 clone_master:
@@ -9,7 +11,7 @@ clone_master:
   script:
     - cd
     - git clone git@gitlab.namibsun.net:namboy94/footkick.git
-    - git clone git@gitlab.namibsun.net:namboy94/footkick.wiki.git
+    - #git clone git@gitlab.namibsun.net:namboy94/footkick.wiki.git
 
     - cd footkick
 
@@ -19,9 +21,9 @@ clone_master:
 
     - cd ../footkick.wiki
 
-    - git push -u git@gitlab.com:namboy94/footkick.wiki.git master
-    - git push -u git@github.com:namboy94/footkick.wiki.git master
-    - git push -u git@bitbucket.org:namboy94/footkick.git/wiki master
+    - #git push -u git@gitlab.com:namboy94/footkick.wiki.git master
+    - #git push -u git@github.com:namboy94/footkick.wiki.git master
+    - #git push -u git@bitbucket.org:namboy94/footkick.git/wiki master
 
 clone_develop:
   stage: clonemirror
@@ -36,6 +38,28 @@ clone_develop:
     - git push -u git@gitlab.com:namboy94/footkick.git develop
     - git push -u git@github.com:namboy94/footkick.git develop
     - git push -u git@bitbucket.org:namboy94/footkick.git develop
+
+build_jar:
+  stage: build
+  only:
+    - master
+  script:
+    - cd
+    - cd footkick
+    - gradle build
+    - mv build/libs/* ../footkick.wiki/builds/jar
+    - cd ../footkick.wiki
+    - git add --all
+    - git commit -m "Added build"
+
+upload_builds:
+  stage: upload
+  only:
+    - master
+  script:
+    - cd
+    - cd footkick.wiki
+    - git push -u origin master
 
 cleanup:
   stage: cleanup
