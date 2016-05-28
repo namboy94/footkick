@@ -47,9 +47,19 @@ build_jar:
     - cd
     - cd footkick
     - gradle build
-    - mv build/libs/* ../footkick.wiki/
+    - mv build/libs/* ../footkick.wiki/builds/jar
+    - cd ../footkick.wiki
+    - git add --all
+    - git commit -m "Added build"
 
-
+upload_builds:
+  stage: upload
+  only:
+    - master
+  script:
+    - cd
+    - cd footkick.wiki
+    - git push -u origin master
 
 cleanup:
   stage: cleanup
