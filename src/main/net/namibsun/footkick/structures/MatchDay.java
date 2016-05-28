@@ -1,9 +1,7 @@
 package net.namibsun.footkick.structures;
 
-import com.google.common.base.Strings;
 import net.namibsun.footkick.scraper.FootballHtmlParser;
 import net.namibsun.footkick.scraper.Match;
-import net.namibsun.footkick.scraper.Team;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,10 +63,10 @@ public class MatchDay {
         String formatted = "";
 
         for (Match match : this.matches) {
-            formatted += Strings.padEnd(match.time, 3, ' ');
-            formatted += Strings.padStart(match.homeTeam, longestHomeTeamLength + 1, ' ');
-            formatted += " " + Strings.padEnd(match.score, 5, ' ') + " ";
-            formatted += Strings.padEnd(match.awayTeam, longestAwayTeamLength + 1, ' ');
+            formatted += League.padRight(match.time, 3);
+            formatted += League.padLeft(match.homeTeam, longestHomeTeamLength + 1);
+            formatted += " " + League.padRight(match.score, 5) + " ";
+            formatted += League.padRight(match.awayTeam, longestAwayTeamLength + 1);
             formatted += "\n";
         }
 

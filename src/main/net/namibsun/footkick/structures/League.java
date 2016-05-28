@@ -45,4 +45,24 @@ public class League {
 
     }
 
+    /**
+     * Pads a string to the left by a specified amount with spaces
+     * @param string the string to be padded
+     * @param amount the amount of characters the string should be (at least)
+     * @return the padded String
+     */
+    public static String padLeft(String string, int amount) {
+        return String.format("%1$" + amount + "s", string);
+    }
+
+    /**
+     * Pads a string to the right by a specified amount with spaces
+     * @param string the string to be padded
+     * @param amount the amount of characters the string should be (at least)
+     * @return the padded String
+     */
+    public static String padRight(String string, int amount) {
+        return String.format("%1$-" + amount + "s", string);
+    }
+
 }

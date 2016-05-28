@@ -36,31 +36,34 @@ public class Main {
 
         if (args.length != 3){
             System.out.println("Invalid amount of parameters");
-            System.out.println("Usage: <country>, <league>, [table|matchday]");
+            System.out.println("Usage: <country>, <league>, [table|matchday|summary]");
         }
-        else if (!args[2].toLowerCase().equals("matchday") && !args[2].toLowerCase().equals("table")) {
+        else if (!args[2].toLowerCase().equals("matchday")
+                && !args[2].toLowerCase().equals("table")
+                && !args[2].toLowerCase().equals("summary")) {
             System.out.println("Invalid mode");
-            System.out.println("Please use either 'table' or 'matchday'");
+            System.out.println("Please use either 'table', 'matchday' or 'summary'");
         }
         else {
             String country = args[0];
             String league = args[1];
             String mode = args[2];
 
-            League leagueObject = new League(country, league);
-            System.out.println(leagueObject.toMonoSpaceString());
-
-            /*
-            if (mode.equals("table")) {
-                LeagueTable leagueTable = new LeagueTable(country, league);
-                System.out.println(leagueTable.toMonoSpaceString());
+            switch (mode) {
+                case "table":
+                    LeagueTable leagueTable = new LeagueTable(country, league);
+                    System.out.println(leagueTable.toMonoSpaceString());
+                    break;
+                case "matchday":
+                    MatchDay matchDay = new MatchDay(country, league);
+                    System.out.println(matchDay.toMonoSpaceString());
+                    break;
+                case "summary":
+                    League leagueObject = new League(country, league);
+                    System.out.println(leagueObject.toMonoSpaceString());
+                    break;
             }
-            else if (mode.equals("matchday")) {
-                MatchDay matchDay = new MatchDay(country, league);
-                System.out.println(matchDay.toMonoSpaceString());
-            }*/
         }
-
 
     }
 
