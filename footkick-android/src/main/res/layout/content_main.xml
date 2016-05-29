@@ -1,8 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+    <Button
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:scrollbars="none"
-            android:id="@+id/leagueTableScroller"
-            android:layout_weight="1">
-</ScrollView>
+            android:layout_height="wrap_content"
+            android:id="@+id/switchButton"/>
+
+    <ViewSwitcher
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/switchButton"
+            android:id="@+id/leagueViewSwitcher">
+    <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scrollbars="none"
+                android:id="@+id/leagueTableScroller">
+        <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TableRow>
+                <TextView android:text="Pos" />
+                <TextView android:text="Team" />
+                <TextView android:text="Position" />
+                <TextView android:text="Position" />
+                <TextView android:text="Position" />
+                <TextView android:text="Position" />
+
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+        <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scrollbars="none"
+                android:id="@+id/matchDayScroller">
+        </ScrollView>
+    </ViewSwitcher>
+</RelativeLayout>

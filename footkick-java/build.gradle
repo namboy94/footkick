@@ -34,7 +34,8 @@ jar {
     manifest {
         attributes 'Main-Class': 'net.namibsun.footkick.java.Main'
     }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    //This line is needed to compile a standalone jar, but breaks android builds.
+    //from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 //noinspection GroovyAssignabilityCheck

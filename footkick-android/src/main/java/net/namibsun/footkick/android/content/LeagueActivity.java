@@ -24,10 +24,9 @@ package net.namibsun.footkick.android.content;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.util.Log;
+import android.view.View;
+import android.widget.*;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.java.scraper.Match;
 import net.namibsun.footkick.java.scraper.Team;
@@ -49,11 +48,29 @@ public class LeagueActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Bundle bundle = this.getIntent().getExtras();
+        final Bundle bundle = this.getIntent().getExtras();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.populateData(bundle.getString("country"), bundle.getString("league"));
+
+        final Button switchButton = (Button) this.findViewById(R.id.switchButton);
+        switchButton.setText("Matchday");
+        switchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String buttonText = switchButton.getText().toString();
+                if (buttonText.equals("Matchday")) {
+                    switchButton.setText("League Table");
+                } else {
+                    switchButton.setText("Matchday");
+                }
+
+                ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.leagueViewSwitcher);
+                switcher.showNext();
+            }
+        });
+
     }
 
     private void populateData(String country, String league) {
@@ -64,7 +81,7 @@ public class LeagueActivity extends AppCompatActivity{
             ArrayList<Match> matches = leagueData.getMatches();
 
             this.fillLeagueTable(teams);
-            //this.fillMatchday(matches);
+            this.fillMatchday(matches);
 
         } catch (IOException e) {
         }
@@ -88,6 +105,7 @@ public class LeagueActivity extends AppCompatActivity{
             for (String dataElement : data) {
                 TextView dataText = new TextView(this);
                 dataText.setText(dataElement);
+                dataText.setPadding(5,0,5,0);
                 teamRow.addView(dataText);
             }
 
@@ -99,10 +117,9 @@ public class LeagueActivity extends AppCompatActivity{
 
     }
 
-    /*
     private void fillMatchday(ArrayList<Match> matches) {
 
-        ScrollView scroller = this.findViewById(R.id.matchDayScroller);
+        ScrollView scroller = (ScrollView) this.findViewById(R.id.matchDayScroller);
         TableLayout matchDayTable = new TableLayout(this);
 
         for (Match match : matches) {
@@ -123,6 +140,4 @@ public class LeagueActivity extends AppCompatActivity{
         scroller.addView(matchDayTable);
 
     }
-    */
-
 }
