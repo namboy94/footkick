@@ -1,7 +1,7 @@
 stages:
   - clonemirror
-  - build-android
-  - build-java
+  - androidbuild
+  - javabuild
   - upload
   - cleanup
 
@@ -22,9 +22,9 @@ clone_master:
 
     - cd ../footkick.wiki
 
-    - #git push -u git@gitlab.com:namboy94/footkick.wiki.git master
-    - #git push -u git@github.com:namboy94/footkick.wiki.git master
-    - #git push -u git@bitbucket.org:namboy94/footkick.git/wiki master
+    #- git push -u git@gitlab.com:namboy94/footkick.wiki.git master
+    #- git push -u git@github.com:namboy94/footkick.wiki.git master
+    #- git push -u git@bitbucket.org:namboy94/footkick.git/wiki master
 
 clone_develop:
   stage: clonemirror
@@ -41,8 +41,9 @@ clone_develop:
     - git push -u git@bitbucket.org:namboy94/footkick.git develop
 
 build_android:
-  stage: build-android
-  only: master
+  stage: androidbuild
+  only:
+    - master
   script:
     - cd
     - cd footkick
@@ -52,7 +53,7 @@ build_android:
     - cp footkick-android/build/outputs/apk/* ../footkick.wiki/builds/apk
 
 build_jar:
-  stage: build-java
+  stage: javabuild
   only:
     - master
   script:
