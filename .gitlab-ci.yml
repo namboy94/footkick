@@ -1,5 +1,8 @@
 stages:
   - clonemirror
+  - androidbuild
+  - javabuild
+  - upload
   - cleanup
 
 clone_master:
@@ -19,9 +22,9 @@ clone_master:
 
     - cd ../footkick.wiki
 
-    - git push -u git@gitlab.com:namboy94/footkick.wiki.git master
-    - git push -u git@github.com:namboy94/footkick.wiki.git master
-    - git push -u git@bitbucket.org:namboy94/footkick.git/wiki master
+    #- git push -u git@gitlab.com:namboy94/footkick.wiki.git master
+    #- git push -u git@github.com:namboy94/footkick.wiki.git master
+    #- git push -u git@bitbucket.org:namboy94/footkick.git/wiki master
 
 clone_develop:
   stage: clonemirror
@@ -36,6 +39,42 @@ clone_develop:
     - git push -u git@gitlab.com:namboy94/footkick.git develop
     - git push -u git@github.com:namboy94/footkick.git develop
     - git push -u git@bitbucket.org:namboy94/footkick.git develop
+
+build_android:
+  stage: androidbuild
+  only:
+    - master
+  script:
+    - cd
+    - cd footkick
+    - python releasebuildprepare.py
+    - bash gradlew assembleRelease
+    - rm footkick-android/build/outputs/apk/footkick-android-release-unaligned.apk
+    - cp footkick-android/build/outputs/apk/* ../footkick.wiki/builds/apk
+
+build_jar:
+  stage: javabuild
+  only:
+    - master
+  script:
+    - cd
+    - cd footkick/footkick-java
+    - rm build.gradle
+    - mv altbuild.gradle build.gradle
+    - gradle build
+    - mv build/libs/* ../../footkick.wiki/builds/jar
+    - cd ../../footkick.wiki
+    - git add --all
+    - git commit -m "Added builds"
+
+upload_builds:
+  stage: upload
+  only:
+    - master
+  script:
+    - cd
+    - cd footkick.wiki
+    - git push -u origin master
 
 cleanup:
   stage: cleanup
