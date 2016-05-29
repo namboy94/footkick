@@ -12,7 +12,7 @@ clone_master:
   script:
     - cd
     - git clone git@gitlab.namibsun.net:namboy94/footkick.git
-    - #git clone git@gitlab.namibsun.net:namboy94/footkick.wiki.git
+    - git clone git@gitlab.namibsun.net:namboy94/footkick.wiki.git
 
     - cd footkick
 
