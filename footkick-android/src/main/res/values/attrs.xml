@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <attr name="country" format="string" />
-    <attr name="league" format="string" />
-</resources>
