@@ -25,13 +25,18 @@ package net.namibsun.footkick.android;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import net.namibsun.footkick.R;
-import net.namibsun.footkick.java.structures.LeagueTable;
+import net.namibsun.footkick.java.scraper.Team;
+import net.namibsun.footkick.java.scraper.FootballHtmlParser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,16 +52,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            LeagueTable league = new LeagueTable("germany", "bundesliga");
-            TableLayout table = (TableLayout) findViewById(R.id.table);
-            TableRow newRow = new TableRow(table.getContext());
-            TextView text = new TextView(table.getContext());
-            text.setText(league.toMonoSpaceString());
-            newRow.addView(text);
+        ArrayList<Team> teams = FootballHtmlParser.getLeagueInformation("germany", "bundesliga");
+
+        ScrollView scrollView = (ScrollView) this.findViewById(R.id.scrollview);
+
+        TableLayout table = new TableLayout(this);
+        table.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                                           ViewGroup.LayoutParams.MATCH_PARENT));
+        table.setStretchAllColumns(true);
+
+        for (Team team : teams) {
+            TableRow newRow = new TableRow(this);
+            TextView teamName = new TextView(this);
+            teamName.setText(team.teamName);
+            TextView teamPoints = new TextView(this);
+            teamPoints.setText(team.points);
+
+            newRow.addView(teamName);
+            newRow.addView(teamPoints);
+
             table.addView(newRow);
-        } catch (IOException e) {
-            e.printStackTrace();
+
         }
+
+        scrollView.addView(table);
+
     }
 }
