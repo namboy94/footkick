@@ -19,6 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+                android:name="net.namibsun.footkick.android.content.LeagueActivity">
+        </activity>
     </application>
 
 </manifest>

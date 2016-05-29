@@ -48,8 +48,12 @@ public class LeagueActivity extends AppCompatActivity{
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Bundle bundle = this.getIntent().getExtras();
+
         super.onCreate(savedInstanceState);
-        this.populateData(savedInstanceState.getString("country"), savedInstanceState.getString("league"));
+        setContentView(R.layout.activity_main);
+        this.populateData(bundle.getString("country"), bundle.getString("league"));
     }
 
     private void populateData(String country, String league) {
@@ -60,7 +64,7 @@ public class LeagueActivity extends AppCompatActivity{
             ArrayList<Match> matches = leagueData.getMatches();
 
             this.fillLeagueTable(teams);
-            this.fillMatchday(matches);
+            //this.fillMatchday(matches);
 
         } catch (IOException e) {
         }
@@ -69,7 +73,7 @@ public class LeagueActivity extends AppCompatActivity{
 
     private void fillLeagueTable(ArrayList<Team> teams) {
 
-        ScrollView scroller = this.findViewById(R.id.leagueTableScroller);
+        ScrollView scroller = (ScrollView) this.findViewById(R.id.leagueTableScroller);
         TableLayout table = new TableLayout(this);
 
         int position = 1;
@@ -95,6 +99,7 @@ public class LeagueActivity extends AppCompatActivity{
 
     }
 
+    /*
     private void fillMatchday(ArrayList<Match> matches) {
 
         ScrollView scroller = this.findViewById(R.id.matchDayScroller);
@@ -118,5 +123,6 @@ public class LeagueActivity extends AppCompatActivity{
         scroller.addView(matchDayTable);
 
     }
+    */
 
 }

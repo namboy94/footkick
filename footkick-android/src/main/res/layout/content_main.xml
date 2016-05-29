@@ -3,6 +3,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:scrollbars="none"
-            android:id="@+id/scrollview"
+            android:id="@+id/leagueTableScroller"
             android:layout_weight="1">
 </ScrollView>
