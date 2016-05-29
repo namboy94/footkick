@@ -24,7 +24,7 @@ public class LeagueLister {
                 "germany bundesliga",
                 "england premier-league",
                 "spain primera-division",
-                "italy serie-a",
+                "ital serie-a",
                 "namibia premier-league"
         };
     }

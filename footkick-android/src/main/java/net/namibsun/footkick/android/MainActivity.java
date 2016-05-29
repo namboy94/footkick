@@ -50,16 +50,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //This is a hack to allow network operations to run on the main UI thread.
-        //This should be removed once network operations are threaded correctly.
-        //This also neccessitates a permission entry in the android manifest file:
-        //<activity
-        //android:name="net.namibsun.footkick.android.content.LeagueActivity">
-        //</activity>
-        //Which should also be removed
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
         //Creates the new Activity and sets the content view to that of activity_main.xml
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

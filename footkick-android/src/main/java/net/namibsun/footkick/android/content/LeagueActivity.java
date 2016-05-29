@@ -24,6 +24,7 @@ package net.namibsun.footkick.android.content;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -57,7 +58,7 @@ public class LeagueActivity extends AppCompatActivity{
 
         //Populate the table layouts
         final Bundle bundle = this.getIntent().getExtras();
-        this.populateData(bundle.getString("country"), bundle.getString("league"));
+        new TablePopulator().execute(bundle.getString("country"), bundle.getString("league"));
 
         //Initialize the switch button
         final Button switchButton = (Button) this.findViewById(R.id.switchButton);
@@ -106,8 +107,8 @@ public class LeagueActivity extends AppCompatActivity{
      */
     private void fillLeagueTable(ArrayList<Team> teams) {
 
-        ScrollView scroller = (ScrollView) this.findViewById(R.id.leagueTableScroller);
-        TableLayout table = new TableLayout(this);
+        final ScrollView scroller = (ScrollView) this.findViewById(R.id.leagueTableScroller);
+        final TableLayout table = new TableLayout(this);
 
         int position = 1;
         for (Team team : teams) {
@@ -129,7 +130,13 @@ public class LeagueActivity extends AppCompatActivity{
             position++;
         }
 
-        scroller.addView(table);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                scroller.addView(table);
+            }
+        });
+
 
     }
 
@@ -139,8 +146,8 @@ public class LeagueActivity extends AppCompatActivity{
      */
     private void fillMatchday(ArrayList<Match> matches) {
 
-        ScrollView scroller = (ScrollView) this.findViewById(R.id.matchDayScroller);
-        TableLayout matchDayTable = new TableLayout(this);
+        final ScrollView scroller = (ScrollView) this.findViewById(R.id.matchDayScroller);
+        final TableLayout matchDayTable = new TableLayout(this);
 
         for (Match match : matches) {
             TableRow matchRow = new TableRow(this);
@@ -157,7 +164,13 @@ public class LeagueActivity extends AppCompatActivity{
 
             matchDayTable.addView(matchRow);
         }
-        scroller.addView(matchDayTable);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                scroller.addView(matchDayTable);
+            }
+        });
 
     }
 
@@ -179,5 +192,22 @@ public class LeagueActivity extends AppCompatActivity{
 
         Intent mainActivity = new Intent(this, MainActivity.class);
         this.startActivity(mainActivity);
+    }
+
+    /**
+     * An Async task that loads the league information in the background
+     */
+    private class TablePopulator extends AsyncTask<String, Void, Void> {
+
+        /**
+         * Runs in the background
+         * @param params the country and league identifiers
+         * @return Void
+         */
+        @Override
+        protected Void doInBackground(String... params) {
+            LeagueActivity.this.populateData(params[0], params[1]);
+            return null;
+        }
     }
 }
