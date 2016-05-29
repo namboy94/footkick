@@ -46,7 +46,10 @@ build_android:
   script:
     - cd
     - cd footkick
-    - ./
+    - python releasebuildprepare.py
+    - bash gradlew assembleRelease
+    - rm footkick-android/build/outputs/apk/footkick-android-release-unaligned.apk
+    - cp footkick-android/build/outputs/apk/* ../footkick.wiki/builds/apk
 
 build_jar:
   stage: build-java
@@ -61,7 +64,7 @@ build_jar:
     - mv build/libs/* ../../footkick.wiki/builds/jar
     - cd ../../footkick.wiki
     - git add --all
-    - git commit -m "Added build"
+    - git commit -m "Added builds"
 
 upload_builds:
   stage: upload
