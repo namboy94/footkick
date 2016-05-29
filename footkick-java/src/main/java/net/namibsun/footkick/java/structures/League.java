@@ -22,8 +22,11 @@ This file is part of footkick.
 package net.namibsun.footkick.java.structures;
 
 import net.namibsun.footkick.java.scraper.FootballHtmlParser;
+import net.namibsun.footkick.java.scraper.Match;
+import net.namibsun.footkick.java.scraper.Team;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * A class that contains all the information about a league
@@ -64,6 +67,22 @@ public class League {
 
         return formatted;
 
+    }
+
+    /**
+     * Gets a list of teams in the league table
+     * @return the array list of teams
+     */
+    public ArrayList<Team> getTeams() {
+        return this.leagueTable.getTeams();
+    }
+
+    /**
+     * Gets a list of matches in the matchday
+     * @return the array list of matches
+     */
+    public ArrayList<Match> getMatches() {
+        return this.matchDay.getMatches();
     }
 
     /**

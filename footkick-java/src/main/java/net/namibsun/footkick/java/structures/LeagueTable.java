@@ -67,6 +67,14 @@ public class LeagueTable {
     }
 
     /**
+     * Getter method for the teams in the league
+     * @return an array list of teams in the league
+     */
+    public ArrayList<Team> getTeams() {
+        return this.teams;
+    }
+
+    /**
      * Converts the league into a monospaced string
      * @return the formatted league table string
      */

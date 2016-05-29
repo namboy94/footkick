@@ -66,6 +66,14 @@ public class MatchDay {
     }
 
     /**
+     * Getter method for the list of matches
+     * @return an array list of all matches
+     */
+    public ArrayList<Match> getMatches() {
+        return this.matches;
+    }
+
+    /**
      * Formats the matchday into a monospaced string
      * @return the formatted matchday string
      */

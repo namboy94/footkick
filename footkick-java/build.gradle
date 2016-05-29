@@ -32,13 +32,12 @@ version = 0.1
 //noinspection GroovyAssignabilityCheck
 jar {
     manifest {
-        attributes 'Main-Class': 'net.namibsun.footkick.Main'
+        attributes 'Main-Class': 'net.namibsun.footkick.java.Main'
     }
 }
 
 //noinspection GroovyAssignabilityCheck
 dependencies {
     compile "org.jsoup:jsoup:1.9.2"
-
     testCompile 'junit:junit:4.12'
 }
