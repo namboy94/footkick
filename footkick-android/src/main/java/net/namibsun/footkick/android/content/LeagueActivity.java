@@ -51,7 +51,7 @@ public class LeagueActivity extends AppCompatActivity{
         final Bundle bundle = this.getIntent().getExtras();
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.content_main);
         this.populateData(bundle.getString("country"), bundle.getString("league"));
 
         final Button switchButton = (Button) this.findViewById(R.id.switchButton);

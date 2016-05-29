@@ -17,19 +17,6 @@
                 android:layout_height="fill_parent"
                 android:scrollbars="none"
                 android:id="@+id/leagueTableScroller">
-        <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <TableRow>
-                <TextView android:text="Pos" />
-                <TextView android:text="Team" />
-                <TextView android:text="Position" />
-                <TextView android:text="Position" />
-                <TextView android:text="Position" />
-                <TextView android:text="Position" />
-
-            </TableRow>
-        </TableLayout>
     </ScrollView>
         <ScrollView
                 android:layout_width="fill_parent"

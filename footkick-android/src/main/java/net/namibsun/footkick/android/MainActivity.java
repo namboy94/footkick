@@ -27,7 +27,18 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import net.namibsun.footkick.android.content.LeagueActivity;
+import net.namibsun.footkick.android.widgets.CountryLeagueButton;
+import net.namibsun.footkick.java.scraper.LeagueLister;
+
+import java.io.BufferedOutputStream;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,12 +55,59 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+        String[] leagues = LeagueLister.getLeagues();
+        ScrollView scroller = (ScrollView) this.findViewById(R.id.mainScroller);
+
+        RelativeLayout leagueHolder = new RelativeLayout(this);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        leagueHolder.setLayoutParams(params);
+
+        Button lastButton = null;
+
+        for (String league : leagues) {
+            final String country = league.split(" ")[0];
+            final String leagueName = league.split(" ")[1];
+            CountryLeagueButton leagueButton = new CountryLeagueButton(this, country, leagueName);
+
+            final MainActivity activity = this;
+
+            leagueButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent leagueActivity = new Intent(activity, LeagueActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("country", country);
+                    bundle.putString("league", leagueName);
+                    leagueActivity.putExtras(bundle);
+                    startActivity(leagueActivity);
+                }
+            });
+
+
+            RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            leagueButton.setId(View.generateViewId());
+            if (lastButton != null) {
+                Log.e("Here",  "hee");
+                Log.e("LAST ID", "" + lastButton.getId());
+                buttonParams.addRule(RelativeLayout.BELOW, lastButton.getId());
+            }
+            leagueHolder.addView(leagueButton, buttonParams);
+            lastButton = leagueButton;
+        }
+
+        scroller.addView(leagueHolder);
+
+
+        /*
         Intent leagueActivity = new Intent(this, LeagueActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("country", "germany");
         bundle.putString("league", "bundesliga");
         leagueActivity.putExtras(bundle);
         startActivity(leagueActivity);
+        */
 
     }
 }
