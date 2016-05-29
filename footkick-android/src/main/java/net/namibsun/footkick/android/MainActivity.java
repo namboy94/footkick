@@ -22,92 +22,81 @@ This file is part of footkick.
 
 package net.namibsun.footkick.android;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
-import net.namibsun.footkick.android.content.LeagueActivity;
 import net.namibsun.footkick.android.widgets.CountryLeagueButton;
 import net.namibsun.footkick.java.scraper.LeagueLister;
 
-import java.io.BufferedOutputStream;
 
-
+/**
+ * The Main Activity class.
+ * It displays a list of country/league combinations as buttons to load the standings
+ * for that country/league
+ */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Creates a new ScrollView containing a RelativeLayout that shows the country/league buttons.
+     * The method inflates the activity_main.xml layout file
+     * @param savedInstanceState - The saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //REMOVE THIS
+        //This is a hack to allow network operations to run on the main UI thread.
+        //This should be removed once network operations are threaded correctly.
+        //This also neccessitates a permission entry in the android manifest file:
+        //<activity
+        //android:name="net.namibsun.footkick.android.content.LeagueActivity">
+        //</activity>
+        //Which should also be removed
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        //REMOVE THIS
 
-
+        //Creates the new Activity and sets the content view to that of activity_main.xml
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
+        //get an array of league identifiers
         String[] leagues = LeagueLister.getLeagues();
+
+        //Initialize the ScollView and RelativeLayout
         ScrollView scroller = (ScrollView) this.findViewById(R.id.mainScroller);
-
         RelativeLayout leagueHolder = new RelativeLayout(this);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        leagueHolder.setLayoutParams(params);
+        leagueHolder.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                                                     ViewGroup.LayoutParams.MATCH_PARENT));
 
+        //Add the buttons
         Button lastButton = null;
-
         for (String league : leagues) {
-            final String country = league.split(" ")[0];
-            final String leagueName = league.split(" ")[1];
-            CountryLeagueButton leagueButton = new CountryLeagueButton(this, country, leagueName);
 
+            String country = league.split(" ")[0];
+            String leagueName = league.split(" ")[1];
             final MainActivity activity = this;
 
-            leagueButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent leagueActivity = new Intent(activity, LeagueActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("country", country);
-                    bundle.putString("league", leagueName);
-                    leagueActivity.putExtras(bundle);
-                    startActivity(leagueActivity);
-                }
-            });
-
-
-            RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            CountryLeagueButton leagueButton = new CountryLeagueButton(this, country, leagueName);
             leagueButton.setId(View.generateViewId());
+            RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
             if (lastButton != null) {
                 Log.e("Here",  "hee");
                 Log.e("LAST ID", "" + lastButton.getId());
                 buttonParams.addRule(RelativeLayout.BELOW, lastButton.getId());
             }
+
             leagueHolder.addView(leagueButton, buttonParams);
             lastButton = leagueButton;
         }
 
+        //Add the buttons to the scroller
         scroller.addView(leagueHolder);
-
-
-        /*
-        Intent leagueActivity = new Intent(this, LeagueActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("country", "germany");
-        bundle.putString("league", "bundesliga");
-        leagueActivity.putExtras(bundle);
-        startActivity(leagueActivity);
-        */
-
     }
 }

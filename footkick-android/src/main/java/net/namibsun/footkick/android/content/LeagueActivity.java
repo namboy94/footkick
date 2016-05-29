@@ -22,11 +22,14 @@ This file is part of footkick.
 
 package net.namibsun.footkick.android.content;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import net.namibsun.footkick.android.MainActivity;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.java.scraper.Match;
 import net.namibsun.footkick.java.scraper.Team;
@@ -48,31 +51,39 @@ public class LeagueActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        final Bundle bundle = this.getIntent().getExtras();
-
+        //Initialize the Activity and load the content_main.xml layout file
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
+
+        //Populate the table layouts
+        final Bundle bundle = this.getIntent().getExtras();
         this.populateData(bundle.getString("country"), bundle.getString("league"));
 
+        //Initialize the switch button
         final Button switchButton = (Button) this.findViewById(R.id.switchButton);
-        switchButton.setText("Matchday");
+        switchButton.setText(R.string.matchday);
+        //Define the on click listener
         switchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Switch between tables
                 String buttonText = switchButton.getText().toString();
                 if (buttonText.equals("Matchday")) {
-                    switchButton.setText("League Table");
+                    switchButton.setText(R.string.leaguetable);
                 } else {
-                    switchButton.setText("Matchday");
+                    switchButton.setText(R.string.matchday);
                 }
-
                 ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.leagueViewSwitcher);
                 switcher.showNext();
             }
         });
-
     }
 
+    /**
+     * This method populates the league table and matchday Views using the specified country and league
+     * @param country the country to populate the views with
+     * @param league the league to populate the views with
+     */
     private void populateData(String country, String league) {
 
         try {
@@ -84,10 +95,15 @@ public class LeagueActivity extends AppCompatActivity{
             this.fillMatchday(matches);
 
         } catch (IOException e) {
+            this.showConnectionErrorDialog();
         }
 
     }
 
+    /**
+     * Fills the league table with the provided team objects
+     * @param teams the teams to be displayed
+     */
     private void fillLeagueTable(ArrayList<Team> teams) {
 
         ScrollView scroller = (ScrollView) this.findViewById(R.id.leagueTableScroller);
@@ -117,6 +133,10 @@ public class LeagueActivity extends AppCompatActivity{
 
     }
 
+    /**
+     * Filles the Matchday table with the parsed matches
+     * @param matches the matches to be displayed
+     */
     private void fillMatchday(ArrayList<Match> matches) {
 
         ScrollView scroller = (ScrollView) this.findViewById(R.id.matchDayScroller);
@@ -139,5 +159,25 @@ public class LeagueActivity extends AppCompatActivity{
         }
         scroller.addView(matchDayTable);
 
+    }
+
+    /**
+     * Shows connection error dialog
+     */
+    private void showConnectionErrorDialog(){
+        AlertDialog.Builder errorDialogBuilder = new AlertDialog.Builder(this);
+        errorDialogBuilder.setTitle("Connection Error");
+        errorDialogBuilder.setMessage("No connection to server");
+        errorDialogBuilder.setCancelable(true);
+        errorDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        errorDialogBuilder.create();
+        errorDialogBuilder.show();
+
+        Intent mainActivity = new Intent(this, MainActivity.class);
+        this.startActivity(mainActivity);
     }
 }
