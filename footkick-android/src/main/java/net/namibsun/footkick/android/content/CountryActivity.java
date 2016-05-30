@@ -56,7 +56,7 @@ public class CountryActivity extends AppCompatActivity{
 
         //Populate the table layouts
         Bundle bundle = this.getIntent().getExtras();
-        new LeagueLister().execute(bundle.getString("countryName"), bundle.getString("link"));
+        new LeagueLister().execute(bundle.getString("country"), bundle.getString("link"));
 
     }
 
@@ -77,7 +77,6 @@ public class CountryActivity extends AppCompatActivity{
         }
 
         //Initialize the ScollView and RelativeLayout
-        final ScrollView scroller = (ScrollView) this.findViewById(R.id.leagueScroller);
         final RelativeLayout leagueHolder = (RelativeLayout) this.findViewById(R.id.leagueHolder);
 
         int lastId = R.id.leagueText;
@@ -99,14 +98,6 @@ public class CountryActivity extends AppCompatActivity{
                 }
             });
         }
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                scroller.addView(leagueHolder);
-            }
-        });
-
     }
 
     /**

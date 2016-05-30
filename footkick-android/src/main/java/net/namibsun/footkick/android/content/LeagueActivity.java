@@ -104,12 +104,11 @@ public class LeagueActivity extends AppCompatActivity{
      */
     private void fillLeagueTable(ArrayList<Team> teams) {
 
-        final ScrollView scroller = (ScrollView) this.findViewById(R.id.leagueTableScroller);
-        final TableLayout table = new TableLayout(this);
+        final TableLayout table = (TableLayout) this.findViewById(R.id.leagueTableTable);
 
         int position = 1;
         for (Team team : teams) {
-            TableRow teamRow = new TableRow(this);
+            final TableRow teamRow = new TableRow(this);
 
             String[] data = {
                     "" + position, team.teamName, team.matches, team.wins, team.draws, team.losses, team.goalsFor,
@@ -122,19 +121,15 @@ public class LeagueActivity extends AppCompatActivity{
                 dataText.setPadding(5,0,5,0);
                 teamRow.addView(dataText);
             }
-
-            table.addView(teamRow);
             position++;
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    table.addView(teamRow);
+                }
+            });
         }
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                scroller.addView(table);
-            }
-        });
-
-
     }
 
     /**
@@ -143,11 +138,10 @@ public class LeagueActivity extends AppCompatActivity{
      */
     private void fillMatchday(ArrayList<Match> matches) {
 
-        final ScrollView scroller = (ScrollView) this.findViewById(R.id.matchDayScroller);
-        final TableLayout matchDayTable = new TableLayout(this);
+        final TableLayout matchDayTable = (TableLayout) this.findViewById(R.id.matchDayTable);
 
         for (Match match : matches) {
-            TableRow matchRow = new TableRow(this);
+            final TableRow matchRow = new TableRow(this);
 
             String[] matchData = {
                     match.time, match.homeTeam, match.score, match.awayTeam
@@ -159,16 +153,13 @@ public class LeagueActivity extends AppCompatActivity{
                 matchRow.addView(dataText);
             }
 
-            matchDayTable.addView(matchRow);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    matchDayTable.addView(matchRow);
+                }
+            });
         }
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                scroller.addView(matchDayTable);
-            }
-        });
-
     }
 
     /**

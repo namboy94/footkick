@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.*;
-import net.namibsun.footkick.android.common.Notifiers;
 import net.namibsun.footkick.android.widgets.CountryButton;
 import net.namibsun.footkick.java.scraper.Country;
 import net.namibsun.footkick.java.scraper.CountryLister;
@@ -55,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         new CountryGetter().execute();
 
+        final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.loadingScreenSwitcher);
+        switcher.showNext();
+
     }
 
     /**
@@ -62,8 +64,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void populateCountryList() {
 
-        final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.loadingScreenSwitcher);
-        final ScrollView scroller = (ScrollView) this.findViewById(R.id.countryScroller);
+        //final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.loadingScreenSwitcher);
         final RelativeLayout layout = (RelativeLayout) this.findViewById(R.id.countryHolder);
 
         //get an array list of country identifiers
@@ -71,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             countries = CountryLister.getCountries().getCountries();
         } catch (IOException e) {
-            Notifiers.showConnectionErrorDialog(this);
+            //TODO Check why this isn't working
+            // Notifiers.showConnectionErrorDialog(this);
             return;
         }
 
@@ -79,24 +81,33 @@ public class MainActivity extends AppCompatActivity {
         int lastId = R.id.countryText;
         for (Country country : countries) {
 
-            CountryButton countryButton = new CountryButton(this, country.countryName, country.countryUrl);
+            final CountryButton countryButton = new CountryButton(this, country.countryName, country.countryUrl);
             countryButton.setId(View.generateViewId());
-            RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
+            final RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
             buttonParams.addRule(RelativeLayout.BELOW, lastId);
-            layout.addView(countryButton, buttonParams);
             lastId = countryButton.getId();
+
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    layout.addView(countryButton, buttonParams);
+                }
+            });
         }
 
+        //TODO Switch from loading animation
+
         //Add the buttons to the scroller and switch loading screen away
+        /*
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                scroller.addView(layout);
-                switcher.showNext();
+                //switcher.showNext();
             }
-        });
+        });*/
     }
 
     /**
