@@ -28,6 +28,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.Notifiers;
@@ -46,6 +48,9 @@ public class LeagueActivity extends AppCompatActivity{
     private ViewSwitcher viewSwitcher;
     private GestureDetector gestureDetector;
 
+    private Animation slide_in_left, slide_out_right;
+    private Animation slide_in_right, slide_out_left;
+
     /**
      * Method run on creation of the Activity
      *
@@ -59,6 +64,10 @@ public class LeagueActivity extends AppCompatActivity{
         setContentView(R.layout.activity_league);
 
         viewSwitcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
+        this.slide_in_left = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
+        this.slide_in_right = AnimationUtils.loadAnimation(this, R.anim.slide_in_right);
+        this.slide_out_left = AnimationUtils.loadAnimation(this, R.anim.slide_out_left);
+        this.slide_out_right = AnimationUtils.loadAnimation(this, R.anim.slide_out_right);
 
         //Populate the table layouts
         Bundle bundle = this.getIntent().getExtras();
@@ -76,9 +85,13 @@ public class LeagueActivity extends AppCompatActivity{
                 String buttonText = switchButton.getText().toString();
                 if (buttonText.equals("Matchday")) {
                     switchButton.setText(R.string.leaguetable);
+                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_right);
+                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_left);
                     LeagueActivity.this.viewSwitcher.showNext();
                 } else {
                     switchButton.setText(R.string.matchday);
+                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_left);
+                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_right);
                     LeagueActivity.this.viewSwitcher.showPrevious();
                 }
 
@@ -106,6 +119,12 @@ public class LeagueActivity extends AppCompatActivity{
     public boolean onTouchEvent(MotionEvent event) {
         this.gestureDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        super.dispatchTouchEvent(ev);
+        return this.gestureDetector.onTouchEvent(ev);
     }
 
     /**
@@ -233,7 +252,7 @@ public class LeagueActivity extends AppCompatActivity{
 
             // Swipe right (previous)
             if (e1.getX() < e2.getX()) {
-                LeagueActivity.this.viewSwitcher.showPrevious();
+                LeagueActivity.this.viewSwitcher.showNext();
             }
 
             return super.onFling(e1, e2, velocityX, velocityY);
