@@ -25,6 +25,8 @@ package net.namibsun.footkick.android.content;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import net.namibsun.footkick.android.R;
@@ -41,6 +43,9 @@ import java.util.ArrayList;
  */
 public class LeagueActivity extends AppCompatActivity{
 
+    private ViewSwitcher viewSwitcher;
+    private GestureDetector gestureDetector;
+
     /**
      * Method run on creation of the Activity
      *
@@ -53,6 +58,8 @@ public class LeagueActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_league);
 
+        viewSwitcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
+
         //Populate the table layouts
         Bundle bundle = this.getIntent().getExtras();
         new TablePopulator().execute(bundle.getString("league"), bundle.getString("link"));
@@ -64,15 +71,17 @@ public class LeagueActivity extends AppCompatActivity{
         switchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 //Switch between tables
                 String buttonText = switchButton.getText().toString();
                 if (buttonText.equals("Matchday")) {
                     switchButton.setText(R.string.leaguetable);
+                    LeagueActivity.this.viewSwitcher.showNext();
                 } else {
                     switchButton.setText(R.string.matchday);
+                    LeagueActivity.this.viewSwitcher.showPrevious();
                 }
-                ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.leagueViewSwitcher);
-                switcher.showNext();
+
             }
         });
 
@@ -83,6 +92,20 @@ public class LeagueActivity extends AppCompatActivity{
             //noinspection ConstantConditions
             this.getActionBar().setTitle(bundle.getString("league"));
         }
+
+        SwipeDetector swipeDetector = new SwipeDetector();
+        this.gestureDetector = new GestureDetector(this, swipeDetector);
+    }
+
+    /**
+     * Calls the gesture detector to swipe to the next or previous view
+     * @param event hte motion event that triggered this method call
+     * @return if the event was accepted or not, I guess?
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        this.gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 
     /**
@@ -103,7 +126,6 @@ public class LeagueActivity extends AppCompatActivity{
         } catch (IOException e) {
             Notifiers.showConnectionErrorDialog(this);
         }
-
     }
 
     /**
@@ -114,12 +136,11 @@ public class LeagueActivity extends AppCompatActivity{
 
         // Switch to matchday if no league table available
         if (teams.size() == 0) {
-            final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
             final Button toggleButton = (Button) this.findViewById(R.id.switchButton);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    switcher.showNext();
+                    LeagueActivity.this.viewSwitcher.showNext();
                     toggleButton.setText(R.string.leaguetable);
                 }
             });
@@ -199,5 +220,24 @@ public class LeagueActivity extends AppCompatActivity{
             LeagueActivity.this.populateData(params[0], params[1]);
             return null;
         }
+    }
+
+    private class SwipeDetector extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            // Swipe left (next)
+            if (e1.getX() > e2.getX()) {
+                LeagueActivity.this.viewSwitcher.showNext();
+            }
+
+            // Swipe right (previous)
+            if (e1.getX() < e2.getX()) {
+                LeagueActivity.this.viewSwitcher.showPrevious();
+            }
+
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+
     }
 }

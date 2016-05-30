@@ -5,7 +5,9 @@
     <ViewSwitcher
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/leagueViewSwitcher">
+            android:id="@+id/leagueViewSwitcher"
+            android:inAnimation="@android:anim/slide_in_left"
+            android:outAnimation="@android:anim/slide_out_right">
         <ScrollView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
