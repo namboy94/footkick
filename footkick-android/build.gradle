@@ -43,21 +43,21 @@ android {
         }
     }
 
-    
+    /*@@@STARTCREDENTIALS
     signingConfigs {
         release {
-            storeFile file("/home/hermann/.android-keys/key")
-            storePassword "AnDFcb1900@com01DNaM"
-            keyAlias "namibsun_key"
-            keyPassword "AnDFcb1900@com01DNaM"
+            storeFile file("@@@KEYFILE@@@")
+            storePassword "@@@STOREPASS@@@"
+            keyAlias "@@@KEYALIAS@@@"
+            keyPassword "@@@KEYPASS@@@"
         }
-    }
+    }@@@ENDCREDENTIALS*/
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            //@@@SIGNINGCONFIG@@@signingConfig signingConfigs.release
         }
     }
 }
