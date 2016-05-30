@@ -68,7 +68,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile project(':footkick-java')
+    compile 'com.google.android.gms:play-services-analytics:9.0.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
 
 //Can build signed from cli with:
 // ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$KEYFILE -Pandroid.injected.signing.store.password=$STORE_PASSWORD -Pandroid.injected.signing.key.alias=$KEY_ALIAS -Pandroid.injected.signing.key.password=$KEY_PASSWORD
