@@ -33,8 +33,6 @@ import java.util.ArrayList;
  */
 public class League {
 
-    String country;
-    String league;
     LeagueTable leagueTable;
     MatchDay matchDay;
 
@@ -47,12 +45,22 @@ public class League {
      */
     public League(String country, String league) throws IOException{
 
-        this.country = country;
-        this.league = league;
-
         FootballHtmlParser parser = new FootballHtmlParser(country, league);
-        this.leagueTable = new LeagueTable(country, league, parser.getLeagueInformation());
-        this.matchDay = new MatchDay(country, league, parser.getMatchdayInformation());
+        this.leagueTable = new LeagueTable(parser.getLeagueInformation());
+        this.matchDay = new MatchDay(parser.getMatchdayInformation());
+
+    }
+
+    /**
+     * Alternate Constructor that can be used to directly parse an URL
+     * @param url the URL to parse
+     * @throws IOException in case a Network error occurs
+     */
+    public League(String url) throws IOException{
+
+        FootballHtmlParser parser = new FootballHtmlParser(url);
+        this.leagueTable = new LeagueTable(parser.getLeagueInformation());
+        this.matchDay = new MatchDay(parser.getMatchdayInformation());
 
     }
 

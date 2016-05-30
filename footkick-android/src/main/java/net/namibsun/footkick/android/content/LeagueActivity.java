@@ -22,16 +22,13 @@ This file is part of footkick.
 
 package net.namibsun.footkick.android.content;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.*;
-import net.namibsun.footkick.android.MainActivity;
 import net.namibsun.footkick.android.R;
+import net.namibsun.footkick.android.common.Notifiers;
 import net.namibsun.footkick.java.scraper.Match;
 import net.namibsun.footkick.java.scraper.Team;
 import net.namibsun.footkick.java.structures.League;
@@ -52,13 +49,13 @@ public class LeagueActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //Initialize the Activity and load the content_main.xml layout file
+        //Initialize the Activity and load the activity_league.xml layout file
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_main);
+        setContentView(R.layout.activity_league);
 
         //Populate the table layouts
         final Bundle bundle = this.getIntent().getExtras();
-        new TablePopulator().execute(bundle.getString("country"), bundle.getString("league"));
+        new TablePopulator().execute(bundle.getString("league"), bundle.getString("link"));
 
         //Initialize the switch button
         final Button switchButton = (Button) this.findViewById(R.id.switchButton);
@@ -82,13 +79,13 @@ public class LeagueActivity extends AppCompatActivity{
 
     /**
      * This method populates the league table and matchday Views using the specified country and league
-     * @param country the country to populate the views with
      * @param league the league to populate the views with
+     * @param link the link to the league's website
      */
-    private void populateData(String country, String league) {
+    private void populateData(String league, String link) {
 
         try {
-            League leagueData = new League(country, league);
+            League leagueData = new League(link);
             ArrayList<Team> teams = leagueData.getTeams();
             ArrayList<Match> matches = leagueData.getMatches();
 
@@ -96,7 +93,7 @@ public class LeagueActivity extends AppCompatActivity{
             this.fillMatchday(matches);
 
         } catch (IOException e) {
-            this.showConnectionErrorDialog();
+            Notifiers.showConnectionErrorDialog(this);
         }
 
     }
@@ -172,26 +169,6 @@ public class LeagueActivity extends AppCompatActivity{
             }
         });
 
-    }
-
-    /**
-     * Shows connection error dialog
-     */
-    private void showConnectionErrorDialog(){
-        AlertDialog.Builder errorDialogBuilder = new AlertDialog.Builder(this);
-        errorDialogBuilder.setTitle("Connection Error");
-        errorDialogBuilder.setMessage("No connection to server");
-        errorDialogBuilder.setCancelable(true);
-        errorDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-        errorDialogBuilder.create();
-        errorDialogBuilder.show();
-
-        Intent mainActivity = new Intent(this, MainActivity.class);
-        this.startActivity(mainActivity);
     }
 
     /**

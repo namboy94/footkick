@@ -33,8 +33,6 @@ import java.util.ArrayList;
  */
 public class MatchDay {
 
-    String country;
-    String league;
     ArrayList<Match> matches;
 
     /**
@@ -44,24 +42,15 @@ public class MatchDay {
      * @throws IOException in case the parsing fails
      */
     public MatchDay(String country, String league) throws IOException {
-
-        this.country = country;
-        this.league = league;
         this.matches = FootballHtmlParser.getMatchdayInformation(country, league);
-
     }
 
     /**
      * Alternate Constructor that does not parse the matches itself, but rather gets
      * pre-defined matches via constructor
-     * @param country the country of the matchday
-     * @param league the league of the matchday
      * @param matches the matches of the matchday
      */
-    public MatchDay(String country, String league, ArrayList<Match> matches) {
-
-        this.country = country;
-        this.league = league;
+    public MatchDay(ArrayList<Match> matches) {
         this.matches = matches;
     }
 
