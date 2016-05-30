@@ -73,31 +73,6 @@ public class LeagueActivity extends AppCompatActivity{
         Bundle bundle = this.getIntent().getExtras();
         new TablePopulator().execute(bundle.getString("league"), bundle.getString("link"));
 
-        //Initialize the switch button
-        final Button switchButton = (Button) this.findViewById(R.id.switchButton);
-        switchButton.setText(R.string.matchday);
-        //Define the on click listener
-        switchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //Switch between tables
-                String buttonText = switchButton.getText().toString();
-                if (buttonText.equals("Matchday")) {
-                    switchButton.setText(R.string.leaguetable);
-                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_right);
-                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_left);
-                    LeagueActivity.this.viewSwitcher.showNext();
-                } else {
-                    switchButton.setText(R.string.matchday);
-                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_left);
-                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_right);
-                    LeagueActivity.this.viewSwitcher.showPrevious();
-                }
-
-            }
-        });
-
         try {
             //noinspection ConstantConditions
             this.getSupportActionBar().setTitle(bundle.getString("league"));
@@ -155,12 +130,10 @@ public class LeagueActivity extends AppCompatActivity{
 
         // Switch to matchday if no league table available
         if (teams.size() == 0) {
-            final Button toggleButton = (Button) this.findViewById(R.id.switchButton);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     LeagueActivity.this.viewSwitcher.showNext();
-                    toggleButton.setText(R.string.leaguetable);
                 }
             });
             return;
@@ -247,11 +220,15 @@ public class LeagueActivity extends AppCompatActivity{
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             // Swipe left (next)
             if (e1.getX() > e2.getX()) {
+                LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_right);
+                LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_left);
                 LeagueActivity.this.viewSwitcher.showNext();
             }
 
             // Swipe right (previous)
             if (e1.getX() < e2.getX()) {
+                LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_left);
+                LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_right);
                 LeagueActivity.this.viewSwitcher.showNext();
             }
 
