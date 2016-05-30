@@ -1,2 +1,7 @@
+V 0.3
+  - Added dynamic country loading
+  - Improved layout of android app
+V 0.2
+  - Basic Android App
 V 0.1
-  - Basic Hello World Program
+  - Basic League info getter CLI tool

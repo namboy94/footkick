@@ -51,6 +51,15 @@ public class FootballHtmlParser {
     }
 
     /**
+     * Alternate Constructor that takes a URL directly
+     * @param url the URL to parse
+     * @throws IOException
+     */
+    public FootballHtmlParser(String url) throws IOException {
+        this.htmlPage = Jsoup.connect(url).get();
+    }
+
+    /**
      * Gets the league information for an initialized FootballHtmlParser object
      * @return the league information
      */

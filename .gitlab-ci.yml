@@ -1,6 +1,6 @@
 stages:
   - clonemirror
-  - androidbuild
+#  - androidbuild
   - javabuild
   - upload
   - cleanup
@@ -40,17 +40,17 @@ clone_develop:
     - git push -u git@github.com:namboy94/footkick.git develop
     - git push -u git@bitbucket.org:namboy94/footkick.git develop
 
-build_android:
-  stage: androidbuild
-  only:
-    - master
-  script:
-    - cd
-    - cd footkick
-    - python releasebuildprepare.py
-    - bash gradlew assembleRelease
-    - rm footkick-android/build/outputs/apk/footkick-android-release-unaligned.apk
-    - cp footkick-android/build/outputs/apk/* ../footkick.wiki/builds/apk
+#build_android:
+#  stage: androidbuild
+#  only:
+#    - master
+#  script:
+#    - cd
+#    - cd footkick
+#    - python releasebuildprepare.py
+#    - bash gradlew assembleRelease
+#    - rm footkick-android/build/outputs/apk/footkick-android-release-unaligned.apk
+#    - cp footkick-android/build/outputs/apk/* ../footkick.wiki/builds/apk
 
 build_jar:
   stage: javabuild

@@ -22,9 +22,14 @@ This file is part of footkick.
 
 package net.namibsun.footkick.java;
 
+import net.namibsun.footkick.java.scraper.Country;
+import net.namibsun.footkick.java.scraper.CountryLister;
+import net.namibsun.footkick.java.structures.CountryList;
 import net.namibsun.footkick.java.structures.League;
 import net.namibsun.footkick.java.structures.LeagueTable;
 import net.namibsun.footkick.java.structures.MatchDay;
+
+import java.util.ArrayList;
 
 /**
  * The Main Java Class
@@ -33,7 +38,13 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        if (args.length != 3){
+        if (args.length == 1 && args[0].equals("list")) {
+            CountryList countries = CountryLister.getCountries();
+            for (Country country: countries.getCountries()) {
+                System.out.println(country.countryName + " @ " + country.countryUrl);
+            }
+        }
+        else if (args.length != 3){
             System.out.println("Invalid amount of parameters");
             System.out.println("Usage: <country>, <league>, [table|matchday|summary]");
         }
