@@ -30,8 +30,8 @@ android {
         applicationId "net.namibsun.footkick.android"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 1
-        versionName "0.2"
+        versionCode 2
+        versionName "0.3"
     }
 
     applicationVariants.all { variant ->
@@ -39,24 +39,25 @@ android {
             output.outputFile = new File(
                     output.outputFile.parent,
                     output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+
         }
     }
 
-    
+    /*@@@STARTCREDENTIALS
     signingConfigs {
         release {
-            storeFile file("/home/hermann/.android-keys/key")
-            storePassword "AnDFcb1900@com01DNaM"
-            keyAlias "namibsun_key"
-            keyPassword "AnDFcb1900@com01DNaM"
+            storeFile file("@@@KEYFILE@@@")
+            storePassword "@@@STOREPASS@@@"
+            keyAlias "@@@KEYALIAS@@@"
+            keyPassword "@@@KEYPASS@@@"
         }
-    }
+    }@@@ENDCREDENTIALS*/
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            //@@@SIGNINGCONFIG@@@signingConfig signingConfigs.release
         }
     }
 }
@@ -68,3 +69,6 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile project(':footkick-java')
 }
+
+//Can build signed from cli with:
+// ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$KEYFILE -Pandroid.injected.signing.store.password=$STORE_PASSWORD -Pandroid.injected.signing.key.alias=$KEY_ALIAS -Pandroid.injected.signing.key.password=$KEY_PASSWORD
