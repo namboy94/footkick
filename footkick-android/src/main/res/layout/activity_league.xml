@@ -1,28 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
+                xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
-    <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/switchButton"/>
-
     <ViewSwitcher
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/switchButton"
             android:id="@+id/leagueViewSwitcher">
         <ScrollView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:scrollbars="none"
                     android:id="@+id/leagueTableScroller">
+            <TableLayout
+                    android:layout_width="fill_parent"
+                    android:stretchColumns="0,1,2,3,4,5,6,7,8"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/leagueTableTable">
+                <TableRow
+                    android:background="@color/colorAccent">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pos"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Team Name"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="M"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="W"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="D"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="L"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="GF"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="GA"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="GD"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Pts"/>
+                </TableRow>
+            </TableLayout>
         </ScrollView>
         <ScrollView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:scrollbars="none"
                 android:id="@+id/matchDayScroller">
+            <TableLayout
+                    android:stretchColumns="0,1,2,3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/matchDayTable">
+                <TableRow tools:ignore="UselessParent"
+                          android:background="@color/colorAccent">
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Time"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Home Team"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Score"/>
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Away Team"/>
+                </TableRow>
+            </TableLayout>
         </ScrollView>
     </ViewSwitcher>
+
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/leagueViewSwitcher"
+            android:id="@+id/switchButton"/>
 </RelativeLayout>
