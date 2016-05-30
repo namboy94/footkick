@@ -25,9 +25,9 @@ package net.namibsun.footkick.android.content;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
@@ -104,10 +104,9 @@ public class LeagueActivity extends AppCompatActivity{
 
     /**
      * This method populates the league table and matchday Views using the specified country and league
-     * @param league the league to populate the views with
      * @param link the link to the league's website
      */
-    private void populateData(String league, String link) {
+    private void populateData(String link) {
 
         try {
             League leagueData = new League(link);
@@ -118,7 +117,14 @@ public class LeagueActivity extends AppCompatActivity{
             this.fillMatchday(matches);
 
         } catch (IOException e) {
-            Notifiers.showConnectionErrorDialog(this);
+            //Notifiers.showConnectionErrorDialog(this);
+            //Handle Dropped Connections
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            this.populateData(link);
         }
     }
 
@@ -209,7 +215,7 @@ public class LeagueActivity extends AppCompatActivity{
          */
         @Override
         protected Void doInBackground(String... params) {
-            LeagueActivity.this.populateData(params[0], params[1]);
+            LeagueActivity.this.populateData(params[1]);
             return null;
         }
     }

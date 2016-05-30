@@ -41,6 +41,8 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private boolean initialized = false;
+
     /**
      * Initializes the Main Activity with a loading screen and starts the country getting process.
      * The method inflates the activity_main.xml layout file
@@ -68,9 +70,19 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Country> countries;
         try {
             countries = CountryLister.getCountries().getCountries();
+            this.initialized = true;
         } catch (IOException e) {
             //TODO Check why this isn't working
             // Notifiers.showConnectionErrorDialog(this);
+
+            //Handle Dropped Connections
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+
+            this.populateCountryList();
             return;
         }
 

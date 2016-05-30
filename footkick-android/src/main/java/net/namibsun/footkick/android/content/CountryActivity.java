@@ -80,7 +80,15 @@ public class CountryActivity extends AppCompatActivity{
         try {
             leagues = new Country(country, link).getLeagues();
         } catch (IOException e) {
-            Notifiers.showConnectionErrorDialog(this);
+            //Notifiers.showConnectionErrorDialog(this);
+            //Handle Dropped Connections
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+
+            this.populateData(country, link);
             return;
         }
 
