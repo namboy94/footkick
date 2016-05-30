@@ -44,12 +44,11 @@ public class LeagueButton extends Button {
      * @param leagueLink the link to the site of the league
      */
     @SuppressLint("SetTextI18n")
-    public LeagueButton(final Context context, final String leagueName, String leagueLink) {
+    public LeagueButton(final Context context, final String leagueName, final String leagueLink) {
 
         //Initializes button
         super(context);
         this.setText(leagueName);
-        final String buttonLink = leagueLink.split("http://www.livescore.com")[1];
 
         //Set the OnclickListener
         this.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +58,7 @@ public class LeagueButton extends Button {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("league", leagueName);
-                bundle.putString("link", buttonLink);
+                bundle.putString("link", leagueLink);
                 leagueActivity.putExtras(bundle);
                 context.startActivity(leagueActivity);
             }
