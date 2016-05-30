@@ -3,4 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="matchday">Matchday</string>
     <string name="leaguetable">League Table</string>
+    <string name="loading_screen">Loading Screen</string>
+    <string name="loading">Loading…</string>
+    <string name="countries">Countries</string>
+    <string name="leagues">Leagues</string>
+    <string name="league_table_text">League Table</string>
+    <string name="matchday_text">Matchday</string>
 </resources>

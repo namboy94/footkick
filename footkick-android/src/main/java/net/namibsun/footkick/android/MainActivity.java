@@ -22,28 +22,27 @@ This file is part of footkick.
 
 package net.namibsun.footkick.android;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import net.namibsun.footkick.android.widgets.CountryLeagueButton;
-import net.namibsun.footkick.java.scraper.LeagueLister;
+import android.widget.*;
+import net.namibsun.footkick.android.widgets.CountryButton;
+import net.namibsun.footkick.java.scraper.Country;
+import net.namibsun.footkick.java.scraper.CountryLister;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 
 /**
  * The Main Activity class.
- * It displays a list of country/league combinations as buttons to load the standings
- * for that country/league
+ * It displays a list of countries as buttons to load the leagues for that country
  */
 public class MainActivity extends AppCompatActivity {
 
     /**
-     * Creates a new ScrollView containing a RelativeLayout that shows the country/league buttons.
+     * Initializes the Main Activity with a loading screen and starts the country getting process.
      * The method inflates the activity_main.xml layout file
      * @param savedInstanceState - The saved instance state
      */
@@ -53,40 +52,73 @@ public class MainActivity extends AppCompatActivity {
         //Creates the new Activity and sets the content view to that of activity_main.xml
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new CountryGetter().execute();
 
-        //get an array of league identifiers
-        String[] leagues = LeagueLister.getLeagues();
+    }
 
-        //Initialize the ScollView and RelativeLayout
-        ScrollView scroller = (ScrollView) this.findViewById(R.id.mainScroller);
-        RelativeLayout leagueHolder = new RelativeLayout(this);
-        leagueHolder.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                                                     ViewGroup.LayoutParams.MATCH_PARENT));
+    /**
+     * Populates the country list and removes the loading screen
+     */
+    private void populateCountryList() {
 
-        //Add the buttons
-        Button lastButton = null;
-        for (String league : leagues) {
+        //final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.loadingScreenSwitcher);
+        final RelativeLayout layout = (RelativeLayout) this.findViewById(R.id.countryHolder);
 
-            String country = league.split(" ")[0];
-            String leagueName = league.split(" ")[1];
-            final MainActivity activity = this;
-
-            CountryLeagueButton leagueButton = new CountryLeagueButton(this, country, leagueName);
-            leagueButton.setId(View.generateViewId());
-            RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-            if (lastButton != null) {
-                Log.e("Here",  "hee");
-                Log.e("LAST ID", "" + lastButton.getId());
-                buttonParams.addRule(RelativeLayout.BELOW, lastButton.getId());
-            }
-
-            leagueHolder.addView(leagueButton, buttonParams);
-            lastButton = leagueButton;
+        //get an array list of country identifiers
+        ArrayList<Country> countries;
+        try {
+            countries = CountryLister.getCountries().getCountries();
+        } catch (IOException e) {
+            //TODO Check why this isn't working
+            // Notifiers.showConnectionErrorDialog(this);
+            return;
         }
 
-        //Add the buttons to the scroller
-        scroller.addView(leagueHolder);
+        //Add the buttons
+        int lastId = R.id.countryText;
+        for (Country country : countries) {
+
+            final CountryButton countryButton = new CountryButton(this, country.countryName, country.countryUrl);
+            countryButton.setId(View.generateViewId());
+            final RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+            buttonParams.addRule(RelativeLayout.BELOW, lastId);
+            lastId = countryButton.getId();
+
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    layout.addView(countryButton, buttonParams);
+                }
+            });
+        }
+        final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.loadingScreenSwitcher);
+        //Switch loading screen away
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switcher.showNext();
+            }
+        });
+    }
+
+    /**
+     * An Async task that loads the available countries and adds them to the list,
+     * then switches the loading screen away
+     */
+    private class CountryGetter extends AsyncTask<Void, Void, Void> {
+
+        /**
+         * Runs in the background
+         * @param params Void
+         * @return Void
+         */
+        @Override
+        protected Void doInBackground(Void... params) {
+            MainActivity.this.populateCountryList();
+            return null;
+        }
     }
 }

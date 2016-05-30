@@ -22,16 +22,13 @@ This file is part of footkick.
 
 package net.namibsun.footkick.android.content;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.*;
-import net.namibsun.footkick.android.MainActivity;
 import net.namibsun.footkick.android.R;
+import net.namibsun.footkick.android.common.Notifiers;
 import net.namibsun.footkick.java.scraper.Match;
 import net.namibsun.footkick.java.scraper.Team;
 import net.namibsun.footkick.java.structures.League;
@@ -52,13 +49,13 @@ public class LeagueActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //Initialize the Activity and load the content_main.xml layout file
+        //Initialize the Activity and load the activity_league.xml layout file
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_main);
+        setContentView(R.layout.activity_league);
 
         //Populate the table layouts
-        final Bundle bundle = this.getIntent().getExtras();
-        new TablePopulator().execute(bundle.getString("country"), bundle.getString("league"));
+        Bundle bundle = this.getIntent().getExtras();
+        new TablePopulator().execute(bundle.getString("league"), bundle.getString("link"));
 
         //Initialize the switch button
         final Button switchButton = (Button) this.findViewById(R.id.switchButton);
@@ -78,17 +75,25 @@ public class LeagueActivity extends AppCompatActivity{
                 switcher.showNext();
             }
         });
+
+        try {
+            //noinspection ConstantConditions
+            this.getSupportActionBar().setTitle(bundle.getString("league"));
+        } catch (NullPointerException e) {
+            //noinspection ConstantConditions
+            this.getActionBar().setTitle(bundle.getString("league"));
+        }
     }
 
     /**
      * This method populates the league table and matchday Views using the specified country and league
-     * @param country the country to populate the views with
      * @param league the league to populate the views with
+     * @param link the link to the league's website
      */
-    private void populateData(String country, String league) {
+    private void populateData(String league, String link) {
 
         try {
-            League leagueData = new League(country, league);
+            League leagueData = new League(link);
             ArrayList<Team> teams = leagueData.getTeams();
             ArrayList<Match> matches = leagueData.getMatches();
 
@@ -96,7 +101,7 @@ public class LeagueActivity extends AppCompatActivity{
             this.fillMatchday(matches);
 
         } catch (IOException e) {
-            this.showConnectionErrorDialog();
+            Notifiers.showConnectionErrorDialog(this);
         }
 
     }
@@ -107,12 +112,25 @@ public class LeagueActivity extends AppCompatActivity{
      */
     private void fillLeagueTable(ArrayList<Team> teams) {
 
-        final ScrollView scroller = (ScrollView) this.findViewById(R.id.leagueTableScroller);
-        final TableLayout table = new TableLayout(this);
+        // Switch to matchday if no league table available
+        if (teams.size() == 0) {
+            final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
+            final Button toggleButton = (Button) this.findViewById(R.id.switchButton);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    switcher.showNext();
+                    toggleButton.setText(R.string.leaguetable);
+                }
+            });
+            return;
+        }
+
+        final TableLayout table = (TableLayout) this.findViewById(R.id.leagueTableTable);
 
         int position = 1;
         for (Team team : teams) {
-            TableRow teamRow = new TableRow(this);
+            final TableRow teamRow = new TableRow(this);
 
             String[] data = {
                     "" + position, team.teamName, team.matches, team.wins, team.draws, team.losses, team.goalsFor,
@@ -125,19 +143,15 @@ public class LeagueActivity extends AppCompatActivity{
                 dataText.setPadding(5,0,5,0);
                 teamRow.addView(dataText);
             }
-
-            table.addView(teamRow);
             position++;
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    table.addView(teamRow);
+                }
+            });
         }
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                scroller.addView(table);
-            }
-        });
-
-
     }
 
     /**
@@ -146,11 +160,10 @@ public class LeagueActivity extends AppCompatActivity{
      */
     private void fillMatchday(ArrayList<Match> matches) {
 
-        final ScrollView scroller = (ScrollView) this.findViewById(R.id.matchDayScroller);
-        final TableLayout matchDayTable = new TableLayout(this);
+        final TableLayout matchDayTable = (TableLayout) this.findViewById(R.id.matchDayTable);
 
         for (Match match : matches) {
-            TableRow matchRow = new TableRow(this);
+            final TableRow matchRow = new TableRow(this);
 
             String[] matchData = {
                     match.time, match.homeTeam, match.score, match.awayTeam
@@ -162,36 +175,13 @@ public class LeagueActivity extends AppCompatActivity{
                 matchRow.addView(dataText);
             }
 
-            matchDayTable.addView(matchRow);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    matchDayTable.addView(matchRow);
+                }
+            });
         }
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                scroller.addView(matchDayTable);
-            }
-        });
-
-    }
-
-    /**
-     * Shows connection error dialog
-     */
-    private void showConnectionErrorDialog(){
-        AlertDialog.Builder errorDialogBuilder = new AlertDialog.Builder(this);
-        errorDialogBuilder.setTitle("Connection Error");
-        errorDialogBuilder.setMessage("No connection to server");
-        errorDialogBuilder.setCancelable(true);
-        errorDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-        errorDialogBuilder.create();
-        errorDialogBuilder.show();
-
-        Intent mainActivity = new Intent(this, MainActivity.class);
-        this.startActivity(mainActivity);
     }
 
     /**
