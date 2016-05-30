@@ -1,11 +1,6 @@
 package net.namibsun.footkick.java.structures;
 
 import net.namibsun.footkick.java.scraper.Country;
-import net.namibsun.footkick.java.scraper.FootballHtmlParser;
-import net.namibsun.footkick.java.scraper.LeagueInfo;
-import net.namibsun.footkick.java.scraper.LeagueLister;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -25,12 +20,17 @@ public class CountryList {
     ArrayList<Country> africa;
     ArrayList<Country> other;
 
+    /**
+     * Creates an new CountryList
+     * @param countries an arraylist of arraylists of countries representing all countries found by
+     *                  the LeagueLister
+     */
     public CountryList(ArrayList<ArrayList<Country>> countries) {
         this.international = countries.get(0);
         this.major = countries.get(1);
         this.otherInternational = countries.get(2);
         this.europe = countries.get(3);
-        this.europe.addAll(countries.get(4));
+        this.europe.addAll(countries.get(4));  // Merge West and East Europe
         this.southAmerica = countries.get(5);
         this.concacaf = countries.get(6);
         this.asia = countries.get(7);
@@ -38,6 +38,7 @@ public class CountryList {
         this.africa = countries.get(9);
         this.other = countries.get(10);
 
+        // Remove the 'More countries entry'
         for (int i = 0; i < this.other.size(); i++) {
             if (this.other.get(i).countryName.contains("More countries")) {
                 this.other.remove(i);
@@ -47,6 +48,10 @@ public class CountryList {
 
     }
 
+    /**
+     * Gets a List of all Countries as a single array list
+     * @return the list of countries
+     */
     public ArrayList<Country> getCountries() {
         ArrayList<Country> returnList = this.major;
         returnList.addAll(this.international);
@@ -59,21 +64,4 @@ public class CountryList {
         returnList.addAll(this.other);
         return returnList;
     }
-
-    public static void main(String[] args) {
-
-        try {
-            CountryList list = LeagueLister.getCountries();
-            for (Country country : list.getCountries()) {
-                System.out.println(country.countryName + "   @   " + country.countryUrl);
-                for (LeagueInfo l : country.getLeagues()) {
-                    System.out.println(l.leagueName + "   @   " + l.leagueUrl);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 }
