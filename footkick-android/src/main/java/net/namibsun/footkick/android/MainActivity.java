@@ -47,7 +47,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private boolean connectionLost = false;
-
     private Tracker analyticsTracker;
 
     /**
@@ -63,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         new CountryGetter().execute();
 
-        Log.i("Starting App", "MainActivity");
         AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
         this.analyticsTracker = application.getDefaultTracker();
     }

@@ -30,6 +30,9 @@ import android.view.MotionEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.samples.quickstart.analytics.AnalyticsApplication;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.Notifiers;
 import net.namibsun.footkick.java.scraper.Match;
@@ -44,8 +47,10 @@ import java.util.ArrayList;
  */
 public class LeagueActivity extends AppCompatActivity{
 
+    private Tracker analyticsTracker;
     private ViewSwitcher viewSwitcher;
     private GestureDetector gestureDetector;
+    private String leagueName;
 
     private Animation slide_in_left, slide_out_right;
     private Animation slide_in_right, slide_out_left;
@@ -77,6 +82,7 @@ public class LeagueActivity extends AppCompatActivity{
         //Populate the table layouts
         Bundle bundle = this.getIntent().getExtras();
         new TablePopulator().execute(bundle.getString("league"), bundle.getString("link"));
+        this.leagueName = bundle.getString("league");
 
         try {
             //noinspection ConstantConditions
@@ -86,8 +92,18 @@ public class LeagueActivity extends AppCompatActivity{
             this.getActionBar().setTitle(bundle.getString("league"));
         }
 
+        AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
+        this.analyticsTracker = application.getDefaultTracker();
+
         SwipeDetector swipeDetector = new SwipeDetector();
         this.gestureDetector = new GestureDetector(this, swipeDetector);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        analyticsTracker.setScreenName(this.leagueName);
+        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     /**
