@@ -40,7 +40,7 @@ import java.util.ArrayList;
 public class MainActivity extends ActivityFrameWork {
 
     /**
-     * Initializes the Main Activity with the activity_main.xml layout and sets the country names.
+     * Initializes the Main Activity with the activity_main.xml layout and sets the activity names.
      */
     @Override
     protected void initialize() {
@@ -52,6 +52,7 @@ public class MainActivity extends ActivityFrameWork {
     /**
      * Populates the country list and removes the loading screen on success
      * Potential Network errors are handled by the Activity FrameWork
+     * @throws IOException in case a network error occurs.
      */
     @Override
     protected void getInternetData() throws IOException{
