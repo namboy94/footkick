@@ -40,8 +40,10 @@ public class Main {
 
         if (args.length == 1 && args[0].equals("list")) {
             CountryList countries = CountryLister.getCountries();
+            int i = 0;
             for (Country country: countries.getCountries()) {
-                System.out.println(country.countryName + " @ " + country.countryUrl);
+                System.out.println(country.countryName + " @ " + country.countryUrl + "    " +i);
+                i++;
             }
         }
         else if (args.length != 3){
