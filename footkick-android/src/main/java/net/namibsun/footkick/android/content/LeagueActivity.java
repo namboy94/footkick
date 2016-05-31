@@ -31,6 +31,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 import net.namibsun.footkick.android.R;
+import net.namibsun.footkick.android.common.Notifiers;
 import net.namibsun.footkick.java.scraper.Match;
 import net.namibsun.footkick.java.scraper.Team;
 import net.namibsun.footkick.java.structures.League;
@@ -48,6 +49,8 @@ public class LeagueActivity extends AppCompatActivity{
 
     private Animation slide_in_left, slide_out_right;
     private Animation slide_in_right, slide_out_left;
+
+    private boolean connectionLost = false;
 
     private int[] tableColours = new int[] {
             R.color.colorEvenRow, R.color.colorOddRow
@@ -117,9 +120,19 @@ public class LeagueActivity extends AppCompatActivity{
 
             this.fillLeagueTable(teams);
             this.fillMatchday(matches);
+            this.connectionLost = false;
 
         } catch (IOException e) {
-            //Notifiers.showConnectionErrorDialog(this);
+            if (!this.connectionLost) {
+                this.connectionLost = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Notifiers.showConnectionErrorDialog(LeagueActivity.this);
+                    }
+                });
+            }
+
             //Handle Dropped Connections
             try {
                 Thread.sleep(3000);

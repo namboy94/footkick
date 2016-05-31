@@ -41,6 +41,8 @@ import java.util.ArrayList;
  */
 public class CountryActivity extends AppCompatActivity{
 
+    private boolean connectionLost = false;
+
     /**
      * Method run on creation of the Activity, it inflates the activity_country.xml
      * layout file and then adds all league for the selected country to a list
@@ -79,8 +81,18 @@ public class CountryActivity extends AppCompatActivity{
         ArrayList<LeagueInfo> leagues;
         try {
             leagues = new Country(country, link).getLeagues();
+            this.connectionLost = false;
         } catch (IOException e) {
-            //Notifiers.showConnectionErrorDialog(this);
+            if (!this.connectionLost) {
+                this.connectionLost = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Notifiers.showConnectionErrorDialog(CountryActivity.this);
+                    }
+                });
+            }
+
             //Handle Dropped Connections
             try {
                 Thread.sleep(3000);

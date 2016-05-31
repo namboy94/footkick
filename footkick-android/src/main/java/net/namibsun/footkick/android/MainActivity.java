@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.*;
+import net.namibsun.footkick.android.common.Notifiers;
 import net.namibsun.footkick.android.widgets.CountryButton;
 import net.namibsun.footkick.java.scraper.Country;
 import net.namibsun.footkick.java.scraper.CountryLister;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private boolean initialized = false;
+    private boolean connectionLost = false;
 
     /**
      * Initializes the Main Activity with a loading screen and starts the country getting process.
@@ -70,10 +71,18 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Country> countries;
         try {
             countries = CountryLister.getCountries().getCountries();
-            this.initialized = true;
+            this.connectionLost = false;
         } catch (IOException e) {
-            //TODO Check why this isn't working
-            // Notifiers.showConnectionErrorDialog(this);
+            if (!this.connectionLost) {
+                this.connectionLost = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Notifiers.showConnectionErrorDialog(MainActivity.this);
+                    }
+                });
+            }
+
 
             //Handle Dropped Connections
             try {
