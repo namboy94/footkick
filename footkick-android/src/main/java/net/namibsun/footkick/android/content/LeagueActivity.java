@@ -25,14 +25,12 @@ package net.namibsun.footkick.android.content;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 import net.namibsun.footkick.android.R;
-import net.namibsun.footkick.android.common.Notifiers;
 import net.namibsun.footkick.java.scraper.Match;
 import net.namibsun.footkick.java.scraper.Team;
 import net.namibsun.footkick.java.structures.League;
@@ -50,6 +48,10 @@ public class LeagueActivity extends AppCompatActivity{
 
     private Animation slide_in_left, slide_out_right;
     private Animation slide_in_right, slide_out_left;
+
+    private int[] tableColours = new int[] {
+            R.color.colorEvenRow, R.color.colorOddRow
+    };
 
     /**
      * Method run on creation of the Activity
@@ -148,8 +150,10 @@ public class LeagueActivity extends AppCompatActivity{
         final TableLayout table = (TableLayout) this.findViewById(R.id.leagueTableTable);
 
         int position = 1;
+
         for (Team team : teams) {
             final TableRow teamRow = new TableRow(this);
+            teamRow.setBackgroundResource(this.tableColours[position % 2]);
 
             String[] data = {
                     "" + position, team.teamName, team.matches, team.wins, team.draws, team.losses, team.goalsFor,
@@ -159,7 +163,6 @@ public class LeagueActivity extends AppCompatActivity{
             for (String dataElement : data) {
                 TextView dataText = new TextView(this);
                 dataText.setText(dataElement);
-                dataText.setPadding(5,0,5,0);
                 teamRow.addView(dataText);
             }
             position++;
@@ -181,8 +184,11 @@ public class LeagueActivity extends AppCompatActivity{
 
         final TableLayout matchDayTable = (TableLayout) this.findViewById(R.id.matchDayTable);
 
+        int row = 1;
         for (Match match : matches) {
             final TableRow matchRow = new TableRow(this);
+            matchRow.setBackgroundResource(this.tableColours[row % 2]);
+            row++;
 
             String[] matchData = {
                     match.time, match.homeTeam, match.score, match.awayTeam

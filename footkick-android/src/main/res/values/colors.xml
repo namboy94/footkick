@@ -2,5 +2,7 @@
 <resources>
     <color name="colorPrimary">#8BA870</color>
     <color name="colorPrimaryDark">#458B00</color>
-    <color name="colorAccent">#C0C0C0</color>
+    <color name="colorAccent">#DB1E26</color>
+    <color name="colorOddRow">#A8A8A8</color>
+    <color name="colorEvenRow">#C0C0C0</color>
 </resources>
