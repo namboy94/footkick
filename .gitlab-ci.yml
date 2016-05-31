@@ -52,20 +52,20 @@ clone_develop:
 #    - rm footkick-android/build/outputs/apk/footkick-android-release-unaligned.apk
 #    - cp footkick-android/build/outputs/apk/* ../footkick.wiki/builds/apk
 
-build_jar:
-  stage: javabuild
-  only:
-    - master
-  script:
-    - cd
-    - cd footkick/footkick-java
-    - rm build.gradle
-    - mv altbuild.gradle build.gradle
-    - gradle build
-    - mv build/libs/* ../../footkick.wiki/builds/jar
-    - cd ../../footkick.wiki
-    - git add --all
-    - git commit -m "Added builds"
+#build_jar:
+#  stage: javabuild
+#  only:
+#    - master
+#  script:
+#    - cd
+#    - cd footkick/footkick-java
+#    - rm build.gradle
+#    - mv altbuild.gradle build.gradle
+#    - gradle build
+#    - mv build/libs/* ../../footkick.wiki/builds/jar
+#    - cd ../../footkick.wiki
+#    - git add --all
+#    - git commit -m "Added builds"
 
 upload_builds:
   stage: upload
