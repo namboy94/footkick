@@ -94,6 +94,7 @@ public class LeagueActivity extends AppCompatActivity{
 
         AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
         this.analyticsTracker = application.getDefaultTracker();
+        this.analyticsTracker.enableAdvertisingIdCollection(true);
 
         SwipeDetector swipeDetector = new SwipeDetector();
         this.gestureDetector = new GestureDetector(this, swipeDetector);

@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
         this.analyticsTracker = application.getDefaultTracker();
+        this.analyticsTracker.enableAdvertisingIdCollection(true);
     }
 
     @Override
