@@ -231,19 +231,18 @@ public class LeagueActivity extends AppCompatActivity{
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             // Swipe left (next)
-            if (e1.getX() > e2.getX()) {
-                LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_right);
-                LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_left);
+
+            if (Math.abs(velocityX) > 3000.0) {
+                if (e1.getX() > e2.getX()) {
+                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_right);
+                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_left);
+                }
+                else {
+                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_left);
+                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_right);
+                }
                 LeagueActivity.this.viewSwitcher.showNext();
             }
-
-            // Swipe right (previous)
-            if (e1.getX() < e2.getX()) {
-                LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_left);
-                LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_right);
-                LeagueActivity.this.viewSwitcher.showNext();
-            }
-
             return super.onFling(e1, e2, velocityX, velocityY);
         }
 
