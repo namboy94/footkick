@@ -1,3 +1,7 @@
+V 0.4
+  - Design improvements
+  - Network Error Detection
+  - Google Analytics integration
 V 0.3
   - Added dynamic country loading
   - Improved layout of android app
