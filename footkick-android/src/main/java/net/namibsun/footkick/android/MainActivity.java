@@ -22,7 +22,6 @@ This file is part of footkick.
 
 package net.namibsun.footkick.android;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
@@ -40,19 +39,14 @@ import java.util.ArrayList;
  */
 public class MainActivity extends ActivityFrameWork {
 
-    protected int layoutFile = R.layout.activity_main;
-    protected String screenName = "Countries";
-    protected String analyticsName = "Countries";
-
     /**
-     * Initializes the Main Activity with a loading screen and starts the country getting process.
-     * The method inflates the activity_main.xml layout file
-     * @param savedInstanceState - The saved instance state
+     * Initializes the Main Activity with the activity_main.xml layout and sets the country names.
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);  //Initialize Analytics etc.
-        this.runInternetDataGetter(this);  //Populate the activity data
+    protected void initialize() {
+        this.layoutFile = R.layout.activity_main;
+        this.screenName = "Countries";
+        this.analyticsName = "Countries";
     }
 
     /**

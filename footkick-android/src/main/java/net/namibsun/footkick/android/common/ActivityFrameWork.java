@@ -25,6 +25,7 @@ package net.namibsun.footkick.android.common;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.samples.quickstart.analytics.AnalyticsApplication;
@@ -50,18 +51,24 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
     /**
      * The ID of the XML layout file
      */
-    protected int layoutFile = -1;
+    protected int layoutFile;
 
     /**
      * The name to be displayed by the action bar
      */
-    protected String screenName = "Footkick";
+    protected String screenName;
 
     /**
      * The name of the activity that will be logged by Google Analytics
      */
-    protected String analyticsName = "Generic";
+    protected String analyticsName;
 
+
+    /**
+     * Method to be overriden by the child class to initialize some local variables like the
+     * layout file to be used
+     */
+    protected abstract void initialize();
 
     /**
      * The constructor (essentially) of the activity. It takes care of initializing the XML file,
@@ -74,6 +81,7 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
 
         //Calls the parent classes' onCreate method
         super.onCreate(savedInstanceState);
+        this.initialize();
 
         //Loads the layout file, won't load if the layout's ID is -1, i.e. not set.
         if (this.layoutFile != -1) {
@@ -92,6 +100,8 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
         } catch (NullPointerException e) {
             this.getActionBar().setTitle(this.screenName);
         }
+
+        this.runInternetDataGetter(this);
     }
 
     /**
