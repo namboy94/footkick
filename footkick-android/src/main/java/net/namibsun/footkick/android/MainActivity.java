@@ -28,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import net.namibsun.footkick.android.common.Notifiers;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.samples.quickstart.analytics.AnalyticsApplication;
@@ -44,6 +45,8 @@ import java.util.ArrayList;
  * It displays a list of countries as buttons to load the leagues for that country
  */
 public class MainActivity extends AppCompatActivity {
+
+    private boolean connectionLost = false;
 
     private Tracker analyticsTracker;
 
@@ -84,9 +87,27 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Country> countries;
         try {
             countries = CountryLister.getCountries().getCountries();
+            this.connectionLost = false;
         } catch (IOException e) {
-            //TODO Check why this isn't working
-            // Notifiers.showConnectionErrorDialog(this);
+            if (!this.connectionLost) {
+                this.connectionLost = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Notifiers.showConnectionErrorDialog(MainActivity.this);
+                    }
+                });
+            }
+
+
+            //Handle Dropped Connections
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+
+            this.populateCountryList();
             return;
         }
 

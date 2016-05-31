@@ -25,7 +25,10 @@ package net.namibsun.footkick.android.content;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.Notifiers;
@@ -41,6 +44,18 @@ import java.util.ArrayList;
  */
 public class LeagueActivity extends AppCompatActivity{
 
+    private ViewSwitcher viewSwitcher;
+    private GestureDetector gestureDetector;
+
+    private Animation slide_in_left, slide_out_right;
+    private Animation slide_in_right, slide_out_left;
+
+    private boolean connectionLost = false;
+
+    private int[] tableColours = new int[] {
+            R.color.colorEvenRow, R.color.colorOddRow
+    };
+
     /**
      * Method run on creation of the Activity
      *
@@ -53,28 +68,15 @@ public class LeagueActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_league);
 
+        viewSwitcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
+        this.slide_in_left = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
+        this.slide_in_right = AnimationUtils.loadAnimation(this, R.anim.slide_in_right);
+        this.slide_out_left = AnimationUtils.loadAnimation(this, R.anim.slide_out_left);
+        this.slide_out_right = AnimationUtils.loadAnimation(this, R.anim.slide_out_right);
+
         //Populate the table layouts
         Bundle bundle = this.getIntent().getExtras();
         new TablePopulator().execute(bundle.getString("league"), bundle.getString("link"));
-
-        //Initialize the switch button
-        final Button switchButton = (Button) this.findViewById(R.id.switchButton);
-        switchButton.setText(R.string.matchday);
-        //Define the on click listener
-        switchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Switch between tables
-                String buttonText = switchButton.getText().toString();
-                if (buttonText.equals("Matchday")) {
-                    switchButton.setText(R.string.leaguetable);
-                } else {
-                    switchButton.setText(R.string.matchday);
-                }
-                ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.leagueViewSwitcher);
-                switcher.showNext();
-            }
-        });
 
         try {
             //noinspection ConstantConditions
@@ -83,14 +85,33 @@ public class LeagueActivity extends AppCompatActivity{
             //noinspection ConstantConditions
             this.getActionBar().setTitle(bundle.getString("league"));
         }
+
+        SwipeDetector swipeDetector = new SwipeDetector();
+        this.gestureDetector = new GestureDetector(this, swipeDetector);
+    }
+
+    /**
+     * Calls the gesture detector to swipe to the next or previous view
+     * @param event hte motion event that triggered this method call
+     * @return if the event was accepted or not, I guess?
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        this.gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        super.dispatchTouchEvent(ev);
+        return this.gestureDetector.onTouchEvent(ev);
     }
 
     /**
      * This method populates the league table and matchday Views using the specified country and league
-     * @param league the league to populate the views with
      * @param link the link to the league's website
      */
-    private void populateData(String league, String link) {
+    private void populateData(String link) {
 
         try {
             League leagueData = new League(link);
@@ -99,11 +120,27 @@ public class LeagueActivity extends AppCompatActivity{
 
             this.fillLeagueTable(teams);
             this.fillMatchday(matches);
+            this.connectionLost = false;
 
         } catch (IOException e) {
-            Notifiers.showConnectionErrorDialog(this);
-        }
+            if (!this.connectionLost) {
+                this.connectionLost = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Notifiers.showConnectionErrorDialog(LeagueActivity.this);
+                    }
+                });
+            }
 
+            //Handle Dropped Connections
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            this.populateData(link);
+        }
     }
 
     /**
@@ -114,13 +151,10 @@ public class LeagueActivity extends AppCompatActivity{
 
         // Switch to matchday if no league table available
         if (teams.size() == 0) {
-            final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
-            final Button toggleButton = (Button) this.findViewById(R.id.switchButton);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    switcher.showNext();
-                    toggleButton.setText(R.string.leaguetable);
+                    LeagueActivity.this.viewSwitcher.showNext();
                 }
             });
             return;
@@ -129,8 +163,10 @@ public class LeagueActivity extends AppCompatActivity{
         final TableLayout table = (TableLayout) this.findViewById(R.id.leagueTableTable);
 
         int position = 1;
+
         for (Team team : teams) {
             final TableRow teamRow = new TableRow(this);
+            teamRow.setBackgroundResource(this.tableColours[position % 2]);
 
             String[] data = {
                     "" + position, team.teamName, team.matches, team.wins, team.draws, team.losses, team.goalsFor,
@@ -140,7 +176,6 @@ public class LeagueActivity extends AppCompatActivity{
             for (String dataElement : data) {
                 TextView dataText = new TextView(this);
                 dataText.setText(dataElement);
-                dataText.setPadding(5,0,5,0);
                 teamRow.addView(dataText);
             }
             position++;
@@ -162,8 +197,11 @@ public class LeagueActivity extends AppCompatActivity{
 
         final TableLayout matchDayTable = (TableLayout) this.findViewById(R.id.matchDayTable);
 
+        int row = 1;
         for (Match match : matches) {
             final TableRow matchRow = new TableRow(this);
+            matchRow.setBackgroundResource(this.tableColours[row % 2]);
+            row++;
 
             String[] matchData = {
                     match.time, match.homeTeam, match.score, match.awayTeam
@@ -196,8 +234,30 @@ public class LeagueActivity extends AppCompatActivity{
          */
         @Override
         protected Void doInBackground(String... params) {
-            LeagueActivity.this.populateData(params[0], params[1]);
+            LeagueActivity.this.populateData(params[1]);
             return null;
         }
+    }
+
+    private class SwipeDetector extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            // Swipe left (next)
+
+            if (Math.abs(velocityX) > 3000.0) {
+                if (e1.getX() > e2.getX()) {
+                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_right);
+                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_left);
+                }
+                else {
+                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_left);
+                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_right);
+                }
+                LeagueActivity.this.viewSwitcher.showNext();
+            }
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+
     }
 }
