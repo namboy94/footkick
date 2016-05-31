@@ -7,3 +7,8 @@ footkick-java/.gradle/*
 footkick-java/build/*
 local.properties
 footkick-android/google-services.json
+.idea/
+build/
+footkick-android/build/
+footkick-java/.gradle/
+footkick-java/build/
