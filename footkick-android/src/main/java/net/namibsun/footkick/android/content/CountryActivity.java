@@ -52,7 +52,7 @@ public class CountryActivity extends ActivityFrameWork{
 
         this.layoutFile = R.layout.activity_country;
         this.analyticsName = bundle.getString("country");
-        this.screenName = this.analyticsName;
+        this.screenName = bundle.getString("country");
         this.countryLink = bundle.getString("link");
     }
 

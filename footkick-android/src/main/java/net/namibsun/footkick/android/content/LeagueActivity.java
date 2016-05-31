@@ -34,7 +34,9 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.samples.quickstart.analytics.AnalyticsApplication;
 import net.namibsun.footkick.android.R;
+import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.common.Notifiers;
+import net.namibsun.footkick.android.common.ViewSwitchSwiper;
 import net.namibsun.footkick.java.scraper.Match;
 import net.namibsun.footkick.java.scraper.Team;
 import net.namibsun.footkick.java.structures.League;
@@ -45,73 +47,35 @@ import java.util.ArrayList;
 /**
  * An activity that displays a league table and a matchday
  */
-public class LeagueActivity extends AppCompatActivity{
+public class LeagueActivity extends ActivityFrameWork{
 
-    private Tracker analyticsTracker;
-    private ViewSwitcher viewSwitcher;
     private GestureDetector gestureDetector;
-    private String leagueName;
+    private String leagueLink;
 
-    private Animation slide_in_left, slide_out_right;
-    private Animation slide_in_right, slide_out_left;
 
-    private boolean connectionLost = false;
+
 
     private int[] tableColours = new int[] {
             R.color.colorEvenRow, R.color.colorOddRow
     };
 
-    /**
-     * Method run on creation of the Activity
-     *
-     * @param savedInstanceState the current instance state of the activity
-     */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        //Initialize the Activity and load the activity_league.xml layout file
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_league);
-
-        viewSwitcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
-        this.slide_in_left = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
-        this.slide_in_right = AnimationUtils.loadAnimation(this, R.anim.slide_in_right);
-        this.slide_out_left = AnimationUtils.loadAnimation(this, R.anim.slide_out_left);
-        this.slide_out_right = AnimationUtils.loadAnimation(this, R.anim.slide_out_right);
-
-        //Populate the table layouts
+    protected void initialize() {
         Bundle bundle = this.getIntent().getExtras();
-        new TablePopulator().execute(bundle.getString("league"), bundle.getString("link"));
-        this.leagueName = bundle.getString("league");
 
-        try {
-            //noinspection ConstantConditions
-            this.getSupportActionBar().setTitle(bundle.getString("league"));
-        } catch (NullPointerException e) {
-            //noinspection ConstantConditions
-            this.getActionBar().setTitle(bundle.getString("league"));
-        }
+        this.layoutFile = R.layout.activity_league;
+        this.analyticsName = bundle.getString("league");
+        this.screenName = bundle.getString("league");
+        this.leagueLink = bundle.getString("link");
 
-        AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
-        this.analyticsTracker = application.getDefaultTracker();
-        this.analyticsTracker.enableAdvertisingIdCollection(true);
+    }
 
-        SwipeDetector swipeDetector = new SwipeDetector();
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
+        ViewSwitchSwiper swipeDetector = new ViewSwitchSwiper(this, switcher);
         this.gestureDetector = new GestureDetector(this, swipeDetector);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        analyticsTracker.setScreenName(this.leagueName);
-        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }
-
-    /**
-     * Calls the gesture detector to swipe to the next or previous view
-     * @param event hte motion event that triggered this method call
-     * @return if the event was accepted or not, I guess?
-     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         this.gestureDetector.onTouchEvent(event);
@@ -124,61 +88,31 @@ public class LeagueActivity extends AppCompatActivity{
         return this.gestureDetector.onTouchEvent(ev);
     }
 
-    /**
-     * This method populates the league table and matchday Views using the specified country and league
-     * @param link the link to the league's website
-     */
-    private void populateData(String link) {
+    protected void getInternetData() throws IOException {
 
-        try {
-            League leagueData = new League(link);
-            ArrayList<Team> teams = leagueData.getTeams();
-            ArrayList<Match> matches = leagueData.getMatches();
+        League leagueData = new League(this.leagueLink);
+        ArrayList<Team> teams = leagueData.getTeams();
+        ArrayList<Match> matches = leagueData.getMatches();
 
-            this.fillLeagueTable(teams);
-            this.fillMatchday(matches);
-            this.connectionLost = false;
+        this.fillLeagueTable(teams);
+        this.fillMatchday(matches);
 
-        } catch (IOException e) {
-            if (!this.connectionLost) {
-                this.connectionLost = true;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Notifiers.showConnectionErrorDialog(LeagueActivity.this);
-                    }
-                });
-            }
-
-            //Handle Dropped Connections
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-            this.populateData(link);
-        }
-    }
-
-    /**
-     * Fills the league table with the provided team objects
-     * @param teams the teams to be displayed
-     */
-    private void fillLeagueTable(ArrayList<Team> teams) {
-
-        // Switch to matchday if no league table available
+        //If this is a league without a league table (for example, the quarterfinals of a knockout
+        // competition) switch over to the matchday view.
+        final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
         if (teams.size() == 0) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    LeagueActivity.this.viewSwitcher.showNext();
+                    switcher.showNext();
                 }
             });
-            return;
         }
+    }
+
+    private void fillLeagueTable(ArrayList<Team> teams) {
 
         final TableLayout table = (TableLayout) this.findViewById(R.id.leagueTableTable);
-
         int position = 1;
 
         for (Team team : teams) {
@@ -206,16 +140,13 @@ public class LeagueActivity extends AppCompatActivity{
         }
     }
 
-    /**
-     * Filles the Matchday table with the parsed matches
-     * @param matches the matches to be displayed
-     */
     private void fillMatchday(ArrayList<Match> matches) {
 
         final TableLayout matchDayTable = (TableLayout) this.findViewById(R.id.matchDayTable);
-
         int row = 1;
+
         for (Match match : matches) {
+
             final TableRow matchRow = new TableRow(this);
             matchRow.setBackgroundResource(this.tableColours[row % 2]);
             row++;
@@ -239,42 +170,6 @@ public class LeagueActivity extends AppCompatActivity{
         }
     }
 
-    /**
-     * An Async task that loads the league information in the background
-     */
-    private class TablePopulator extends AsyncTask<String, Void, Void> {
 
-        /**
-         * Runs in the background
-         * @param params the country and league identifiers
-         * @return Void
-         */
-        @Override
-        protected Void doInBackground(String... params) {
-            LeagueActivity.this.populateData(params[1]);
-            return null;
-        }
-    }
 
-    private class SwipeDetector extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            // Swipe left (next)
-
-            if (Math.abs(velocityX) > 3000.0) {
-                if (e1.getX() > e2.getX()) {
-                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_right);
-                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_left);
-                }
-                else {
-                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_left);
-                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_right);
-                }
-                LeagueActivity.this.viewSwitcher.showNext();
-            }
-            return super.onFling(e1, e2, velocityX, velocityY);
-        }
-
-    }
 }
