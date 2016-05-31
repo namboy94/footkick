@@ -4,8 +4,9 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/leagueViewSwitcher"
+        android:background="@color/colorTableBG"
         android:inAnimation="@anim/slide_in_right"
         android:outAnimation="@anim/slide_out_left">
     <ScrollView
@@ -19,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/leagueTableTable">
             <TableRow tools:ignore="UselessParent"
-                android:background="@color/colorAccent">
+                android:background="@color/colorTableHeader">
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -74,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/matchDayTable">
             <TableRow tools:ignore="UselessParent"
-                      android:background="@color/colorAccent">
+                      android:background="@color/colorTableHeader">
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
