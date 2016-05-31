@@ -25,8 +25,13 @@ package net.namibsun.footkick.android;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import net.namibsun.footkick.android.common.Notifiers;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.samples.quickstart.analytics.AnalyticsApplication;
 import net.namibsun.footkick.android.widgets.CountryButton;
 import net.namibsun.footkick.java.scraper.Country;
 import net.namibsun.footkick.java.scraper.CountryLister;
@@ -41,6 +46,9 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private boolean connectionLost = false;
+    private Tracker analyticsTracker;
+
     /**
      * Initializes the Main Activity with a loading screen and starts the country getting process.
      * The method inflates the activity_main.xml layout file
@@ -54,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         new CountryGetter().execute();
 
+        AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
+        this.analyticsTracker = application.getDefaultTracker();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        analyticsTracker.setScreenName("Mainactivity");
+        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     /**
@@ -68,9 +85,27 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Country> countries;
         try {
             countries = CountryLister.getCountries().getCountries();
+            this.connectionLost = false;
         } catch (IOException e) {
-            //TODO Check why this isn't working
-            // Notifiers.showConnectionErrorDialog(this);
+            if (!this.connectionLost) {
+                this.connectionLost = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Notifiers.showConnectionErrorDialog(MainActivity.this);
+                    }
+                });
+            }
+
+
+            //Handle Dropped Connections
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+
+            this.populateCountryList();
             return;
         }
 

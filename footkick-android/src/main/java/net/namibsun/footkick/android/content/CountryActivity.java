@@ -27,6 +27,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.*;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.samples.quickstart.analytics.AnalyticsApplication;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.Notifiers;
 import net.namibsun.footkick.android.widgets.LeagueButton;
@@ -40,6 +43,10 @@ import java.util.ArrayList;
  * An activity that displays a list of leagues in a country
  */
 public class CountryActivity extends AppCompatActivity{
+
+    private Tracker analyticsTracker;
+    private boolean connectionLost = false;
+    private String countryName;
 
     /**
      * Method run on creation of the Activity, it inflates the activity_country.xml
@@ -57,6 +64,7 @@ public class CountryActivity extends AppCompatActivity{
         //Populate the table layouts
         Bundle bundle = this.getIntent().getExtras();
         new LeagueLister().execute(bundle.getString("country"), bundle.getString("link"));
+        this.countryName = bundle.getString("country");
 
         try {
             //noinspection ConstantConditions
@@ -66,6 +74,15 @@ public class CountryActivity extends AppCompatActivity{
             this.getActionBar().setTitle(bundle.getString("country"));
         }
 
+        AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
+        this.analyticsTracker = application.getDefaultTracker();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        analyticsTracker.setScreenName(this.countryName);
+        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     /**
@@ -79,8 +96,26 @@ public class CountryActivity extends AppCompatActivity{
         ArrayList<LeagueInfo> leagues;
         try {
             leagues = new Country(country, link).getLeagues();
+            this.connectionLost = false;
         } catch (IOException e) {
-            Notifiers.showConnectionErrorDialog(this);
+            if (!this.connectionLost) {
+                this.connectionLost = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Notifiers.showConnectionErrorDialog(CountryActivity.this);
+                    }
+                });
+            }
+
+            //Handle Dropped Connections
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+
+            this.populateData(country, link);
             return;
         }
 

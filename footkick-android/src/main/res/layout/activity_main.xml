@@ -5,7 +5,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/switchButton"
-        android:id="@+id/loadingScreenSwitcher">
+        android:id="@+id/loadingScreenSwitcher"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out"
+        android:background="@color/colorTableBG"
+        >
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
