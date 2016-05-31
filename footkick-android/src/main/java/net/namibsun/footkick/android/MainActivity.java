@@ -25,8 +25,10 @@ package net.namibsun.footkick.android;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.samples.quickstart.analytics.AnalyticsApplication;
 import net.namibsun.footkick.android.widgets.CountryButton;
@@ -43,7 +45,7 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private Tracker mTracker;
+    private Tracker analyticsTracker;
 
     /**
      * Initializes the Main Activity with a loading screen and starts the country getting process.
@@ -58,9 +60,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         new CountryGetter().execute();
 
-        AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        this.mTracker = application.getDefaultTracker();
+        Log.i("Starting App", "MainActivity");
+        AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
+        this.analyticsTracker = application.getDefaultTracker();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        analyticsTracker.setScreenName("Mainactivity");
+        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     /**
