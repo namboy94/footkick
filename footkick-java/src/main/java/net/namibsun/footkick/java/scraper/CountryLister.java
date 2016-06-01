@@ -61,6 +61,9 @@ public class CountryLister {
             ArrayList<Country> blockCountries = new ArrayList<>();
 
             for (Element country: singleCountries) {
+                if (country.text().contains("More countries")) {
+                    continue;
+                }
                 String link = country.toString().split("<a href=\"")[1].split("\"")[0];
                 Country countryObject = new Country(country.text(), link);
                 blockCountries.add(countryObject);
