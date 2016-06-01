@@ -23,7 +23,6 @@ This file is part of footkick.
 package net.namibsun.footkick.android.content;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.*;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
@@ -81,7 +80,7 @@ public class CountryActivity extends ActivityFrameWork{
             final RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-            leagueButton.setId(View.generateViewId());
+            leagueButton.setId(lastId + 1);
             buttonParams.addRule(RelativeLayout.BELOW, lastId);
             lastId = leagueButton.getId();
 
