@@ -1,3 +1,6 @@
+V 0.5
+  - Implemented loading wheel instead of loading screen
+  - Vast structural code improvements
 V 0.4
   - Design improvements
   - Network Error Detection
