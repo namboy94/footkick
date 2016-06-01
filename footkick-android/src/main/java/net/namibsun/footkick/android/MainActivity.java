@@ -23,7 +23,6 @@ This file is part of footkick.
 package net.namibsun.footkick.android;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.*;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.widgets.CountryButton;
@@ -74,8 +73,12 @@ public class MainActivity extends ActivityFrameWork {
             final RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-            countryButton.setId(View.generateViewId());
             buttonParams.addRule(RelativeLayout.BELOW, lastId);
+
+            if (lastId == -1) {
+                lastId++;
+            }
+            countryButton.setId(lastId + 1);
             lastId = countryButton.getId();
 
             //Add button to bottom of relative layout
