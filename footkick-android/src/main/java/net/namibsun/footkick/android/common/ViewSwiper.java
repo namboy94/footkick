@@ -29,6 +29,9 @@ public class ViewSwiper extends GestureDetector.SimpleOnGestureListener {
      */
     private Animation slide_in_right, slide_out_left;
 
+    private Runnable nextRunner = null;
+    private Runnable previousRunner = null;
+
     /**
      * The Constructor of the ViewSwiper class. It saves the switcher as a class variable
      * and also initializes the animations.
@@ -41,6 +44,24 @@ public class ViewSwiper extends GestureDetector.SimpleOnGestureListener {
         this.slide_in_right = AnimationUtils.loadAnimation(activity, R.anim.slide_in_right);
         this.slide_out_left = AnimationUtils.loadAnimation(activity, R.anim.slide_out_left);
         this.slide_out_right = AnimationUtils.loadAnimation(activity, R.anim.slide_out_right);
+    }
+
+    /**
+     * Alternate constructor that also defines runnables to be run when switching to the next or
+     * previous view
+     * @param activity the activity creating this ViewSwiper, needed to initialize the animations
+     * @param switcher the View switcher/flipper to be used
+     * @param previousMethod the runnable to be run whenever the previous View will be shown
+     * @param nextMethod the runnable to be run whenever the next View will be shown
+     */
+    public ViewSwiper(ActivityFrameWork activity, ViewAnimator switcher, Runnable previousMethod, Runnable nextMethod) {
+        this.switcher = switcher;
+        this.slide_in_left = AnimationUtils.loadAnimation(activity, R.anim.slide_in_left);
+        this.slide_in_right = AnimationUtils.loadAnimation(activity, R.anim.slide_in_right);
+        this.slide_out_left = AnimationUtils.loadAnimation(activity, R.anim.slide_out_left);
+        this.slide_out_right = AnimationUtils.loadAnimation(activity, R.anim.slide_out_right);
+        this.nextRunner = nextMethod;
+        this.previousRunner = previousMethod;
     }
 
     /**
@@ -63,12 +84,18 @@ public class ViewSwiper extends GestureDetector.SimpleOnGestureListener {
                 this.switcher.setInAnimation(this.slide_in_right);
                 this.switcher.setOutAnimation(this.slide_out_left);
                 this.switcher.showNext();
+                if (this.nextRunner != null) {
+                    this.nextRunner.run();
+                }
             }
             // Swipe left (next)
             else {
                 this.switcher.setInAnimation(this.slide_in_left);
                 this.switcher.setOutAnimation(this.slide_out_right);
                 this.switcher.showPrevious();
+                if (this.previousRunner != null) {
+                    this.previousRunner.run();
+                }
             }
         }
         return super.onFling(event1, event2, velocityX, velocityY);
