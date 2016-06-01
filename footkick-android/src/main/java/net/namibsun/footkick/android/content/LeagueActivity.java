@@ -53,6 +53,30 @@ public class LeagueActivity extends ActivityFrameWork{
      */
     private String leagueLink;
 
+    /**
+     * The table header for the league table
+     */
+    String[] leagueTableHeader = new String[] {
+            this.getString(R.string.table_position), this.getString(R.string.table_team_name),
+            this.getString(R.string.table_matches), this.getString(R.string.table_wins),
+            this.getString(R.string.table_draws), this.getString(R.string.table_losses),
+            this.getString(R.string.table_goals_for), this.getString(R.string.table_goals_agaist),
+            this.getString(R.string.table_goal_difference), this.getString(R.string.table_points)
+    };
+
+    /**
+     * The table header for the matchday table
+     */
+    String[] matchDayHeader = new String[] {
+            this.getString(R.string.matchday_time), this.getString(R.string.matchday_home_team),
+            this.getString(R.string.matchday_score), this.getString(R.string.matchday_away_team)
+    };
+
+    /**
+     * Initializes the activity, sets the name of the activity as well as the XML layout
+     * file, and initializes the swipe detector.
+     * @param savedInstanceState the saved instance sent by the Android OS
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Bundle bundle = this.getIntent().getExtras();
@@ -64,45 +88,49 @@ public class LeagueActivity extends ActivityFrameWork{
 
         super.onCreate(bundle);
 
+        //Initialize Swipe Detector
         ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
         ViewSwiper swipeDetector = new ViewSwiper(this, switcher);
         this.gestureDetector = new GestureDetector(this, swipeDetector);
     }
 
+    /**
+     * Overrides the onTouchEvent method to integrate the swipe detector
+     * @param event the motion event that triggered this method call
+     * @return a boolean representing if the method triggered something???
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         this.gestureDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
 
+    /**
+     * Overrides the dispatchTouchEvent to enable the Swipe detector on top of a scroll view
+     * @param event the motion event that triggered this method call
+     * @return a boolean representing if the method triggered something???
+     */
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        super.dispatchTouchEvent(ev);
-        return this.gestureDetector.onTouchEvent(ev);
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        super.dispatchTouchEvent(event);
+        return this.gestureDetector.onTouchEvent(event);
     }
 
+    /**
+     * Populates the tables of the activity with league table and matchday data.
+     * @throws IOException in case the connection to livescore.com fails, this is handled
+     *                     by the activity framework class
+     */
     protected void getInternetData() throws IOException {
 
+        //Get the league data and remove the progress circle
         League leagueData = new League(this.leagueLink);
         ArrayList<Team> teams = leagueData.getTeams();
         ArrayList<Match> matches = leagueData.getMatches();
         this.removeView(R.id.league_activity_progress);
 
-        String[] leagueTableHeader = new String[] {
-                this.getString(R.string.table_position), this.getString(R.string.table_team_name),
-                this.getString(R.string.table_matches), this.getString(R.string.table_wins),
-                this.getString(R.string.table_draws), this.getString(R.string.table_losses),
-                this.getString(R.string.table_goals_for), this.getString(R.string.table_goals_agaist),
-                this.getString(R.string.table_goal_difference), this.getString(R.string.table_points)
-        };
-
-        String[] matchDayHeader = new String[] {
-                this.getString(R.string.matchday_time), this.getString(R.string.matchday_home_team),
-                this.getString(R.string.matchday_score), this.getString(R.string.matchday_away_team)
-        };
-
-        this.fillTable(R.id.leagueTableTable, leagueTableHeader, teams);
-        this.fillTable(R.id.matchDayTable, matchDayHeader, matches);
+        this.fillTable(R.id.leagueTableTable, this.leagueTableHeader, teams);
+        this.fillTable(R.id.matchDayTable, this.matchDayHeader, matches);
 
         //If this is a league without a league table (for example, the quarterfinals of a knockout
         // competition) switch over to the matchday view.
@@ -117,6 +145,12 @@ public class LeagueActivity extends ActivityFrameWork{
         }
     }
 
+    /**
+     * Fills the table layout with the data received from livescore.com
+     * @param tableId the table to be filled
+     * @param header the header of the table
+     * @param data the data to be entered
+     */
     private void fillTable(int tableId, String[] header, ArrayList<? extends LeagueData> data) {
 
         int[] tableColours = new int[]{ R.color.colorTableSecondaryRow, R.color.colorTablePrimaryRow };
@@ -125,15 +159,22 @@ public class LeagueActivity extends ActivityFrameWork{
         }
 
         final TableLayout table = (TableLayout) this.findViewById(tableId);
-        TableRow headerRow = this.addRow(table, header, R.color.colorAccent);
+        this.addRow(table, header, R.color.colorTableHeader);
 
         for (int i = 0; i < data.size(); i++) {
             String[] rowContent = data.get(i).toStringArray();
-            TableRow row = this.addRow(table, rowContent, tableColours[i % 2]);
+            this.addRow(table, rowContent, tableColours[i % 2]);
         }
     }
 
-    private TableRow addRow(final TableLayout table, String[] data, int colour) {
+    /**
+     * Adds a TableRow to a TableLayout
+     * The TableRow is generated by using an array of strings which will be turned into TextViews
+     * @param table the table to which the row will be added
+     * @param data the data to generate the TableRow with
+     * @param colour the background colour of the TableRow
+     */
+    private void addRow(final TableLayout table, String[] data, int colour) {
         final TableRow dataRow = new TableRow(this);
         dataRow.setBackgroundResource(colour);
         for (String columnText : data) {
@@ -147,6 +188,5 @@ public class LeagueActivity extends ActivityFrameWork{
                 table.addView(dataRow);
             }
         });
-        return dataRow;
     }
 }
