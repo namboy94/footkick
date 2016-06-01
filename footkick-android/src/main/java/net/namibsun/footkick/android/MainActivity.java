@@ -22,16 +22,10 @@ This file is part of footkick.
 
 package net.namibsun.footkick.android;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
-import net.namibsun.footkick.android.common.Notifiers;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.google.samples.quickstart.analytics.AnalyticsApplication;
+import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.widgets.CountryButton;
 import net.namibsun.footkick.java.scraper.Country;
 import net.namibsun.footkick.java.scraper.CountryLister;
@@ -44,84 +38,47 @@ import java.util.ArrayList;
  * The Main Activity class.
  * It displays a list of countries as buttons to load the leagues for that country
  */
-public class MainActivity extends AppCompatActivity {
-
-    private boolean connectionLost = false;
-    private Tracker analyticsTracker;
+public class MainActivity extends ActivityFrameWork {
 
     /**
-     * Initializes the Main Activity with a loading screen and starts the country getting process.
-     * The method inflates the activity_main.xml layout file
-     * @param savedInstanceState - The saved instance state
+     * Initializes the Main Activity with the activity_main.xml layout and sets the activity names.
+     * @param savedInstanceState the saved instance state provided for the activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //Creates the new Activity and sets the content view to that of activity_main.xml
+        this.layoutFile = R.layout.activity_main;
+        this.screenName = "Countries";
+        this.analyticsName = "Countries";
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        new CountryGetter().execute();
-
-        AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
-        this.analyticsTracker = application.getDefaultTracker();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        analyticsTracker.setScreenName("Mainactivity");
-        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     /**
-     * Populates the country list and removes the loading screen
+     * Populates the country list and removes the loading screen on success
+     * Potential Network errors are handled by the Activity FrameWork
+     * @throws IOException in case a network error occurs.
      */
-    private void populateCountryList() {
+    @Override
+    protected void getInternetData() throws IOException{
 
-        //final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.loadingScreenSwitcher);
+        ArrayList<Country> countries = CountryLister.getCountries().getCountries(); //Get the country identifiers
+        this.removeView(R.id.main_activity_progress);
+
         final RelativeLayout layout = (RelativeLayout) this.findViewById(R.id.countryHolder);
+        int lastId = -1;  //used to identify under which view the next button will be placed
+                          //Initialized with a non-existent ID to set the first button to the top
 
-        //get an array list of country identifiers
-        ArrayList<Country> countries;
-        try {
-            countries = CountryLister.getCountries().getCountries();
-            this.connectionLost = false;
-        } catch (IOException e) {
-            if (!this.connectionLost) {
-                this.connectionLost = true;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Notifiers.showConnectionErrorDialog(MainActivity.this);
-                    }
-                });
-            }
-
-
-            //Handle Dropped Connections
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-
-            this.populateCountryList();
-            return;
-        }
-
-        //Add the buttons
-        int lastId = R.id.countryText;
         for (Country country : countries) {
 
             final CountryButton countryButton = new CountryButton(this, country.countryName, country.countryUrl);
-            countryButton.setId(View.generateViewId());
             final RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
+            countryButton.setId(View.generateViewId());
             buttonParams.addRule(RelativeLayout.BELOW, lastId);
             lastId = countryButton.getId();
 
-
+            //Add button to bottom of relative layout
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -129,31 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.loadingScreenSwitcher);
-        //Switch loading screen away
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                switcher.showNext();
-            }
-        });
     }
 
-    /**
-     * An Async task that loads the available countries and adds them to the list,
-     * then switches the loading screen away
-     */
-    private class CountryGetter extends AsyncTask<Void, Void, Void> {
-
-        /**
-         * Runs in the background
-         * @param params Void
-         * @return Void
-         */
-        @Override
-        protected Void doInBackground(Void... params) {
-            MainActivity.this.populateCountryList();
-            return null;
-        }
-    }
 }

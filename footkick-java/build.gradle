@@ -27,7 +27,7 @@ sourceCompatibility= 1.7
 targetCompatibility= 1.7
 
 //noinspection GroovyUnusedAssignment
-version = 0.4
+version = 0.5
 
 //noinspection GroovyAssignabilityCheck
 jar {
@@ -35,7 +35,7 @@ jar {
         attributes 'Main-Class': 'net.namibsun.footkick.java.Main'
     }
     //This line is needed to compile a standalone jar, but breaks android builds.
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    //from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 //noinspection GroovyAssignabilityCheck

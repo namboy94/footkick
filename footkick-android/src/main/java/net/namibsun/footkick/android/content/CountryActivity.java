@@ -22,16 +22,11 @@ This file is part of footkick.
 
 package net.namibsun.footkick.android.content;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.*;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.google.samples.quickstart.analytics.AnalyticsApplication;
 import net.namibsun.footkick.android.R;
-import net.namibsun.footkick.android.common.Notifiers;
+import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.widgets.LeagueButton;
 import net.namibsun.footkick.java.scraper.Country;
 import net.namibsun.footkick.java.scraper.LeagueInfo;
@@ -42,98 +37,55 @@ import java.util.ArrayList;
 /**
  * An activity that displays a list of leagues in a country
  */
-public class CountryActivity extends AppCompatActivity{
-
-    private Tracker analyticsTracker;
-    private boolean connectionLost = false;
-    private String countryName;
+public class CountryActivity extends ActivityFrameWork{
 
     /**
-     * Method run on creation of the Activity, it inflates the activity_country.xml
-     * layout file and then adds all league for the selected country to a list
-     *
-     * @param savedInstanceState the current instance state of the activity
+     * A string storing the link of this country's livescore.com address
+     */
+    private String countryLink;
+
+    /**
+     * Initializes the needed local variables and calls the parent class's onCreate method
+     * @param savedInstanceState the saved instance state provided for the activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //Initialize the Activity and load the activity_country.xml layout file
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_country);
-
-        //Populate the table layouts
         Bundle bundle = this.getIntent().getExtras();
-        new LeagueLister().execute(bundle.getString("country"), bundle.getString("link"));
-        this.countryName = bundle.getString("country");
 
-        try {
-            //noinspection ConstantConditions
-            this.getSupportActionBar().setTitle(bundle.getString("country"));
-        } catch (NullPointerException e) {
-            //noinspection ConstantConditions
-            this.getActionBar().setTitle(bundle.getString("country"));
-        }
+        this.layoutFile = R.layout.activity_country;
+        this.analyticsName = bundle.getString("country");
+        this.screenName = bundle.getString("country");
+        this.countryLink = bundle.getString("link");
 
-        AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
-        this.analyticsTracker = application.getDefaultTracker();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        analyticsTracker.setScreenName(this.countryName);
-        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        super.onCreate(savedInstanceState);
     }
 
     /**
-     * This method lists all countries as pressable buttons
-     * @param country the country to populate the views with its leagues with
-     * @param link the link to the country URL
+     * Populates the league list with entries gotten from the internet.
+     * Potential network errors are handled by the activity framework class
+     * @throws IOException in case a network error occurs
      */
-    private void populateData(String country, String link) {
+    protected void getInternetData() throws IOException {
 
         //Get the league data
-        ArrayList<LeagueInfo> leagues;
-        try {
-            leagues = new Country(country, link).getLeagues();
-            this.connectionLost = false;
-        } catch (IOException e) {
-            if (!this.connectionLost) {
-                this.connectionLost = true;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Notifiers.showConnectionErrorDialog(CountryActivity.this);
-                    }
-                });
-            }
+        ArrayList<LeagueInfo> leagues = new Country(this.screenName, this.countryLink).getLeagues();
+        this.removeView(R.id.country_activity_progress);
 
-            //Handle Dropped Connections
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-
-            this.populateData(country, link);
-            return;
-        }
-
-        //Initialize the ScollView and RelativeLayout
         final RelativeLayout leagueHolder = (RelativeLayout) this.findViewById(R.id.leagueHolder);
-
         int lastId = R.id.leagueText;
+
         for (LeagueInfo league: leagues) {
             //Add the buttons
 
             final LeagueButton leagueButton = new LeagueButton(this, league.leagueName, league.leagueUrl);
-            leagueButton.setId(View.generateViewId());
             final RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
+            leagueButton.setId(View.generateViewId());
             buttonParams.addRule(RelativeLayout.BELOW, lastId);
             lastId = leagueButton.getId();
 
+            //Add button to relative layout
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -143,20 +95,4 @@ public class CountryActivity extends AppCompatActivity{
         }
     }
 
-    /**
-     * An Async task that loads the country's league information in the background
-     */
-    private class LeagueLister extends AsyncTask<String, Void, Void> {
-
-        /**
-         * Runs in the background
-         * @param params the country name and link
-         * @return Void
-         */
-        @Override
-        protected Void doInBackground(String... params) {
-            CountryActivity.this.populateData(params[0], params[1]);
-            return null;
-        }
-    }
 }
