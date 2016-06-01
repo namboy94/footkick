@@ -54,25 +54,6 @@ public class LeagueActivity extends ActivityFrameWork{
     private String leagueLink;
 
     /**
-     * The table header for the league table
-     */
-    String[] leagueTableHeader = new String[] {
-            this.getString(R.string.table_position), this.getString(R.string.table_team_name),
-            this.getString(R.string.table_matches), this.getString(R.string.table_wins),
-            this.getString(R.string.table_draws), this.getString(R.string.table_losses),
-            this.getString(R.string.table_goals_for), this.getString(R.string.table_goals_agaist),
-            this.getString(R.string.table_goal_difference), this.getString(R.string.table_points)
-    };
-
-    /**
-     * The table header for the matchday table
-     */
-    String[] matchDayHeader = new String[] {
-            this.getString(R.string.matchday_time), this.getString(R.string.matchday_home_team),
-            this.getString(R.string.matchday_score), this.getString(R.string.matchday_away_team)
-    };
-
-    /**
      * Initializes the activity, sets the name of the activity as well as the XML layout
      * file, and initializes the swipe detector.
      * @param savedInstanceState the saved instance sent by the Android OS
@@ -129,8 +110,21 @@ public class LeagueActivity extends ActivityFrameWork{
         ArrayList<Match> matches = leagueData.getMatches();
         this.removeView(R.id.league_activity_progress);
 
-        this.fillTable(R.id.leagueTableTable, this.leagueTableHeader, teams);
-        this.fillTable(R.id.matchDayTable, this.matchDayHeader, matches);
+        //Initialize the table header strings
+        String[] leagueTableHeader = new String[] {
+                this.getString(R.string.table_position), this.getString(R.string.table_team_name),
+                this.getString(R.string.table_matches), this.getString(R.string.table_wins),
+                this.getString(R.string.table_draws), this.getString(R.string.table_losses),
+                this.getString(R.string.table_goals_for), this.getString(R.string.table_goals_agaist),
+                this.getString(R.string.table_goal_difference), this.getString(R.string.table_points)
+        };
+        String[] matchDayHeader = new String[] {
+                this.getString(R.string.matchday_time), this.getString(R.string.matchday_home_team),
+                this.getString(R.string.matchday_score), this.getString(R.string.matchday_away_team)
+        };
+
+        this.fillTable(R.id.leagueTableTable, leagueTableHeader, teams);
+        this.fillTable(R.id.matchDayTable, matchDayHeader, matches);
 
         //If this is a league without a league table (for example, the quarterfinals of a knockout
         // competition) switch over to the matchday view.
