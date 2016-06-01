@@ -63,7 +63,7 @@ public class LeagueActivity extends ActivityFrameWork{
         Bundle bundle = this.getIntent().getExtras();
 
         this.layoutFile = R.layout.activity_league;
-        this.analyticsName = bundle.getString("league");
+        this.analyticsName = bundle.getString("country") + " - " + bundle.getString("league");
         this.screenName = bundle.getString("league");
         this.leagueLink = bundle.getString("link");
 
