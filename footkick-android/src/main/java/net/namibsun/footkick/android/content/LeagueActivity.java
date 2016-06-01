@@ -29,6 +29,7 @@ import android.widget.*;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.common.ViewSwiper;
+import net.namibsun.footkick.java.scraper.LeagueData;
 import net.namibsun.footkick.java.scraper.Match;
 import net.namibsun.footkick.java.scraper.Team;
 import net.namibsun.footkick.java.structures.League;
@@ -85,10 +86,23 @@ public class LeagueActivity extends ActivityFrameWork{
         League leagueData = new League(this.leagueLink);
         ArrayList<Team> teams = leagueData.getTeams();
         ArrayList<Match> matches = leagueData.getMatches();
-        this.removeView(R.id.country_activity_progress);
+        this.removeView(R.id.league_activity_progress);
 
-        this.fillLeagueTable(teams);
-        this.fillMatchday(matches);
+        String[] leagueTableHeader = new String[] {
+                this.getString(R.string.table_position), this.getString(R.string.table_team_name),
+                this.getString(R.string.table_matches), this.getString(R.string.table_wins),
+                this.getString(R.string.table_draws), this.getString(R.string.table_losses),
+                this.getString(R.string.table_goals_for), this.getString(R.string.table_goals_agaist),
+                this.getString(R.string.table_goal_difference), this.getString(R.string.table_points)
+        };
+
+        String[] matchDayHeader = new String[] {
+                this.getString(R.string.matchday_time), this.getString(R.string.matchday_home_team),
+                this.getString(R.string.matchday_score), this.getString(R.string.matchday_away_team)
+        };
+
+        this.fillTable(R.id.leagueTableTable, leagueTableHeader, teams);
+        this.fillTable(R.id.matchDayTable, matchDayHeader, matches);
 
         //If this is a league without a league table (for example, the quarterfinals of a knockout
         // competition) switch over to the matchday view.
@@ -103,87 +117,36 @@ public class LeagueActivity extends ActivityFrameWork{
         }
     }
 
-    private void fillTable(int tableId, String[] header, ArrayList data) {
+    private void fillTable(int tableId, String[] header, ArrayList<? extends LeagueData> data) {
 
-        final TableLayout table = (TableLayout) this.findViewById(tableId);
-
-        for (int i = 0; i < data.size(); i++) {
-
-        }
-
-    }
-
-    private void fillLeagueTable(ArrayList<Team> teams) {
-
-        final TableLayout table = (TableLayout) this.findViewById(R.id.leagueTableTable);
-        int position = 1;
-
-        for (Team team : teams) {
-            final TableRow teamRow = new TableRow(this);
-            teamRow.setBackgroundResource(this.getRowColour(position - 1, teams.size()));
-
-            String[] data = {
-                    "" + position, team.teamName, team.matches, team.wins, team.draws, team.losses, team.goalsFor,
-                    team.goalsAgainst, team.goalDifference, team.points
-            };
-
-            for (String dataElement : data) {
-                TextView dataText = new TextView(this);
-                dataText.setText(dataElement);
-                teamRow.addView(dataText);
-            }
-            position++;
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    table.addView(teamRow);
-                }
-            });
-        }
-    }
-
-    private void fillMatchday(ArrayList<Match> matches) {
-
-
-
-
-        final TableLayout matchDayTable = (TableLayout) this.findViewById(R.id.matchDayTable);
-        int row = 0;
-
-        for (Match match : matches) {
-
-            final TableRow matchRow = new TableRow(this);
-            matchRow.setBackgroundResource(this.getRowColour(row, matches.size()));
-            row++;
-
-            String[] matchData = {
-                    match.time, match.homeTeam, match.score, match.awayTeam
-            };
-
-            for (String dataElement: matchData) {
-                TextView dataText = new TextView(this);
-                dataText.setText(dataElement);
-                matchRow.addView(dataText);
-            }
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    matchDayTable.addView(matchRow);
-                }
-            });
-        }
-    }
-
-    private int getRowColour(int rowNumber, int totalRows) {
         int[] tableColours = new int[]{ R.color.colorTableSecondaryRow, R.color.colorTablePrimaryRow };
-        if (totalRows % 2 == 0) {
+        if (data.size() % 2 == 0) {
             tableColours = new int[]{ R.color.colorTablePrimaryRow, R.color.colorTableSecondaryRow };
         }
-        return tableColours[rowNumber % 2];
+
+        final TableLayout table = (TableLayout) this.findViewById(tableId);
+        TableRow headerRow = this.addRow(table, header, R.color.colorAccent);
+
+        for (int i = 0; i < data.size(); i++) {
+            String[] rowContent = data.get(i).toStringArray();
+            TableRow row = this.addRow(table, rowContent, tableColours[i % 2]);
+        }
     }
 
-
-
+    private TableRow addRow(final TableLayout table, String[] data, int colour) {
+        final TableRow dataRow = new TableRow(this);
+        dataRow.setBackgroundResource(colour);
+        for (String columnText : data) {
+            TextView dataText = new TextView(this);
+            dataText.setText(columnText);
+            dataRow.addView(dataText);
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                table.addView(dataRow);
+            }
+        });
+        return dataRow;
+    }
 }

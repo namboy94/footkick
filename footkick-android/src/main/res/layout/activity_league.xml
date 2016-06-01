@@ -2,7 +2,6 @@
 
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorTableBG">
@@ -19,52 +18,9 @@
                     android:id="@+id/leagueTableScroller">
             <TableLayout
                     android:layout_width="fill_parent"
-                    android:stretchColumns="0,1,2,3,4,5,6,7,8"
+                    android:stretchColumns="0,1,2,3,4,5,6,7,8,9"
                     android:layout_height="wrap_content"
                     android:id="@+id/leagueTableTable">
-                <TableRow tools:ignore="UselessParent"
-                    android:background="@color/colorTableHeader">
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/table_position"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/table_team_name"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/table_matches"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/table_wins"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/table_draws"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/table_losses"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/table_goals_for"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/table_goals_agaist"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/table_goal_difference"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/table_points"/>
-                </TableRow>
             </TableLayout>
         </ScrollView>
         <ScrollView
@@ -77,25 +33,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/matchDayTable">
-                <TableRow tools:ignore="UselessParent"
-                          android:background="@color/colorTableHeader">
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/matchday_time"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/matchday_home_team"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/matchday_score"/>
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/matchday_away_team"/>
-                </TableRow>
             </TableLayout>
         </ScrollView>
     </ViewSwitcher>
