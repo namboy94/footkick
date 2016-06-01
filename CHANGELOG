@@ -1,3 +1,5 @@
+V 0.5.1
+  - Stopped app from crashing on older versions of android.
 V 0.5
   - Implemented loading wheel instead of loading screen
   - Vast structural code improvements
