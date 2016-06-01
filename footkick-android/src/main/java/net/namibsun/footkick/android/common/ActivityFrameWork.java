@@ -25,7 +25,7 @@ package net.namibsun.footkick.android.common;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.View;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.samples.quickstart.analytics.AnalyticsApplication;
@@ -65,12 +65,6 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
 
 
     /**
-     * Method to be overriden by the child class to initialize some local variables like the
-     * layout file to be used
-     */
-    protected abstract void initialize();
-
-    /**
      * The constructor (essentially) of the activity. It takes care of initializing the XML file,
      * analytics tracker and action bar title
      * @param savedInstanceState the saved instance sent by the Android OS
@@ -81,7 +75,6 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
 
         //Calls the parent classes' onCreate method
         super.onCreate(savedInstanceState);
-        this.initialize();
 
         //Loads the layout file, won't load if the layout's ID is -1, i.e. not set.
         if (this.layoutFile != -1) {
@@ -114,6 +107,20 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
         super.onResume();
         analyticsTracker.setScreenName(this.analyticsName);  //Set the name to be sent to the analytics service
         analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build()); //And send it
+    }
+
+    /**
+     * Removes a view from the UI. This method should be run whenever removing views from a different thread.
+     * @param viewId the view to hide's View ID
+     */
+    protected void removeView(int viewId) {
+        final View view = this.findViewById(viewId);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                view.setVisibility(View.GONE);
+            }
+        });
     }
 
     /**

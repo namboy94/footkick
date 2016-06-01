@@ -25,8 +25,9 @@ package net.namibsun.footkick.java.scraper;
 /**
  * Class that models a team in a league
  */
-public class Team {
+public class Team implements LeagueData {
 
+    public String position;
     public String teamName;
     public String matches;
     public String wins;
@@ -39,6 +40,7 @@ public class Team {
 
     /**
      * Constructor that Creates a new Team with the necessary attributes
+     * @param position the team's current position
      * @param teamName the team's name
      * @param matches how many matches the team has played so far
      * @param wins how often the team has won
@@ -49,7 +51,8 @@ public class Team {
      * @param goalDifference the goal difference of the team
      * @param points how many points the team has earned so far
      */
-    Team(String teamName,
+    Team(String position,
+         String teamName,
          String matches,
          String wins,
          String draws,
@@ -59,6 +62,7 @@ public class Team {
          String goalDifference,
          String points) {
 
+        this.position = position;
         this.teamName = teamName;
         this.matches = matches;
         this.wins = wins;
@@ -69,6 +73,18 @@ public class Team {
         this.goalDifference = goalDifference;
         this.points = points;
 
+    }
+
+    /**
+     * Turns the data of the Team object into a String array for easy entry into tables
+     * @return the data as a String array
+     */
+    public String[] toStringArray() {
+        return new String[] {
+            this.position, this.teamName, this.matches, this.wins, this.draws, this.losses, this.goalsFor,
+                this.goalsAgainst, this.goalDifference, this.points
+
+        };
     }
 
 }

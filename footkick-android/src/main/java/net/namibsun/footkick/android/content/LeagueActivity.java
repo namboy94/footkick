@@ -41,10 +41,19 @@ import java.util.ArrayList;
  */
 public class LeagueActivity extends ActivityFrameWork{
 
+    /**
+     * A gesture detector that detects swipes to the left and right and switches
+     * between the matchday and league tables accordingly
+     */
     private GestureDetector gestureDetector;
+
+    /**
+     * The URL link to the league's livescore.com site
+     */
     private String leagueLink;
 
-    protected void initialize() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         Bundle bundle = this.getIntent().getExtras();
 
         this.layoutFile = R.layout.activity_league;
@@ -52,10 +61,8 @@ public class LeagueActivity extends ActivityFrameWork{
         this.screenName = bundle.getString("league");
         this.leagueLink = bundle.getString("link");
 
-    }
-
-    protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+
         ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
         ViewSwiper swipeDetector = new ViewSwiper(this, switcher);
         this.gestureDetector = new GestureDetector(this, swipeDetector);
@@ -78,6 +85,7 @@ public class LeagueActivity extends ActivityFrameWork{
         League leagueData = new League(this.leagueLink);
         ArrayList<Team> teams = leagueData.getTeams();
         ArrayList<Match> matches = leagueData.getMatches();
+        this.removeView(R.id.country_activity_progress);
 
         this.fillLeagueTable(teams);
         this.fillMatchday(matches);
@@ -93,6 +101,16 @@ public class LeagueActivity extends ActivityFrameWork{
                 }
             });
         }
+    }
+
+    private void fillTable(int tableId, String[] header, ArrayList data) {
+
+        final TableLayout table = (TableLayout) this.findViewById(tableId);
+
+        for (int i = 0; i < data.size(); i++) {
+
+        }
+
     }
 
     private void fillLeagueTable(ArrayList<Team> teams) {

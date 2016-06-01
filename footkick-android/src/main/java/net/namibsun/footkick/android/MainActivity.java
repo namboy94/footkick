@@ -22,6 +22,7 @@ This file is part of footkick.
 
 package net.namibsun.footkick.android;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
@@ -41,12 +42,15 @@ public class MainActivity extends ActivityFrameWork {
 
     /**
      * Initializes the Main Activity with the activity_main.xml layout and sets the activity names.
+     * @param savedInstanceState the saved instance state provided for the activity
      */
     @Override
-    protected void initialize() {
+    protected void onCreate(Bundle savedInstanceState) {
+
         this.layoutFile = R.layout.activity_main;
         this.screenName = "Countries";
         this.analyticsName = "Countries";
+        super.onCreate(savedInstanceState);
     }
 
     /**
@@ -58,13 +62,7 @@ public class MainActivity extends ActivityFrameWork {
     protected void getInternetData() throws IOException{
 
         ArrayList<Country> countries = CountryLister.getCountries().getCountries(); //Get the country identifiers
-        //Remove Loading wheel
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                MainActivity.this.findViewById(R.id.main_activity_progress).setVisibility(View.GONE);
-            }
-        });
+        this.removeView(R.id.main_activity_progress);
 
         final RelativeLayout layout = (RelativeLayout) this.findViewById(R.id.countryHolder);
         int lastId = -1;  //used to identify under which view the next button will be placed

@@ -45,15 +45,19 @@ public class CountryActivity extends ActivityFrameWork{
     private String countryLink;
 
     /**
-     * Initializes the needed local variables
+     * Initializes the needed local variables and calls the parent class's onCreate method
+     * @param savedInstanceState the saved instance state provided for the activity
      */
-    protected void initialize() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         Bundle bundle = this.getIntent().getExtras();
 
         this.layoutFile = R.layout.activity_country;
         this.analyticsName = bundle.getString("country");
         this.screenName = bundle.getString("country");
         this.countryLink = bundle.getString("link");
+
+        super.onCreate(savedInstanceState);
     }
 
     /**
@@ -65,13 +69,7 @@ public class CountryActivity extends ActivityFrameWork{
 
         //Get the league data
         ArrayList<LeagueInfo> leagues = new Country(this.screenName, this.countryLink).getLeagues();
-        //Remove Loading wheel
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                CountryActivity.this.findViewById(R.id.country_activity_progress).setVisibility(View.GONE);
-            }
-        });
+        this.removeView(R.id.country_activity_progress);
 
         final RelativeLayout leagueHolder = (RelativeLayout) this.findViewById(R.id.leagueHolder);
         int lastId = R.id.leagueText;
