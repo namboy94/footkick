@@ -79,6 +79,9 @@ upload_builds:
 cleanup:
   stage: cleanup
   when: always
+  only:
+  - master
+  - develop
   script:
     - cd
     - rm -rf footkick

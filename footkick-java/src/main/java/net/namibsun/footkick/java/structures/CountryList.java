@@ -41,11 +41,11 @@ public class CountryList {
     public CountryList(ArrayList<ArrayList<Country>> countries) {
 
         String[] categoryIdentifiers = new String[] {
-                "Major", "International", "Western Europe", "Eastern Europe", "South America",
+                "International", "Major", "Minor International", "Western Europe", "Eastern Europe", "South America",
                 "North/Middle America", "Asia", "Oceania", "Africa", "Other"
         };
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 11; i++) {
             this.countryCategories.add(new CountryCategory(categoryIdentifiers[i], countries.get(i)));
         }
 
