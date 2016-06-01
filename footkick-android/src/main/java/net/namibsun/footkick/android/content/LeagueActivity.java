@@ -22,19 +22,14 @@ This file is part of footkick.
 
 package net.namibsun.footkick.android.content;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.*;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.google.samples.quickstart.analytics.AnalyticsApplication;
 import net.namibsun.footkick.android.R;
-import net.namibsun.footkick.android.common.Notifiers;
+import net.namibsun.footkick.android.common.ActivityFrameWork;
+import net.namibsun.footkick.android.common.ViewSwiper;
+import net.namibsun.footkick.java.scraper.LeagueData;
 import net.namibsun.footkick.java.scraper.Match;
 import net.namibsun.footkick.java.scraper.Team;
 import net.namibsun.footkick.java.structures.League;
@@ -45,72 +40,45 @@ import java.util.ArrayList;
 /**
  * An activity that displays a league table and a matchday
  */
-public class LeagueActivity extends AppCompatActivity{
-
-    private Tracker analyticsTracker;
-    private ViewSwitcher viewSwitcher;
-    private GestureDetector gestureDetector;
-    private String leagueName;
-
-    private Animation slide_in_left, slide_out_right;
-    private Animation slide_in_right, slide_out_left;
-
-    private boolean connectionLost = false;
-
-    private int[] tableColours = new int[] {
-            R.color.colorEvenRow, R.color.colorOddRow
-    };
+public class LeagueActivity extends ActivityFrameWork{
 
     /**
-     * Method run on creation of the Activity
-     *
-     * @param savedInstanceState the current instance state of the activity
+     * A gesture detector that detects swipes to the left and right and switches
+     * between the matchday and league tables accordingly
+     */
+    private GestureDetector gestureDetector;
+
+    /**
+     * The URL link to the league's livescore.com site
+     */
+    private String leagueLink;
+
+    /**
+     * Initializes the activity, sets the name of the activity as well as the XML layout
+     * file, and initializes the swipe detector.
+     * @param savedInstanceState the saved instance sent by the Android OS
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //Initialize the Activity and load the activity_league.xml layout file
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_league);
-
-        viewSwitcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
-        this.slide_in_left = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
-        this.slide_in_right = AnimationUtils.loadAnimation(this, R.anim.slide_in_right);
-        this.slide_out_left = AnimationUtils.loadAnimation(this, R.anim.slide_out_left);
-        this.slide_out_right = AnimationUtils.loadAnimation(this, R.anim.slide_out_right);
-
-        //Populate the table layouts
         Bundle bundle = this.getIntent().getExtras();
-        new TablePopulator().execute(bundle.getString("league"), bundle.getString("link"));
-        this.leagueName = bundle.getString("league");
 
-        try {
-            //noinspection ConstantConditions
-            this.getSupportActionBar().setTitle(bundle.getString("league"));
-        } catch (NullPointerException e) {
-            //noinspection ConstantConditions
-            this.getActionBar().setTitle(bundle.getString("league"));
-        }
+        this.layoutFile = R.layout.activity_league;
+        this.analyticsName = bundle.getString("league");
+        this.screenName = bundle.getString("league");
+        this.leagueLink = bundle.getString("link");
 
-        AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
-        this.analyticsTracker = application.getDefaultTracker();
-        this.analyticsTracker.enableAdvertisingIdCollection(true);
+        super.onCreate(bundle);
 
-        SwipeDetector swipeDetector = new SwipeDetector();
+        //Initialize Swipe Detector
+        ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
+        ViewSwiper swipeDetector = new ViewSwiper(this, switcher);
         this.gestureDetector = new GestureDetector(this, swipeDetector);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        analyticsTracker.setScreenName(this.leagueName);
-        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }
-
     /**
-     * Calls the gesture detector to swipe to the next or previous view
-     * @param event hte motion event that triggered this method call
-     * @return if the event was accepted or not, I guess?
+     * Overrides the onTouchEvent method to integrate the swipe detector
+     * @param event the motion event that triggered this method call
+     * @return a boolean representing if the method triggered something???
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -118,163 +86,101 @@ public class LeagueActivity extends AppCompatActivity{
         return super.onTouchEvent(event);
     }
 
+    /**
+     * Overrides the dispatchTouchEvent to enable the Swipe detector on top of a scroll view
+     * @param event the motion event that triggered this method call
+     * @return a boolean representing if the method triggered something???
+     */
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        super.dispatchTouchEvent(ev);
-        return this.gestureDetector.onTouchEvent(ev);
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        super.dispatchTouchEvent(event);
+        return this.gestureDetector.onTouchEvent(event);
     }
 
     /**
-     * This method populates the league table and matchday Views using the specified country and league
-     * @param link the link to the league's website
+     * Populates the tables of the activity with league table and matchday data.
+     * @throws IOException in case the connection to livescore.com fails, this is handled
+     *                     by the activity framework class
      */
-    private void populateData(String link) {
+    protected void getInternetData() throws IOException {
 
-        try {
-            League leagueData = new League(link);
-            ArrayList<Team> teams = leagueData.getTeams();
-            ArrayList<Match> matches = leagueData.getMatches();
+        //Get the league data and remove the progress circle
+        League leagueData = new League(this.leagueLink);
+        ArrayList<Team> teams = leagueData.getTeams();
+        ArrayList<Match> matches = leagueData.getMatches();
+        this.removeView(R.id.league_activity_progress);
 
-            this.fillLeagueTable(teams);
-            this.fillMatchday(matches);
-            this.connectionLost = false;
+        //Initialize the table header strings
+        String[] leagueTableHeader = new String[] {
+                this.getString(R.string.table_position), this.getString(R.string.table_team_name),
+                this.getString(R.string.table_matches), this.getString(R.string.table_wins),
+                this.getString(R.string.table_draws), this.getString(R.string.table_losses),
+                this.getString(R.string.table_goals_for), this.getString(R.string.table_goals_agaist),
+                this.getString(R.string.table_goal_difference), this.getString(R.string.table_points)
+        };
+        String[] matchDayHeader = new String[] {
+                this.getString(R.string.matchday_time), this.getString(R.string.matchday_home_team),
+                this.getString(R.string.matchday_score), this.getString(R.string.matchday_away_team)
+        };
 
-        } catch (IOException e) {
-            if (!this.connectionLost) {
-                this.connectionLost = true;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Notifiers.showConnectionErrorDialog(LeagueActivity.this);
-                    }
-                });
-            }
+        this.fillTable(R.id.leagueTableTable, leagueTableHeader, teams);
+        this.fillTable(R.id.matchDayTable, matchDayHeader, matches);
 
-            //Handle Dropped Connections
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-            this.populateData(link);
-        }
-    }
-
-    /**
-     * Fills the league table with the provided team objects
-     * @param teams the teams to be displayed
-     */
-    private void fillLeagueTable(ArrayList<Team> teams) {
-
-        // Switch to matchday if no league table available
+        //If this is a league without a league table (for example, the quarterfinals of a knockout
+        // competition) switch over to the matchday view.
+        final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
         if (teams.size() == 0) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    LeagueActivity.this.viewSwitcher.showNext();
-                }
-            });
-            return;
-        }
-
-        final TableLayout table = (TableLayout) this.findViewById(R.id.leagueTableTable);
-
-        int position = 1;
-
-        for (Team team : teams) {
-            final TableRow teamRow = new TableRow(this);
-            teamRow.setBackgroundResource(this.tableColours[position % 2]);
-
-            String[] data = {
-                    "" + position, team.teamName, team.matches, team.wins, team.draws, team.losses, team.goalsFor,
-                    team.goalsAgainst, team.goalDifference, team.points
-            };
-
-            for (String dataElement : data) {
-                TextView dataText = new TextView(this);
-                dataText.setText(dataElement);
-                teamRow.addView(dataText);
-            }
-            position++;
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    table.addView(teamRow);
+                    switcher.showNext();
                 }
             });
         }
     }
 
     /**
-     * Filles the Matchday table with the parsed matches
-     * @param matches the matches to be displayed
+     * Fills the table layout with the data received from livescore.com
+     * @param tableId the table to be filled
+     * @param header the header of the table
+     * @param data the data to be entered
      */
-    private void fillMatchday(ArrayList<Match> matches) {
+    private void fillTable(int tableId, String[] header, ArrayList<? extends LeagueData> data) {
 
-        final TableLayout matchDayTable = (TableLayout) this.findViewById(R.id.matchDayTable);
+        int[] tableColours = new int[]{ R.color.colorTableSecondaryRow, R.color.colorTablePrimaryRow };
+        if (data.size() % 2 == 0) {
+            tableColours = new int[]{ R.color.colorTablePrimaryRow, R.color.colorTableSecondaryRow };
+        }
 
-        int row = 1;
-        for (Match match : matches) {
-            final TableRow matchRow = new TableRow(this);
-            matchRow.setBackgroundResource(this.tableColours[row % 2]);
-            row++;
+        final TableLayout table = (TableLayout) this.findViewById(tableId);
+        this.addRow(table, header, R.color.colorTableHeader);
 
-            String[] matchData = {
-                    match.time, match.homeTeam, match.score, match.awayTeam
-            };
-
-            for (String dataElement: matchData) {
-                TextView dataText = new TextView(this);
-                dataText.setText(dataElement);
-                matchRow.addView(dataText);
-            }
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    matchDayTable.addView(matchRow);
-                }
-            });
+        for (int i = 0; i < data.size(); i++) {
+            String[] rowContent = data.get(i).toStringArray();
+            this.addRow(table, rowContent, tableColours[i % 2]);
         }
     }
 
     /**
-     * An Async task that loads the league information in the background
+     * Adds a TableRow to a TableLayout
+     * The TableRow is generated by using an array of strings which will be turned into TextViews
+     * @param table the table to which the row will be added
+     * @param data the data to generate the TableRow with
+     * @param colour the background colour of the TableRow
      */
-    private class TablePopulator extends AsyncTask<String, Void, Void> {
-
-        /**
-         * Runs in the background
-         * @param params the country and league identifiers
-         * @return Void
-         */
-        @Override
-        protected Void doInBackground(String... params) {
-            LeagueActivity.this.populateData(params[1]);
-            return null;
+    private void addRow(final TableLayout table, String[] data, int colour) {
+        final TableRow dataRow = new TableRow(this);
+        dataRow.setBackgroundResource(colour);
+        for (String columnText : data) {
+            TextView dataText = new TextView(this);
+            dataText.setText(columnText);
+            dataRow.addView(dataText);
         }
-    }
-
-    private class SwipeDetector extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            // Swipe left (next)
-
-            if (Math.abs(velocityX) > 3000.0) {
-                if (e1.getX() > e2.getX()) {
-                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_right);
-                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_left);
-                }
-                else {
-                    LeagueActivity.this.viewSwitcher.setInAnimation(LeagueActivity.this.slide_in_left);
-                    LeagueActivity.this.viewSwitcher.setOutAnimation(LeagueActivity.this.slide_out_right);
-                }
-                LeagueActivity.this.viewSwitcher.showNext();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                table.addView(dataRow);
             }
-            return super.onFling(e1, e2, velocityX, velocityY);
-        }
-
+        });
     }
 }

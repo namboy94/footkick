@@ -25,7 +25,7 @@ package net.namibsun.footkick.java.scraper;
 /**
  * Class that models a single football match
  */
-public class Match {
+public class Match implements LeagueData {
 
     public String homeTeam;
     public String awayTeam;
@@ -44,6 +44,17 @@ public class Match {
         this.awayTeam = awayTeam;
         this.time = time;
         this.score = score;
+    }
+
+    /**
+     * Turns the data of the Match object into a String array for easy entry into tables
+     * @return the data as a String array
+     */
+    public String[] toStringArray() {
+        return new String[] {
+                this.time, this.homeTeam, this.score, this.awayTeam
+
+        };
     }
 
 }

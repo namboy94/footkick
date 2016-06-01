@@ -32,7 +32,7 @@ import net.namibsun.footkick.android.content.CountryActivity;
 
 /**
  * A Button that stores a country  and automatically defines an on click listener
- * to open that country's content activity
+ * to open that country's CountryActivity
  */
 @SuppressLint("ViewConstructor")
 public class CountryButton extends Button {

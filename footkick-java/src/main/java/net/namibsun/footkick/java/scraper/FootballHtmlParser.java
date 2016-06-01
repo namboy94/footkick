@@ -92,7 +92,8 @@ public class FootballHtmlParser {
         ArrayList<Team> teams = new ArrayList<>();
 
         while (teamPositionIndex < leagueTeams.size() && statsPositionIndex < leagueStats.size()) {
-            Team team = new Team(leagueTeams.get(teamPositionIndex).text(),
+            Team team = new Team("" + teamPositionIndex,
+                    leagueTeams.get(teamPositionIndex).text(),
                     leagueStats.get(statsPositionIndex).text(),
                     leagueStats.get(statsPositionIndex + 1).text(),
                     leagueStats.get(statsPositionIndex + 2).text(),

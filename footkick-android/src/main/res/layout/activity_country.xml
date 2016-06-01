@@ -1,19 +1,28 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/leagueScroller"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorTableBG">
-
-    <RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <ScrollView
+            android:id="@+id/leagueScroller"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/leagueHolder">
+            android:layout_height="match_parent"
+            android:background="@color/colorTableBG">
 
-        <TextView
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/leagueText"/>
-    </RelativeLayout>
+                android:id="@+id/leagueHolder">
 
-</ScrollView>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/leagueText"/>
+        </RelativeLayout>
+    </ScrollView>
+    <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/country_activity_progress"
+            android:indeterminate="true" />
+</RelativeLayout>
