@@ -43,7 +43,7 @@ public class MainActivity extends ActivityFrameWork {
      * Initializes the Main Activity with the activity_main.xml layout and sets the activity names.
      * @param savedInstanceState the saved instance state provided for the activity
      */
-    @Override
+    @Override     
     protected void onCreate(Bundle savedInstanceState) {
 
         this.layoutFile = R.layout.activity_main;
