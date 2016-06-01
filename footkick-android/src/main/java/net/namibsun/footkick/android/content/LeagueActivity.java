@@ -22,21 +22,13 @@ This file is part of footkick.
 
 package net.namibsun.footkick.android.content;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.*;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.google.samples.quickstart.analytics.AnalyticsApplication;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
-import net.namibsun.footkick.android.common.Notifiers;
-import net.namibsun.footkick.android.common.ViewSwitchSwiper;
+import net.namibsun.footkick.android.common.ViewSwiper;
 import net.namibsun.footkick.java.scraper.Match;
 import net.namibsun.footkick.java.scraper.Team;
 import net.namibsun.footkick.java.structures.League;
@@ -52,13 +44,6 @@ public class LeagueActivity extends ActivityFrameWork{
     private GestureDetector gestureDetector;
     private String leagueLink;
 
-
-
-
-    private int[] tableColours = new int[] {
-            R.color.colorEvenRow, R.color.colorOddRow
-    };
-
     protected void initialize() {
         Bundle bundle = this.getIntent().getExtras();
 
@@ -72,7 +57,7 @@ public class LeagueActivity extends ActivityFrameWork{
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
-        ViewSwitchSwiper swipeDetector = new ViewSwitchSwiper(this, switcher);
+        ViewSwiper swipeDetector = new ViewSwiper(this, switcher);
         this.gestureDetector = new GestureDetector(this, swipeDetector);
     }
 
@@ -117,7 +102,7 @@ public class LeagueActivity extends ActivityFrameWork{
 
         for (Team team : teams) {
             final TableRow teamRow = new TableRow(this);
-            teamRow.setBackgroundResource(this.tableColours[position % 2]);
+            teamRow.setBackgroundResource(this.getRowColour(position - 1, teams.size()));
 
             String[] data = {
                     "" + position, team.teamName, team.matches, team.wins, team.draws, team.losses, team.goalsFor,
@@ -142,13 +127,16 @@ public class LeagueActivity extends ActivityFrameWork{
 
     private void fillMatchday(ArrayList<Match> matches) {
 
+
+
+
         final TableLayout matchDayTable = (TableLayout) this.findViewById(R.id.matchDayTable);
-        int row = 1;
+        int row = 0;
 
         for (Match match : matches) {
 
             final TableRow matchRow = new TableRow(this);
-            matchRow.setBackgroundResource(this.tableColours[row % 2]);
+            matchRow.setBackgroundResource(this.getRowColour(row, matches.size()));
             row++;
 
             String[] matchData = {
@@ -168,6 +156,14 @@ public class LeagueActivity extends ActivityFrameWork{
                 }
             });
         }
+    }
+
+    private int getRowColour(int rowNumber, int totalRows) {
+        int[] tableColours = new int[]{ R.color.colorTableSecondaryRow, R.color.colorTablePrimaryRow };
+        if (totalRows % 2 == 0) {
+            tableColours = new int[]{ R.color.colorTablePrimaryRow, R.color.colorTableSecondaryRow };
+        }
+        return tableColours[rowNumber % 2];
     }
 
 

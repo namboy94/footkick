@@ -4,17 +4,17 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ViewSwitcher;
+import android.widget.ViewAnimator;
 import net.namibsun.footkick.android.R;
 
 
-public class ViewSwitchSwiper extends GestureDetector.SimpleOnGestureListener {
+public class ViewSwiper extends GestureDetector.SimpleOnGestureListener {
 
-    private ViewSwitcher switcher;
+    private ViewAnimator switcher;
     private Animation slide_in_left, slide_out_right;
     private Animation slide_in_right, slide_out_left;
     
-    public ViewSwitchSwiper(ActivityFrameWork activity, ViewSwitcher switcher) {
+    public ViewSwiper(ActivityFrameWork activity, ViewAnimator switcher) {
         this.switcher = switcher;
         this.slide_in_left = AnimationUtils.loadAnimation(activity, R.anim.slide_in_left);
         this.slide_in_right = AnimationUtils.loadAnimation(activity, R.anim.slide_in_right);
