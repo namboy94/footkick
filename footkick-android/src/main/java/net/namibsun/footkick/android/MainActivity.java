@@ -58,8 +58,14 @@ public class MainActivity extends ActivityFrameWork {
     protected void getInternetData() throws IOException{
 
         ArrayList<Country> countries = CountryLister.getCountries().getCountries(); //Get the country identifiers
+        //Remove Loading wheel
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.this.findViewById(R.id.main_activity_progress).setVisibility(View.GONE);
+            }
+        });
 
-        final ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.loadingScreenSwitcher);
         final RelativeLayout layout = (RelativeLayout) this.findViewById(R.id.countryHolder);
         int lastId = -1;  //used to identify under which view the next button will be placed
                           //Initialized with a non-existent ID to set the first button to the top
@@ -82,13 +88,6 @@ public class MainActivity extends ActivityFrameWork {
                 }
             });
         }
-        //Switch loading screen away
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                switcher.showNext();
-            }
-        });
     }
 
 }

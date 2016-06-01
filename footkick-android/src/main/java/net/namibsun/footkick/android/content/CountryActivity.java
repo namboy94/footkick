@@ -65,13 +65,13 @@ public class CountryActivity extends ActivityFrameWork{
 
         //Get the league data
         ArrayList<LeagueInfo> leagues = new Country(this.screenName, this.countryLink).getLeagues();
+        //Remove Loading wheel
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 CountryActivity.this.findViewById(R.id.country_activity_progress).setVisibility(View.GONE);
             }
         });
-
 
         final RelativeLayout leagueHolder = (RelativeLayout) this.findViewById(R.id.leagueHolder);
         int lastId = R.id.leagueText;
