@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.*;
+import com.google.android.gms.analytics.HitBuilders;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.common.ViewSwiper;
@@ -54,6 +55,11 @@ public class LeagueActivity extends ActivityFrameWork{
     private String leagueLink;
 
     /**
+     * The current view type to be sent vie Analytics
+     */
+    private String currentView = "League Table";
+
+    /**
      * Initializes the activity, sets the name of the activity as well as the XML layout
      * file, and initializes the swipe detector.
      * @param savedInstanceState the saved instance sent by the Android OS
@@ -69,9 +75,25 @@ public class LeagueActivity extends ActivityFrameWork{
 
         super.onCreate(bundle);
 
+        //Create a Runnable that keeps track of which View is currently shown.
+        Runnable toggleView = new Runnable() {
+            @Override
+            public void run() {
+                if (LeagueActivity.this.currentView.equals("League Table")) {
+                    LeagueActivity.this.currentView = "Matchday";
+                }
+                else {
+                    LeagueActivity.this.currentView = "League Table";
+                }
+                analyticsTracker.setScreenName(
+                        LeagueActivity.this.analyticsName + " - " + LeagueActivity.this.currentView);
+                analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
+            }
+        };
+
         //Initialize Swipe Detector
         ViewSwitcher switcher = (ViewSwitcher) this.findViewById(R.id.leagueViewSwitcher);
-        ViewSwiper swipeDetector = new ViewSwiper(this, switcher);
+        ViewSwiper swipeDetector = new ViewSwiper(this, switcher, toggleView, toggleView);
         this.gestureDetector = new GestureDetector(this, swipeDetector);
     }
 
