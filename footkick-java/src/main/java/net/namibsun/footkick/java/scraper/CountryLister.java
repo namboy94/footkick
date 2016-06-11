@@ -44,7 +44,7 @@ public class CountryLister {
      */
     public static CountryList getCountries() throws IOException{
 
-        String url = "http://www.livescore.com/";
+        String url = "http://www.livescore.com/soccer/";
         Document jsoupDocument = Jsoup.connect(url).get();
 
         ArrayList<ArrayList<Country>> countries = new ArrayList<>();
@@ -71,8 +71,6 @@ public class CountryLister {
 
             countries.add(blockCountries);
         }
-
         return new CountryList(countries);
-
     }
 }
