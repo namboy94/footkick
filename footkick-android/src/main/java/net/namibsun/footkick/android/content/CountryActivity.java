@@ -76,7 +76,8 @@ public class CountryActivity extends ActivityFrameWork{
         for (LeagueInfo league: leagues) {
             //Add the buttons
 
-            final LeagueButton leagueButton = new LeagueButton(this, league.leagueName, league.leagueUrl);
+            final LeagueButton leagueButton = new LeagueButton(this,
+                    this.analyticsName, league.leagueName, league.leagueUrl);
             final RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
