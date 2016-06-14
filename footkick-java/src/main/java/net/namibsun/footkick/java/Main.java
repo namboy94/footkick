@@ -48,7 +48,7 @@ public class Main {
         }
         else if (args.length != 3){
             System.out.println("Invalid amount of parameters");
-            System.out.println("Usage: <country>, <league>, [table|matchday|summary]");
+            System.out.println("Usage: <country> <league> [table|matchday|summary]");
         }
         else if (!args[2].toLowerCase().equals("matchday")
                 && !args[2].toLowerCase().equals("table")

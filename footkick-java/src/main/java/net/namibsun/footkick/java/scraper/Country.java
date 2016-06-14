@@ -40,7 +40,7 @@ public class Country {
     public String countryUrl;
 
     /**
-     * Construcotr that automatically generates a valid URL from the countryUrl parameter
+     * Constructor that automatically generates a valid URL from the countryUrl parameter
      * and stores the country name
      * @param countryName the country's name
      * @param countryUrl the country's livescore.com url
