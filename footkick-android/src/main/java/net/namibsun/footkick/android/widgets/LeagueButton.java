@@ -40,11 +40,13 @@ public class LeagueButton extends Button {
     /**
      * Creates a new CountryLeagueButton and enables the OnclickListener
      * @param context the context from which the button will be called
+     * @param countryName the name of the league's country for analytics purposes
      * @param leagueName the name of the league
      * @param leagueLink the link to the site of the league
      */
     @SuppressLint("SetTextI18n")
-    public LeagueButton(final Context context, final String leagueName, final String leagueLink) {
+    public LeagueButton(final Context context,
+                        final String countryName, final String leagueName, final String leagueLink) {
 
         //Initializes button
         super(context);
@@ -59,6 +61,7 @@ public class LeagueButton extends Button {
                 Bundle bundle = new Bundle();
                 bundle.putString("league", leagueName);
                 bundle.putString("link", leagueLink);
+                bundle.putString("country", countryName);
                 leagueActivity.putExtras(bundle);
                 context.startActivity(leagueActivity);
             }
