@@ -1,4 +1,4 @@
-# Footkick V 0.5
+# Footkick V 0.6
 
 A Java Program and Android App that fetches online football information
 
