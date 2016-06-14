@@ -51,9 +51,13 @@ public class CountryLister {
         Elements countryBlocks = jsoupDocument.select("ul");
 
         //Remove fluff
-        countryBlocks.remove(18);
-        countryBlocks.remove(1);
-        countryBlocks.remove(0);
+        try {
+            countryBlocks.remove(18);
+            countryBlocks.remove(1);
+            countryBlocks.remove(0);
+        } catch (IndexOutOfBoundsException e) {
+            throw new IOException("Failed to retrieve data");
+        }
 
         for (Element countryBlock : countryBlocks) {
             Document singleCountriesDocument = Jsoup.parse(countryBlock.toString());

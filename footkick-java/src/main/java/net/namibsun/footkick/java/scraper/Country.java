@@ -78,7 +78,11 @@ public class Country {
                 }
             }
 
-            countryLeagues = normalButtonBlocks.get(1);
+            try {
+                countryLeagues = normalButtonBlocks.get(1);
+            } catch (IndexOutOfBoundsException e) {
+                throw new IOException("Failed to get league information");
+            }
         }
 
         jsoupDocument = Jsoup.parse(countryLeagues.toString());
