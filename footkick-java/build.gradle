@@ -27,7 +27,7 @@ sourceCompatibility= 1.7
 targetCompatibility= 1.7
 
 //noinspection GroovyUnusedAssignment
-version = 0.6
+version = rootProject.ext.version
 
 //noinspection GroovyAssignabilityCheck
 jar {

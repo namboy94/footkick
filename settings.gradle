@@ -21,5 +21,6 @@ This file is part of footkick.
 */
 
 rootProject.name = 'footkick'
-include ':footkick-java', 'footkick-android'
+include ':footkick-java'
+include ':footkick-android'
 

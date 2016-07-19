@@ -30,8 +30,8 @@ android {
         applicationId "net.namibsun.footkick.android"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 6
-        versionName "0.6"
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.version
     }
 
     applicationVariants.all { variant ->
