@@ -20,9 +20,9 @@ This file is part of footkick.
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package net.namibsun.footkick.java.structures;
+package net.namibsun.footkick.lib.structures;
 
-import net.namibsun.footkick.java.scraper.Country;
+import net.namibsun.footkick.lib.scraper.Country;
 import java.util.ArrayList;
 
 /**

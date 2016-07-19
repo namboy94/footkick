@@ -34,12 +34,11 @@ jar {
     manifest {
         attributes 'Main-Class': 'net.namibsun.footkick.java.Main'
     }
-    //This line is needed to compile a standalone jar, but breaks android builds.
-    //from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 //noinspection GroovyAssignabilityCheck
 dependencies {
-    compile "org.jsoup:jsoup:1.9.2"
+
     testCompile 'junit:junit:4.12'
 }

@@ -20,10 +20,10 @@ This file is part of footkick.
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package net.namibsun.footkick.java.structures;
+package net.namibsun.footkick.lib.structures;
 
-import net.namibsun.footkick.java.scraper.FootballHtmlParser;
-import net.namibsun.footkick.java.scraper.Match;
+import net.namibsun.footkick.lib.scraper.FootballHtmlParser;
+import net.namibsun.footkick.lib.scraper.Match;
 
 import java.io.IOException;
 import java.util.ArrayList;

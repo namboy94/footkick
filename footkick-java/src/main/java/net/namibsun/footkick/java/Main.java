@@ -22,14 +22,12 @@ This file is part of footkick.
 
 package net.namibsun.footkick.java;
 
-import net.namibsun.footkick.java.scraper.Country;
-import net.namibsun.footkick.java.scraper.CountryLister;
-import net.namibsun.footkick.java.structures.CountryList;
-import net.namibsun.footkick.java.structures.League;
-import net.namibsun.footkick.java.structures.LeagueTable;
-import net.namibsun.footkick.java.structures.MatchDay;
-
-import java.util.ArrayList;
+import net.namibsun.footkick.lib.scraper.Country;
+import net.namibsun.footkick.lib.scraper.CountryLister;
+import net.namibsun.footkick.lib.structures.CountryList;
+import net.namibsun.footkick.lib.structures.League;
+import net.namibsun.footkick.lib.structures.LeagueTable;
+import net.namibsun.footkick.lib.structures.MatchDay;
 
 /**
  * The Main Java Class

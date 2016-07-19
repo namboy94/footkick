@@ -20,7 +20,7 @@ This file is part of footkick.
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package net.namibsun.footkick.java.scraper;
+package net.namibsun.footkick.lib.scraper;
 
 /**
  * Class that models a single football match
