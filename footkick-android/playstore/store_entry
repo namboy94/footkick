@@ -1,0 +1,46 @@
+# Title
+
+Footkick
+
+------------------------------------------------------------------------------------------------------------------------
+# Short Description
+
+Footkick is a lightweight football league table and match result checker.
+
+------------------------------------------------------------------------------------------------------------------------
+# Full Description
+
+Footkick is a simple football(soccer) information tool. It enables checking current league standings and the latest
+match results or upcoming matches.
+
+We use the data from www.livecore.com, which allows us to serve a huge amount of data for many countries, including
+small nations like Namibia, but also the big powerhouses like Germany, England or Spain.
+
+The app is fully open source under the GPLv3 license, you can check the source code on our github page:
+https://github.com/namboy94/footkick
+
+or if you want to contribute, join us on our privately hosted gitlab instance:
+http://gitlab.namibsun.net/namboy94/footkick
+
+We have a privacy statement available, you can view it here:
+http://gitlab.namibsun.net/namboy94/footkick/raw/master/mal-tournament-android/playstore/privacy_statement
+
+For APK builds and java desktop builds of the software, visit our github releases page:
+https://github.com/namboy94/footkick/releases
+
+------------------------------------------------------------------------------------------------------------------------
+# Categorization
+
+Application Type:             Applications
+Category:                     Sports
+Content rating:               Everyone
+
+------------------------------------------------------------------------------------------------------------------------
+# Contact Details
+
+Website:                      http://gitlab.namibsun.net/namboy94/footkick
+Email:                        hermann@krumreyh.com
+Phone:
+
+-----------------------------------------------------------------------------------------------------------------------
+# Privacy Policy              http://gitlab.namibsun.net/namboy94/footkick/raw/master/mal-tournament-android/playstore/privacy_statement

@@ -1,0 +1,13 @@
+Footkick tracks some non-identifiable user behaviour data. Currently, the following is tracked with the help
+of google analytics:
+
+    - Every time a new screen is displayed, this change is sent to the analytics servers.
+      It sends the name of the newly opened screen
+    - Which country and which league data is viewed
+
+The application does NOT collect any PERSONAL data.
+
+In case an application build without the analytics tracking enabled is required/desired, there is an application
+build available at https://github.com/namboy94/footkick/releases, named
+
+    footkick-android-release-noanalytics-<version>.apk
