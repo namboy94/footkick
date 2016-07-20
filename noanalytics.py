@@ -8,7 +8,7 @@ import sys
 gradle_root_file = "build.gradle"
 apk_output_dir = "footkick-android/build/outputs/apk/"
 apk_name_pre_version = "footkick-android-release-"
-analyticsfile = "footkick-android/src/main/java/net/namibsun/footkick/android/common/ActivityFramework.java"
+analyticsfile = "footkick-android/src/main/java/net/namibsun/footkick/android/common/ActivityFrameWork.java"
 
 # Don't change anything below this!
 
