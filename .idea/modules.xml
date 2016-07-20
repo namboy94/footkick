@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/footkick.iml" filepath="$PROJECT_DIR$/.idea/modules/footkick.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/footkick-android/footkick-android.iml" filepath="$PROJECT_DIR$/.idea/modules/footkick-android/footkick-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/footkick-java/footkick-java.iml" filepath="$PROJECT_DIR$/.idea/modules/footkick-java/footkick-java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/footkick-lib/footkick-lib.iml" filepath="$PROJECT_DIR$/.idea/modules/footkick-lib/footkick-lib.iml" />
+    </modules>
+  </component>
+</project>

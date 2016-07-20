@@ -27,8 +27,8 @@ import android.widget.*;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.widgets.LeagueButton;
-import net.namibsun.footkick.java.scraper.Country;
-import net.namibsun.footkick.java.scraper.LeagueInfo;
+import net.namibsun.footkick.lib.scraper.Country;
+import net.namibsun.footkick.lib.scraper.LeagueInfo;
 
 import java.io.IOException;
 import java.util.ArrayList;

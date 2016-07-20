@@ -26,8 +26,8 @@ import android.os.Bundle;
 import android.widget.*;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.widgets.CountryButton;
-import net.namibsun.footkick.java.scraper.Country;
-import net.namibsun.footkick.java.scraper.CountryLister;
+import net.namibsun.footkick.lib.scraper.Country;
+import net.namibsun.footkick.lib.scraper.CountryLister;
 
 import java.io.IOException;
 import java.util.ArrayList;

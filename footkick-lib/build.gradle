@@ -20,8 +20,23 @@ This file is part of footkick.
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-rootProject.name = 'footkick'
-include ':footkick-java'
-include ':footkick-android'
-include ':footkick-lib'
+//noinspection GrUnresolvedAccess
+apply plugin: 'java'
 
+sourceCompatibility= 1.7
+targetCompatibility= 1.7
+
+//noinspection GroovyUnusedAssignment
+version = rootProject.ext.version
+
+//noinspection GroovyAssignabilityCheck
+jar {
+    manifest {
+    }
+}
+
+//noinspection GroovyAssignabilityCheck
+dependencies {
+    compile "org.jsoup:jsoup:1.9.2"
+    testCompile 'junit:junit:4.12'
+}

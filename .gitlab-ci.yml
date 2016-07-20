@@ -1,88 +1,52 @@
 stages:
-  - clonemirror
-#  - androidbuild
-  - javabuild
-  - upload
-  - cleanup
+  - mirror
+  - build
+  - docstats
 
-clone_master:
-  stage: clonemirror
+variables:
+  ANDROID_HOME: "/opt/android-sdk"
+  ANDROIDKEY_ALIAS: "$ANDROIDKEY_ALIAS"
+  ANDROIDKEY_PASS: "$ANDROIDKEY_PASS"
+  ANDROIDKEY_LOCATION: "$ANDROIDKEY_LOCATION"
+
+mirror_repo:
+  stage: mirror
   only:
     - master
-  script:
-    - cd
-    - git clone git@gitlab.namibsun.net:namboy94/footkick.git
-    - git clone git@gitlab.namibsun.net:namboy94/footkick.wiki.git
-
-    - cd footkick
-
-    - git push -u git@gitlab.com:namboy94/footkick.git master
-    - git push -u git@github.com:namboy94/footkick.git master
-    - git push -u git@bitbucket.org:namboy94/footkick.git master
-
-    - cd ../footkick.wiki
-
-    #- git push -u git@gitlab.com:namboy94/footkick.wiki.git master
-    #- git push -u git@github.com:namboy94/footkick.wiki.git master
-    #- git push -u git@bitbucket.org:namboy94/footkick.git/wiki master
-
-clone_develop:
-  stage: clonemirror
-  only:
     - develop
   script:
-    - cd
-    - git clone -b develop git@gitlab.namibsun.net:namboy94/footkick.git footkick
+    - git checkout master
+    - git pull origin master
+    - git push git@github.com:namboy94/footkick.git master --force
+    - git checkout develop
+    - git pull origin develop
+    - git push git@github.com:namboy94/footkick.git develop --force
 
-    - cd footkick
-
-    - git push -u git@gitlab.com:namboy94/footkick.git develop
-    - git push -u git@github.com:namboy94/footkick.git develop
-    - git push -u git@bitbucket.org:namboy94/footkick.git develop
-
-#build_android:
-#  stage: androidbuild
-#  only:
-#    - master
-#  script:
-#    - cd
-#    - cd footkick
-#    - python releasebuildprepare.py
-#    - bash gradlew assembleRelease
-#    - rm footkick-android/build/outputs/apk/footkick-android-release-unaligned.apk
-#    - cp footkick-android/build/outputs/apk/* ../footkick.wiki/builds/apk
-
-#build_jar:
-#  stage: javabuild
-#  only:
-#    - master
-#  script:
-#    - cd
-#    - cd footkick/footkick-java
-#    - rm build.gradle
-#    - mv altbuild.gradle build.gradle
-#    - gradle build
-#    - mv build/libs/* ../../footkick.wiki/builds/jar
-#    - cd ../../footkick.wiki
-#    - git add --all
-#    - git commit -m "Added builds"
-
-upload_builds:
-  stage: upload
+build_release:
+  stage: build
   only:
     - master
+    - test_build
   script:
-    - cd
-    - cd footkick.wiki
-    - git push -u origin master
+    - cp $GOOGLESERVICES_JSON footkick-android/google-services.json
+    - python signed_apk_enabler.py
+    - gradle build
+    - python noanalytics.py stash
+    - ./gradlew assembleRelease
+    - python noanalytics.py restore
+    - python github-release.py $GITHUBAUTH
 
-cleanup:
-  stage: cleanup
-  when: always
+  artifacts:
+    paths:
+      - footkick-java/build/libs
+      - footkick-lib/build/libs
+      - footkick-android/build/outputs/apk
+
+generate_git_stats:
+  stage: docstats
   only:
-  - master
-  - develop
+    - master
+    - develop
   script:
-    - cd
-    - rm -rf footkick
-    - rm -rf footkick.wiki
+    - gitstats . git_stats
+    - rsync -av git_stats/ www.krumreyh.com@ssh.strato.de:~/programming_pages/footkick/git_stats --delete-after

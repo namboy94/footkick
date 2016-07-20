@@ -30,10 +30,10 @@ import com.google.android.gms.analytics.HitBuilders;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.common.ViewSwiper;
-import net.namibsun.footkick.java.scraper.LeagueData;
-import net.namibsun.footkick.java.scraper.Match;
-import net.namibsun.footkick.java.scraper.Team;
-import net.namibsun.footkick.java.structures.League;
+import net.namibsun.footkick.lib.scraper.LeagueData;
+import net.namibsun.footkick.lib.scraper.Match;
+import net.namibsun.footkick.lib.scraper.Team;
+import net.namibsun.footkick.lib.structures.League;
 
 import java.io.IOException;
 import java.util.ArrayList;
