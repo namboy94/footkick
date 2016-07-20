@@ -23,9 +23,6 @@ This file is part of footkick.
 //noinspection GrUnresolvedAccess
 apply plugin: 'java'
 
-sourceCompatibility= 1.7
-targetCompatibility= 1.7
-
 //noinspection GroovyUnusedAssignment
 version = rootProject.ext.version
 
@@ -39,6 +36,6 @@ jar {
 
 //noinspection GroovyAssignabilityCheck
 dependencies {
-
+    compile project(':footkick-lib')
     testCompile 'junit:junit:4.12'
 }

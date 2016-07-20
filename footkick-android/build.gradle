@@ -43,20 +43,20 @@ android {
         }
     }
 
-    signingConfigs {
-        release {
-            storeFile file(System.getenv("ANDROIDKEY_LOCATION"))
-            storePassword System.getenv("ANDROIDKEY_PASS")
-            keyAlias System.getenv("ANDROIDKEY_ALIAS")
-            keyPassword System.getenv("ANDROIDKEY_PASS")
-        }
-    }
+    //SIGNED-KEY-RELEASEsigningConfigs {
+    //SIGNED-KEY-RELEASE    release {
+    //SIGNED-KEY-RELEASE        storeFile file(System.getenv("ANDROIDKEY_LOCATION"))
+    //SIGNED-KEY-RELEASE        storePassword System.getenv("ANDROIDKEY_PASS")
+    //SIGNED-KEY-RELEASE        keyAlias System.getenv("ANDROIDKEY_ALIAS")
+    //SIGNED-KEY-RELEASE        keyPassword System.getenv("ANDROIDKEY_PASS")
+    //SIGNED-KEY-RELEASE    }
+    //SIGNED-KEY-RELEASE}
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            //SIGNED-KEY-RELEASEsigningConfig signingConfigs.release
         }
     }
 }

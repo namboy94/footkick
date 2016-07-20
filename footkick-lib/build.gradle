@@ -37,7 +37,6 @@ jar {
 
 //noinspection GroovyAssignabilityCheck
 dependencies {
-    compile "org.jsoup:jsoup:1.9.2"x
-    compile project(':footkick-lib')
+    compile "org.jsoup:jsoup:1.9.2"
     testCompile 'junit:junit:4.12'
 }
