@@ -44,6 +44,11 @@ import java.io.IOException;
 public abstract class ActivityFrameWork extends AppCompatActivity {
 
     /**
+     * Flag that can deactivate the Google Analytics functionality
+     */
+    protected boolean analyticsActive = true;
+
+    /**
      * The Google Analytics tracker
      */
     protected Tracker analyticsTracker;
@@ -81,10 +86,12 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
             this.setContentView(this.layoutFile);
         }
 
-        //Initializes the analytics tracker
-        AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
-        this.analyticsTracker = application.getDefaultTracker();
-        this.analyticsTracker.enableAdvertisingIdCollection(true); //Enable demographics tracking
+        if (this.analyticsActive) {
+            //Initializes the analytics tracker
+            AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
+            this.analyticsTracker = application.getDefaultTracker();
+            this.analyticsTracker.enableAdvertisingIdCollection(true); //Enable demographics tracking
+        }
 
         //For compatibility reasons, we try to set the support action bar and the action bar as well
         //One or the other always exists, depending on the version of android
@@ -105,8 +112,10 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        analyticsTracker.setScreenName(this.analyticsName);  //Set the name to be sent to the analytics service
-        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build()); //And send it
+        if (this.analyticsActive) {
+            analyticsTracker.setScreenName(this.analyticsName);  // Set the name to be sent to the analytics service
+            analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build()); // And send it
+        }
     }
 
     /**
