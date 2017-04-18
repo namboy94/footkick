@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Parses www.livescore.com for current Football results
+ * Parses www.livescores.com for current Football results
  */
 public class FootballHtmlParser {
 
@@ -45,7 +45,7 @@ public class FootballHtmlParser {
      */
     public FootballHtmlParser(String country, String league) throws IOException {
 
-        String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
+        String livescoreUrl = "http://www.livescores.com/soccer/" + country +  "/" + league + "/";
         this.htmlPage = Jsoup.connect(livescoreUrl).get();
 
     }
@@ -143,7 +143,7 @@ public class FootballHtmlParser {
      */
     public static ArrayList<Team> getLeagueInformation(String country, String league) {
 
-        String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
+        String livescoreUrl = "http://www.livescores.com/soccer/" + country +  "/" + league + "/";
 
         try {
             Document jsoupDocument = Jsoup.connect(livescoreUrl).get();
@@ -162,7 +162,7 @@ public class FootballHtmlParser {
      */
     public static ArrayList<Match> getMatchdayInformation(String country, String league) {
 
-        String livescoreUrl = "http://www.livescore.com/soccer/" + country +  "/" + league + "/";
+        String livescoreUrl = "http://www.livescores.com/soccer/" + country +  "/" + league + "/";
 
         try {
             Document jsoupDocument = Jsoup.connect(livescoreUrl).get();

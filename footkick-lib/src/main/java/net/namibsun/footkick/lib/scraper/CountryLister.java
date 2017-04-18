@@ -38,13 +38,13 @@ import java.util.ArrayList;
 public class CountryLister {
 
     /**
-     * Parses www.livescore.com to get all available countries
+     * Parses www.livescores.com to get all available countries
      * @return a CountryList object containing information about all available countries
      * @throws IOException if the information getting fails
      */
     public static CountryList getCountries() throws IOException{
 
-        String url = "http://www.livescore.com/soccer/";
+        String url = "http://www.livescores.com/soccer/";
         Document jsoupDocument = Jsoup.connect(url).get();
 
         ArrayList<ArrayList<Country>> countries = new ArrayList<>();

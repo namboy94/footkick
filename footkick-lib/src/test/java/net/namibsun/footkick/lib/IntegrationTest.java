@@ -19,25 +19,26 @@ This file is part of footkick.
     You should have received a copy of the GNU General Public License
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
+package net.namibsun.footkick.lib;
 
-package net.namibsun.footkick.lib.scraper;
+import org.junit.Test;
+import java.io.IOException;
+import net.namibsun.footkick.lib.structures.LeagueTable;
+
 
 /**
- * A class that stores the information about a league, like the league name and URL
+ * Basic test to make sure that the scraper works
  */
-public class LeagueInfo {
-
-    public String leagueUrl;
-    public String leagueName;
+public class IntegrationTest {
 
     /**
-     * Stores the league's name and its URL
-     * @param leagueName the league's name
-     * @param leagueUrl the league's URL
+     * Tests fetching the Bundesliga Scores
+     * @throws IOException if a, well, IOException occurs
      */
-    public LeagueInfo(String leagueName, String leagueUrl) {
-        this.leagueName = leagueName;
-        this.leagueUrl = "http://www.livescores.com" + leagueUrl;
+    @Test
+    public void testFetchinBundesligaResults() throws IOException {
+        LeagueTable table = new LeagueTable("germany", "bundesliga");
+        System.out.println(table.toMonoSpaceString());
     }
 
 }

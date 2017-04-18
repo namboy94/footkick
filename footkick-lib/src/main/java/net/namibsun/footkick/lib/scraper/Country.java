@@ -43,11 +43,11 @@ public class Country {
      * Constructor that automatically generates a valid URL from the countryUrl parameter
      * and stores the country name
      * @param countryName the country's name
-     * @param countryUrl the country's livescore.com url
+     * @param countryUrl the country's livescores.com url
      */
     public Country(String countryName, String countryUrl) {
         this.countryName = countryName;
-        this.countryUrl = "http://www.livescore.com" + countryUrl;
+        this.countryUrl = "http://www.livescores.com" + countryUrl;
     }
 
     /**
