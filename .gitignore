@@ -3,3 +3,4 @@ footkick-android/google-services.json
 .gradle
 build
 out
+.idea/
