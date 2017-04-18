@@ -48,7 +48,7 @@ public class CountryButton extends Button {
         //Initializes button
         super(context);
         this.setText(countryName);
-        final String buttonLink = countryLink.split("http://www.livescore.com")[1];
+        final String buttonLink = countryLink.split("http://www.livescores.com")[1];
 
         //Set the OnclickListener
         this.setOnClickListener(new View.OnClickListener() {
