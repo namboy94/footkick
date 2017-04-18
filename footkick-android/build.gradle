@@ -23,40 +23,21 @@ This file is part of footkick.
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "net.namibsun.footkick.android"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.version
     }
-
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            output.outputFile = new File(
-                    output.outputFile.parent,
-                    output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
-
-        }
-    }
-
-    //SIGNED-KEY-RELEASEsigningConfigs {
-    //SIGNED-KEY-RELEASE    release {
-    //SIGNED-KEY-RELEASE        storeFile file(System.getenv("ANDROIDKEY_LOCATION"))
-    //SIGNED-KEY-RELEASE        storePassword System.getenv("ANDROIDKEY_PASS")
-    //SIGNED-KEY-RELEASE        keyAlias System.getenv("ANDROIDKEY_ALIAS")
-    //SIGNED-KEY-RELEASE        keyPassword System.getenv("ANDROIDKEY_PASS")
-    //SIGNED-KEY-RELEASE    }
-    //SIGNED-KEY-RELEASE}
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //SIGNED-KEY-RELEASEsigningConfig signingConfigs.release
         }
     }
 }
@@ -65,9 +46,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':footkick-lib')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.android.support:cardview-v7:23.3.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.google.android.gms:play-services-analytics:9.0.0'
 }
 

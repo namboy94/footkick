@@ -4,3 +4,4 @@ footkick-android/google-services.json
 build
 out
 .idea/
+*.iml
