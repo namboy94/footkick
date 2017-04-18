@@ -52,7 +52,7 @@ public class CountryLister {
 
         //Remove fluff
         try {
-            countryBlocks.remove(18);
+            //countryBlocks.remove(18);
             countryBlocks.remove(1);
             countryBlocks.remove(0);
         } catch (IndexOutOfBoundsException e) {

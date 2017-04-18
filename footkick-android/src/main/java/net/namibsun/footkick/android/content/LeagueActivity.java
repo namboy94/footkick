@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.*;
-import com.google.android.gms.analytics.HitBuilders;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.common.ViewSwiper;
@@ -85,9 +84,9 @@ public class LeagueActivity extends ActivityFrameWork{
                 else {
                     LeagueActivity.this.currentView = "League Table";
                 }
-                analyticsTracker.setScreenName(
-                        LeagueActivity.this.analyticsName + " - " + LeagueActivity.this.currentView);
-                analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
+                //analyticsTracker.setScreenName(
+                //        LeagueActivity.this.analyticsName + " - " + LeagueActivity.this.currentView);
+                //analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
             }
         };
 

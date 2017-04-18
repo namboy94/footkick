@@ -23,7 +23,11 @@ package net.namibsun.footkick.lib;
 
 import org.junit.Test;
 import java.io.IOException;
+
+import net.namibsun.footkick.lib.structures.CountryList;
 import net.namibsun.footkick.lib.structures.LeagueTable;
+import net.namibsun.footkick.lib.scraper.Country;
+import net.namibsun.footkick.lib.scraper.CountryLister;
 
 
 /**
@@ -39,6 +43,9 @@ public class IntegrationTest {
     public void testFetchinBundesligaResults() throws IOException {
         LeagueTable table = new LeagueTable("germany", "bundesliga");
         System.out.println(table.toMonoSpaceString());
-    }
 
+        for (Country c : CountryLister.getCountries().getCountries()) {
+            System.out.println(c.countryName);
+        }
+    }
 }

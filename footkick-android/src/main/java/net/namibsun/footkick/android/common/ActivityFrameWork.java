@@ -26,17 +26,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.google.samples.quickstart.analytics.AnalyticsApplication;
 
 import java.io.IOException;
 
 /**
- * This is an Activity class that defines common functionality and attributes for all other activities used in this
- * App. The Activity does the following:
+ * This is an Activity class that defines common functionality and attributes for all other
+ * activities used in this App. The Activity does the following:
  *
- * 1. Initializes the Google Analytics tracker and automatically tracks whenever the onContinue method is called,
+ * 1. Initializes the Google Analytics tracker and automatically tracks whenever the
+ *    onContinue method is called,
  *    i.e. whenever that activity is called into the foreground
  * 2. Loads a predetermined XML layout file
  * 3. Sets the ActionBars to the Activity's screenName
@@ -44,14 +42,9 @@ import java.io.IOException;
 public abstract class ActivityFrameWork extends AppCompatActivity {
 
     /**
-     * Flag that can deactivate the Google Analytics functionality
-     */
-    protected boolean analyticsActive = true;
-
-    /**
      * The Google Analytics tracker
      */
-    protected Tracker analyticsTracker;
+    //protected Tracker analyticsTracker;
 
     /**
      * The ID of the XML layout file
@@ -86,12 +79,10 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
             this.setContentView(this.layoutFile);
         }
 
-        if (this.analyticsActive) {
-            //Initializes the analytics tracker
-            AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
-            this.analyticsTracker = application.getDefaultTracker();
-            this.analyticsTracker.enableAdvertisingIdCollection(true); //Enable demographics tracking
-        }
+        //Initializes the analytics tracker
+        //AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
+        //this.analyticsTracker = application.getDefaultTracker();
+        //this.analyticsTracker.enableAdvertisingIdCollection(true); //Enable demographics tracking
 
         //For compatibility reasons, we try to set the support action bar and the action bar as well
         //One or the other always exists, depending on the version of android
@@ -112,10 +103,8 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (this.analyticsActive) {
-            analyticsTracker.setScreenName(this.analyticsName);  // Set the name to be sent to the analytics service
-            analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build()); // And send it
-        }
+        //analyticsTracker.setScreenName(this.analyticsName);  // Set the name to be sent to the analytics service
+        //analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build()); // And send it
     }
 
     /**
