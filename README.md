@@ -1,5 +1,11 @@
 # Footkick
 
+|master|develop|
+|:----:|:-----:|
+|[![build status](https://gitlab.namibsun.net/namboy94/footkick/badges/master/build.svg)](https://gitlab.namibsun.net/namboy94/footkick/commits/master)|[![build status](https://gitlab.namibsun.net/namboy94/footkick/badges/develop/build.svg)](https://gitlab.namibsun.net/namboy94/footkick/commits/develop)|
+
+![Logo](footkick-android/resources/playstore/art_assets/banner.png)
+
 A Java Program and Android App that fetches online football information
 
 Footkick is a simple football(soccer) information tool. It enables checking current league
