@@ -34,6 +34,7 @@ lint:
   tags:
     - linux-buildserver
   script:
+    - echo $GOOGLE_SERVICES_JSON > footkick-android/google-services.json
     - gradle lint
 
 test:
@@ -41,6 +42,7 @@ test:
   tags:
     - linux-buildserver
   script:
+    - echo $GOOGLE_SERVICES_JSON > footkick-android/google-services.json
     - gradle test
 
 build_app:
