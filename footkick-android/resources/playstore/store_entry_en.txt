@@ -40,7 +40,7 @@ Content rating:               Everyone
 ----------------------------------------------------------------------------------------------------
 # Contact Details
 
-Website:                      http://gitlab.namibsun.net/namboy94/footkick
+Website:                      https://gitlab.namibsun.net/namboy94/footkick
 Email:                        hermann@krumreyh.com
 Phone:
 
