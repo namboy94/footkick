@@ -1,3 +1,7 @@
+V 1.0.0
+  - Replaced Google analytics with Firebase Analytics
+  - Fixed Parsing issues
+  - Added a rudimentary unit test
 V 0.6
   - Fixed issues cropping up due to livescore.com's EURO 2016 redirect
 V 0.5.1
