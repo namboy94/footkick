@@ -33,8 +33,8 @@ import java.util.ArrayList;
  */
 public class League {
 
-    LeagueTable leagueTable;
-    MatchDay matchDay;
+    private LeagueTable leagueTable;
+    private MatchDay matchDay;
 
     /**
      * Constructs a new League object that automatically parses the relevant information
@@ -99,7 +99,7 @@ public class League {
      * @param amount the amount of characters the string should be (at least)
      * @return the padded String
      */
-    public static String padLeft(String string, int amount) {
+    static String padLeft(String string, int amount) {
         return String.format("%1$" + amount + "s", string);
     }
 
@@ -109,7 +109,7 @@ public class League {
      * @param amount the amount of characters the string should be (at least)
      * @return the padded String
      */
-    public static String padRight(String string, int amount) {
+    static String padRight(String string, int amount) {
         return String.format("%1$-" + amount + "s", string);
     }
 

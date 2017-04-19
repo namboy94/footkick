@@ -25,8 +25,9 @@ package net.namibsun.footkick.lib.scraper;
 /**
  * Class that models a team in a league
  */
-public class Team implements LeagueData {
+public class Team implements net.namibsun.footkick.lib.scraper.interfaces.LeagueData {
 
+    @SuppressWarnings("WeakerAccess")
     public String position;
     public String teamName;
     public String matches;
@@ -81,9 +82,8 @@ public class Team implements LeagueData {
      */
     public String[] toStringArray() {
         return new String[] {
-            this.position, this.teamName, this.matches, this.wins, this.draws, this.losses, this.goalsFor,
-                this.goalsAgainst, this.goalDifference, this.points
-
+            this.position, this.teamName, this.matches, this.wins, this.draws, this.losses,
+            this.goalsFor, this.goalsAgainst, this.goalDifference, this.points
         };
     }
 

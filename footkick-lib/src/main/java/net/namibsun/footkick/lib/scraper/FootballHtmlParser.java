@@ -34,7 +34,7 @@ import java.util.ArrayList;
  */
 public class FootballHtmlParser {
 
-    Document htmlPage;
+    private Document htmlPage;
 
     /**
      * Constructor for the FootballHtmlParser class that initializes class variables used by
@@ -53,7 +53,7 @@ public class FootballHtmlParser {
     /**
      * Alternate Constructor that takes a URL directly
      * @param url the URL to parse
-     * @throws IOException
+     * @throws IOException when a Connection error occurs
      */
     public FootballHtmlParser(String url) throws IOException {
         this.htmlPage = Jsoup.connect(url).get();
@@ -80,7 +80,7 @@ public class FootballHtmlParser {
      * @param jsoupDocument the jsoup Document to parse
      * @return an array list of parsed teams
      */
-    public static ArrayList<Team> scrapeLeagueInformation(Document jsoupDocument) {
+    private static ArrayList<Team> scrapeLeagueInformation(Document jsoupDocument) {
 
         Elements leagueTeams = jsoupDocument.select(".team");
         Elements leagueStats = jsoupDocument.select(".pts");
@@ -115,7 +115,7 @@ public class FootballHtmlParser {
      * @param jsoupDocument the jsoup Document to be parsed
      * @return an array list of parsed matches
      */
-    public static ArrayList<Match> scrapeMatchdayInformation(Document jsoupDocument) {
+    private static ArrayList<Match> scrapeMatchdayInformation(Document jsoupDocument) {
 
         ArrayList<Match> matches = new ArrayList<>();
 

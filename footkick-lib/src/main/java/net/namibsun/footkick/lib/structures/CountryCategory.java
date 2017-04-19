@@ -7,7 +7,8 @@ import java.util.ArrayList;
 /**
  * Class that models a category of countries, for example Europe, Africa, Rest of World, etc.
  */
-public class CountryCategory {
+@SuppressWarnings("WeakerAccess")
+class CountryCategory {
 
     public String categoryName;
     public ArrayList<Country> countries = new ArrayList<>();

@@ -29,12 +29,12 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Class that contains static methods to show the user messages
  */
-public class Notifiers {
+class Notifiers {
 
     /**
      * Shows connection error dialog
      */
-    public static void showConnectionErrorDialog(AppCompatActivity activity){
+    static void showConnectionErrorDialog(AppCompatActivity activity){
 
         AlertDialog.Builder errorDialogBuilder = new AlertDialog.Builder(activity);
         errorDialogBuilder.setTitle("Connection Error");

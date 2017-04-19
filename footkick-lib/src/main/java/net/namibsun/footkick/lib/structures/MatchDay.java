@@ -33,7 +33,7 @@ import java.util.ArrayList;
  */
 public class MatchDay {
 
-    ArrayList<Match> matches;
+    private ArrayList<Match> matches;
 
     /**
      * Constructor that automatically parses the matchday for the specified league and country
@@ -50,7 +50,7 @@ public class MatchDay {
      * pre-defined matches via constructor
      * @param matches the matches of the matchday
      */
-    public MatchDay(ArrayList<Match> matches) {
+    MatchDay(ArrayList<Match> matches) {
         this.matches = matches;
     }
 
@@ -58,7 +58,7 @@ public class MatchDay {
      * Getter method for the list of matches
      * @return an array list of all matches
      */
-    public ArrayList<Match> getMatches() {
+    ArrayList<Match> getMatches() {
         return this.matches;
     }
 

@@ -29,7 +29,7 @@ import android.widget.*;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.common.ViewSwiper;
-import net.namibsun.footkick.lib.scraper.LeagueData;
+import net.namibsun.footkick.lib.scraper.interfaces.LeagueData;
 import net.namibsun.footkick.lib.scraper.Match;
 import net.namibsun.footkick.lib.scraper.Team;
 import net.namibsun.footkick.lib.structures.League;
@@ -85,7 +85,7 @@ public class LeagueActivity extends ActivityFrameWork{
                     LeagueActivity.this.currentView = "League Table";
                 }
                 //analyticsTracker.setScreenName(
-                //        LeagueActivity.this.analyticsName + " - " + LeagueActivity.this.currentView);
+                //    LeagueActivity.this.analyticsName + " - " + LeagueActivity.this.currentView);
                 //analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
             }
         };
@@ -168,9 +168,13 @@ public class LeagueActivity extends ActivityFrameWork{
      */
     private void fillTable(int tableId, String[] header, ArrayList<? extends LeagueData> data) {
 
-        int[] tableColours = new int[]{ R.color.colorTableSecondaryRow, R.color.colorTablePrimaryRow };
+        int[] tableColours = new int[]{
+                R.color.colorTableSecondaryRow,
+                R.color.colorTablePrimaryRow };
         if (data.size() % 2 == 0) {
-            tableColours = new int[]{ R.color.colorTablePrimaryRow, R.color.colorTableSecondaryRow };
+            tableColours = new int[]{
+                    R.color.colorTablePrimaryRow,
+                    R.color.colorTableSecondaryRow };
         }
 
         final TableLayout table = (TableLayout) this.findViewById(tableId);

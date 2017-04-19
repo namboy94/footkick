@@ -35,7 +35,7 @@ public class LeagueInfo {
      * @param leagueName the league's name
      * @param leagueUrl the league's URL
      */
-    public LeagueInfo(String leagueName, String leagueUrl) {
+    LeagueInfo(String leagueName, String leagueUrl) {
         this.leagueName = leagueName;
         this.leagueUrl = "http://www.livescores.com" + leagueUrl;
     }

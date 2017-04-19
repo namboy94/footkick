@@ -33,7 +33,7 @@ import java.util.ArrayList;
  */
 public class LeagueTable {
 
-    ArrayList<Team> teams;
+    private ArrayList<Team> teams;
 
     /**
      * Constructor that automatically parses the league table for the specified country an league
@@ -52,7 +52,7 @@ public class LeagueTable {
      * team objects given via parameter
      * @param teams the teams in the league table
      */
-    public LeagueTable(ArrayList<Team> teams) {
+    LeagueTable(ArrayList<Team> teams) {
         this.teams = teams;
     }
 
@@ -60,7 +60,7 @@ public class LeagueTable {
      * Getter method for the teams in the league
      * @return an array list of teams in the league
      */
-    public ArrayList<Team> getTeams() {
+    ArrayList<Team> getTeams() {
         return this.teams;
     }
 

@@ -1,4 +1,4 @@
-package net.namibsun.footkick.lib.scraper;
+package net.namibsun.footkick.lib.scraper.interfaces;
 
 /**
  * An interface that defines the behaviour of the Team and Match classes

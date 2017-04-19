@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import net.namibsun.footkick.android.content.LeagueActivity;
 
 /**
@@ -35,7 +34,7 @@ import net.namibsun.footkick.android.content.LeagueActivity;
  * to open that country/league's content activity
  */
 @SuppressLint("ViewConstructor")
-public class LeagueButton extends Button {
+public class LeagueButton extends android.support.v7.widget.AppCompatButton {
 
     /**
      * Creates a new CountryLeagueButton and enables the OnclickListener

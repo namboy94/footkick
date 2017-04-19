@@ -38,6 +38,7 @@ public class ViewSwiper extends GestureDetector.SimpleOnGestureListener {
      * @param activity the activity creating this ViewSwiper, needed to initialize the animations
      * @param switcher the View switcher/flipper to be used
      */
+    @SuppressWarnings("unused")
     public ViewSwiper(ActivityFrameWork activity, ViewAnimator switcher) {
         this.switcher = switcher;
         this.slide_in_left = AnimationUtils.loadAnimation(activity, R.anim.slide_in_left);
@@ -54,7 +55,8 @@ public class ViewSwiper extends GestureDetector.SimpleOnGestureListener {
      * @param previousMethod the runnable to be run whenever the previous View will be shown
      * @param nextMethod the runnable to be run whenever the next View will be shown
      */
-    public ViewSwiper(ActivityFrameWork activity, ViewAnimator switcher, Runnable previousMethod, Runnable nextMethod) {
+    public ViewSwiper(ActivityFrameWork activity, ViewAnimator switcher, Runnable previousMethod,
+                      Runnable nextMethod) {
         this.switcher = switcher;
         this.slide_in_left = AnimationUtils.loadAnimation(activity, R.anim.slide_in_left);
         this.slide_in_right = AnimationUtils.loadAnimation(activity, R.anim.slide_in_right);
@@ -69,13 +71,14 @@ public class ViewSwiper extends GestureDetector.SimpleOnGestureListener {
      * and if the fling was right or left
      * @param event1 the first motion event, i.e. where the user started touching the screen
      * @param event2 the second motion event, i.e. where the user stopped touching the screen
-     * @param velocityX the speed of the fling in X direction, used to check if the screen was swiped
-     *                  fast enough to trigger a View switch
+     * @param velocityX the speed of the fling in X direction, used to check
+     *                  if the screen was swiped fast enough to trigger a View switch
      * @param velocityY the y Velocity of the fling. Not used here.
      * @return if the event triggered???
      */
     @Override
-    public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
+    public boolean onFling(MotionEvent event1, MotionEvent event2,
+                           float velocityX, float velocityY) {
 
         if (Math.abs(velocityX) > 3000.0) {  //Velocity must be at least 3000.0
             // Swipe left (next)

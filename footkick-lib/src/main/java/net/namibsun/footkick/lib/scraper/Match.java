@@ -25,7 +25,7 @@ package net.namibsun.footkick.lib.scraper;
 /**
  * Class that models a single football match
  */
-public class Match implements LeagueData {
+public class Match implements net.namibsun.footkick.lib.scraper.interfaces.LeagueData {
 
     public String homeTeam;
     public String awayTeam;

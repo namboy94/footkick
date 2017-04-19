@@ -34,6 +34,11 @@ import net.namibsun.footkick.lib.structures.MatchDay;
  */
 public class Main {
 
+    /**
+     * Starts the Footkick CLI Tool
+     * @param args The command line arguments passed to the Program
+     * @throws Exception Any Exception that may occur
+     */
     public static void main(String[] args) throws Exception {
 
         if (args.length == 1 && args[0].equals("list")) {
@@ -74,7 +79,5 @@ public class Main {
                     break;
             }
         }
-
     }
-
 }

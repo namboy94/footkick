@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import net.namibsun.footkick.android.content.CountryActivity;
 
 /**
@@ -35,7 +34,7 @@ import net.namibsun.footkick.android.content.CountryActivity;
  * to open that country's CountryActivity
  */
 @SuppressLint("ViewConstructor")
-public class CountryButton extends Button {
+public class CountryButton extends android.support.v7.widget.AppCompatButton {
 
     /**
      * Creates a new CountryButton and enables the OnclickListener

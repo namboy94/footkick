@@ -74,12 +74,13 @@ public class CountryActivity extends ActivityFrameWork{
         int lastId = R.id.leagueText;
 
         for (LeagueInfo league: leagues) {
-            //Add the buttons
 
+            //Add the buttons
             final LeagueButton leagueButton = new LeagueButton(this,
                     this.analyticsName, league.leagueName, league.leagueUrl);
             final RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
 
             leagueButton.setId(lastId + 1);
             buttonParams.addRule(RelativeLayout.BELOW, lastId);

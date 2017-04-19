@@ -41,9 +41,9 @@ import java.io.IOException;
  */
 public abstract class ActivityFrameWork extends AppCompatActivity {
 
-    /**
-     * The Google Analytics tracker
-     */
+    ///**
+    // * The Google Analytics tracker
+    // */
     //protected Tracker analyticsTracker;
 
     /**
@@ -67,7 +67,8 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
      * analytics tracker and action bar title
      * @param savedInstanceState the saved instance sent by the Android OS
      */
-    @SuppressWarnings("ConstantConditions") //To appease IntelliJ regarding the setting of the action bar title
+    //To appease IntelliJ regarding the setting of the action bar title
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -103,12 +104,14 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //analyticsTracker.setScreenName(this.analyticsName);  // Set the name to be sent to the analytics service
+        // Set the name to be sent to the analytics service
+        //analyticsTracker.setScreenName(this.analyticsName);
         //analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build()); // And send it
     }
 
     /**
-     * Removes a view from the UI. This method should be run whenever removing views from a different thread.
+     * Removes a view from the UI. This method should be run whenever
+     * removing views from a different thread.
      * @param viewId the view to hide's View ID
      */
     protected void removeView(int viewId) {
@@ -139,6 +142,7 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
      *                 the activity's methods and variables, most importantly the
      *                 getInternetData method
      */
+    @SuppressWarnings("DanglingJavadoc")
     protected void runInternetDataGetter(final ActivityFrameWork activity) {
 
         /**
@@ -150,23 +154,26 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
 
             /**
              * Does a background task, in which the app checks for IOExceptions caused by
-             * network loss. If this occurs, a message dialog is shown to the user, and the method will
-             * automatically retry to get the online data once every three seconds
-             * @param params the parameters given, which in this case are Void parameters, hence irrelevant
+             * network loss. If this occurs, a message dialog is shown to the user,
+             * and the method will automatically retry to get the online data once every
+             * three seconds.
+             * @param params the parameters given, which in this case are Void parameters,
+             *               hence irrelevant
              * @return just null
              */
             @Override
             protected Void doInBackground(Void... params) {
 
-                boolean connectionLost = false;  //Used to check if the connection was lost
-                boolean finished = false;  //Used to check if the operation has finished successfully
+                boolean connectionLost = false;  // Used to check if the connection was lost
+                boolean finished = false;  // Used to check if the operation has finished
 
-                //Try to get the data until we have it
+                // Try to get the data until we have it
                 while (!finished) {
                     try {
-                        activity.getInternetData();  //Get the internet data
-                        finished = true;  //On success, tell the program that the loop has finished
-                    } catch (IOException e) { //If the operation was no successful, handle the lost connection
+                        activity.getInternetData();  // Get the internet data
+                        finished = true;  // On success, tell the program that the loop has finished
+                    } catch (IOException e) { // If the operation was no successful,
+                                              // handle the lost connection
 
                         //Show an error dialog in case this is the first loop,
                         //then let the app know that it is known that the connection was lost

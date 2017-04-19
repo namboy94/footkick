@@ -31,7 +31,7 @@ import java.util.ArrayList;
  */
 public class CountryList {
 
-    ArrayList<CountryCategory> countryCategories = new ArrayList<>();
+    private ArrayList<CountryCategory> countryCategories = new ArrayList<>();
 
     /**
      * Creates an new CountryList
@@ -69,6 +69,7 @@ public class CountryList {
      * Getter method for the countryCategories variable
      * @return all country categories
      */
+    @SuppressWarnings("unused")
     public ArrayList<CountryCategory> getCountryCategories() {
         return this.countryCategories;
     }
