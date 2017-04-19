@@ -60,7 +60,7 @@ build_app:
     - mv footkick-android/build/outputs/apk/footkick-android-release.apk artifacts/footkick-android-$(gradle version -q).apk
     - mv footkick-lib/build/libs/footkick-lib-$(gradle version -q).jar artifacts/footkick-lib-$(gradle version -q).jar
     - mv footkick-java/build/libs/footkick-java-$(gradle version -q).jar artifacts/footkick-java-$(gradle version -q).jar
-    - rm androidkey app/google-services.json
+    - rm androidkey footkick-android/google-services.json
   artifacts:
      paths:
       - artifacts/
