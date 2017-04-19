@@ -26,6 +26,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.IOException;
 
@@ -41,10 +42,10 @@ import java.io.IOException;
  */
 public abstract class ActivityFrameWork extends AppCompatActivity {
 
-    ///**
-    // * The Google Analytics tracker
-    // */
-    //protected Tracker analyticsTracker;
+    /**
+     * The Google Analytics tracker
+     */
+    protected FirebaseAnalytics firebase;
 
     /**
      * The ID of the XML layout file
@@ -80,10 +81,8 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
             this.setContentView(this.layoutFile);
         }
 
-        //Initializes the analytics tracker
-        //AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
-        //this.analyticsTracker = application.getDefaultTracker();
-        //this.analyticsTracker.enableAdvertisingIdCollection(true); //Enable demographics tracking
+        // Initializes the firebase analytics tracker
+        this.firebase = FirebaseAnalytics.getInstance(this);
 
         //For compatibility reasons, we try to set the support action bar and the action bar as well
         //One or the other always exists, depending on the version of android
@@ -104,9 +103,7 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Set the name to be sent to the analytics service
-        //analyticsTracker.setScreenName(this.analyticsName);
-        //analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build()); // And send it
+        this.firebase.setCurrentScreen(this, this.analyticsName, null);
     }
 
     /**
