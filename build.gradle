@@ -21,8 +21,8 @@ This file is part of footkick.
 */
 
 ext {
-    version = "0.6"
-    versionCode = 6
+    version = "1.0.0"
+    versionCode = 100
 }
 
 buildscript {
