@@ -1,52 +1,128 @@
 stages:
   - mirror
+  - test
   - build
-  - docstats
+  - release
+  - docs
+  - finalize
 
 variables:
-  ANDROID_HOME: "/opt/android-sdk"
+  GITLAB_ACCESS_TOKEN: "$GITLAB_ACCESS_TOKEN"
+  GITHUB_ACCESS_TOKEN: "$GITHUB_ACCESS_TOKEN"
+  ANDROID_HOME: "$ANDROID_SDK_LOCATION"
+  ANDROIDKEY: "$ANDROIDKEY"
   ANDROIDKEY_ALIAS: "$ANDROIDKEY_ALIAS"
   ANDROIDKEY_PASS: "$ANDROIDKEY_PASS"
-  ANDROIDKEY_LOCATION: "$ANDROIDKEY_LOCATION"
+  GOOGLE_SERVICES_JSON: "$GOOGLE_SERVICES_JSON"
+  PLAY_UPLOAD_SECRET: "$PLAY_UPLOAD_SECRET"
+  PLAY_UPLOAD_EMAIL: "$PLAY_UPLOAD_EMAIL"
 
-mirror_repo:
+github_mirror:
   stage: mirror
-  only:
-    - master
-    - develop
+  tags:
+    - linux-buildserver
   script:
     - git checkout master
-    - git pull origin master
-    - git push git@github.com:namboy94/footkick.git master --force
+    - git pull
+    - git push git@github.com:namboy94/footkick.git master -f
     - git checkout develop
-    - git pull origin develop
-    - git push git@github.com:namboy94/footkick.git develop --force
+    - git pull
+    - git push git@github.com:namboy94/footkick.git develop -f
 
-build_release:
+lint:
+  stage: test
+  tags:
+    - linux-buildserver
+  script:
+    - gradle ktlint
+
+build_app:
   stage: build
   only:
     - master
-    - test_build
+  tags:
+    - linux-buildserver
   script:
-    - cp $GOOGLESERVICES_JSON footkick-android/google-services.json
-    - python signed_apk_enabler.py
+    - mkdir -p artifacts
+    - echo $ANDROIDKEY | base64 -d > androidkey
+    - echo $GOOGLE_SERVICES_JSON > footkick-android/google-services.json
     - gradle build
-    - python noanalytics.py stash
-    - ./gradlew assembleRelease
-    - python noanalytics.py restore
-    - python github-release.py $GITHUBAUTH
-
+    - ./gradlew assembleRelease -Pandroid.injected.signing.store.file=androidkey -Pandroid.injected.signing.store.password=$ANDROIDKEY_PASS -Pandroid.injected.signing.key.alias=$ANDROIDKEY_ALIAS -Pandroid.injected.signing.key.password=$ANDROIDKEY_PASS
+    - mv footkick-android/build/outputs/apk/footkick-android-release.apk artifacts/footkick-android-$(gradle version -q).apk
+    - mv footkick-lib/build/libs/footkick-lib-$(gradle version -q).jar artifacts/footkick-lib-$(gradle version -q).jar
+    - mv footkick-java/build/libs/footkick-java-$(gradle version -q).jar artifacts/footkick-java-$(gradle version -q).jar
+    - rm androidkey app/google-services.json
   artifacts:
-    paths:
-      - footkick-java/build/libs
-      - footkick-lib/build/libs
-      - footkick-android/build/outputs/apk
+     paths:
+      - artifacts/
 
-generate_git_stats:
-  stage: docstats
+upload_gitlab_release:
+  stage: release
+  only:
+    - master
+  tags:
+    - linux-buildserver
+  script:
+    - mkdir -p artifacts
+    - git clone https://gitlab.namibsun.net/namboy94/gitlab-release-uploader.git
+    - git clone https://gitlab.namibsun.net/namboy94/changelog-reader.git
+    - python changelog-reader/changelog-reader.py -c CHANGELOG -d  current_changelog
+    - python gitlab-release-uploader/gitlab-release-uploader.py namboy94 footkick $GITLAB_ACCESS_TOKEN
+      $(gradle version -q) current_changelog artifacts -b master -u https://gitlab.namibsun.net
+
+upload_github_release:
+  stage: release
+  only:
+    - master
+  tags:
+    - linux-buildserver
+  script:
+    - mkdir -p artifacts
+    - git clone https://gitlab.namibsun.net/namboy94/github-release-uploader.git
+    - git clone https://gitlab.namibsun.net/namboy94/changelog-reader.git
+    - python changelog-reader/changelog-reader.py -c CHANGELOG -d current_changelog
+    - python github-release-uploader/github-release-uploader.py namboy94 footkick $GITHUB_ACCESS_TOKEN
+      $(gradle version -q) current_changelog artifacts -b master
+
+upload_play_store_beta:
+  stage: release
+  only:
+    - master
+  tags:
+    - linux-buildserver
+  script:
+    - pip install --upgrade google-api-python-client pyOpenSSL --user
+    - git clone https://gitlab.namibsun.net/namboy94/changelog-reader.git
+    - git clone https://gitlab.namibsun.net/namboy94/play-upload.git
+    - python changelog-reader/changelog-reader.py -c CHANGELOG -d en-US
+    - python changelog-reader/changelog-reader.py -c CHANGELOG-de -d de-DE
+    - echo $PLAY_UPLOAD_SECRET | base64 -d > key.p12
+    - python play-upload/play-upload.py net.namibsun.footkick.android production $PLAY_UPLOAD_EMAIL key.p12 artifacts/*.apk --changes="en-US,de-DE"
+    - rm key.p12
+
+gitstats:
+  stage: docs
+  tags:
+    - linux-buildserver
   only:
     - master
     - develop
   script:
-    - gitstats . git_stats
-    - rsync -av git_stats/ www.krumreyh.com@ssh.strato.de:~/programming_pages/footkick/git_stats --delete-after
+    - gitstats . gitstats
+    - rsync -av gitstats/ /var/www/gitstats.namibsun.net/public_html/gitstats/footkick --delete-before
+    - git_stats generate
+    - rsync -av git_stats/ /var/www/gitstats.namibsun.net/public_html/git_stats/footkick --delete-before
+
+update_site_indexes:
+  stage: finalize
+  tags:
+    - linux-buildserver
+  script:
+    - git clone https://gitlab.namibsun.net/namboy94/html-index-generator.git
+    - cd html-index-generator
+    - python html-index-generator.py /var/www/coverage.namibsun.net/public_html
+      /var/www/coverage.namibsun.net/public_html/index.html
+    - python html-index-generator.py /var/www/docs.namibsun.net/public_html
+      /var/www/docs.namibsun.net/public_html/index.html
+    - python html-index-generator.py /var/www/gitstats.namibsun.net/public_html
+      /var/www/gitstats.namibsun.net/public_html/index.html
