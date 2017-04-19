@@ -1,9 +1,7 @@
-.gradle/*
-footkick-android/.gradle/*
 local.properties
-footkick-android/google-services.json
+google-services.json
+.gradle
+build
+out
 .idea/
-build/
-footkick-android/build/
-footkick-java/.gradle/
-footkick-java/build/
+*.iml

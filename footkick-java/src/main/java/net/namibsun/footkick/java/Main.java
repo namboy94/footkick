@@ -22,20 +22,23 @@ This file is part of footkick.
 
 package net.namibsun.footkick.java;
 
-import net.namibsun.footkick.java.scraper.Country;
-import net.namibsun.footkick.java.scraper.CountryLister;
-import net.namibsun.footkick.java.structures.CountryList;
-import net.namibsun.footkick.java.structures.League;
-import net.namibsun.footkick.java.structures.LeagueTable;
-import net.namibsun.footkick.java.structures.MatchDay;
-
-import java.util.ArrayList;
+import net.namibsun.footkick.lib.scraper.Country;
+import net.namibsun.footkick.lib.scraper.CountryLister;
+import net.namibsun.footkick.lib.structures.CountryList;
+import net.namibsun.footkick.lib.structures.League;
+import net.namibsun.footkick.lib.structures.LeagueTable;
+import net.namibsun.footkick.lib.structures.MatchDay;
 
 /**
  * The Main Java Class
  */
 public class Main {
 
+    /**
+     * Starts the Footkick CLI Tool
+     * @param args The command line arguments passed to the Program
+     * @throws Exception Any Exception that may occur
+     */
     public static void main(String[] args) throws Exception {
 
         if (args.length == 1 && args[0].equals("list")) {
@@ -76,7 +79,5 @@ public class Main {
                     break;
             }
         }
-
     }
-
 }

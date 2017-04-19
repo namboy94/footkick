@@ -27,8 +27,8 @@ import android.widget.*;
 import net.namibsun.footkick.android.R;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.widgets.LeagueButton;
-import net.namibsun.footkick.java.scraper.Country;
-import net.namibsun.footkick.java.scraper.LeagueInfo;
+import net.namibsun.footkick.lib.scraper.Country;
+import net.namibsun.footkick.lib.scraper.LeagueInfo;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,12 +74,13 @@ public class CountryActivity extends ActivityFrameWork{
         int lastId = R.id.leagueText;
 
         for (LeagueInfo league: leagues) {
-            //Add the buttons
 
+            //Add the buttons
             final LeagueButton leagueButton = new LeagueButton(this,
                     this.analyticsName, league.leagueName, league.leagueUrl);
             final RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
 
             leagueButton.setId(lastId + 1);
             buttonParams.addRule(RelativeLayout.BELOW, lastId);

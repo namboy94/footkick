@@ -20,8 +20,24 @@ This file is part of footkick.
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-rootProject.name = 'footkick'
-include ':footkick-java'
-include ':footkick-android'
-include ':footkick-lib'
+package net.namibsun.footkick.lib.scraper;
 
+/**
+ * A class that stores the information about a league, like the league name and URL
+ */
+public class LeagueInfo {
+
+    public String leagueUrl;
+    public String leagueName;
+
+    /**
+     * Stores the league's name and its URL
+     * @param leagueName the league's name
+     * @param leagueUrl the league's URL
+     */
+    LeagueInfo(String leagueName, String leagueUrl) {
+        this.leagueName = leagueName;
+        this.leagueUrl = "http://www.livescores.com" + leagueUrl;
+    }
+
+}

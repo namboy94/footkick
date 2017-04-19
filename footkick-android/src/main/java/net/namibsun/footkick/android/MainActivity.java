@@ -26,8 +26,8 @@ import android.os.Bundle;
 import android.widget.*;
 import net.namibsun.footkick.android.common.ActivityFrameWork;
 import net.namibsun.footkick.android.widgets.CountryButton;
-import net.namibsun.footkick.java.scraper.Country;
-import net.namibsun.footkick.java.scraper.CountryLister;
+import net.namibsun.footkick.lib.scraper.Country;
+import net.namibsun.footkick.lib.scraper.CountryLister;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,7 +60,8 @@ public class MainActivity extends ActivityFrameWork {
     @Override
     protected void getInternetData() throws IOException{
 
-        ArrayList<Country> countries = CountryLister.getCountries().getCountries(); //Get the country identifiers
+        //Get the country identifiers
+        ArrayList<Country> countries = CountryLister.getCountries().getCountries();
         this.removeView(R.id.main_activity_progress);
 
         final RelativeLayout layout = (RelativeLayout) this.findViewById(R.id.countryHolder);
@@ -69,9 +70,12 @@ public class MainActivity extends ActivityFrameWork {
 
         for (Country country : countries) {
 
-            final CountryButton countryButton = new CountryButton(this, country.countryName, country.countryUrl);
+            final CountryButton countryButton =
+                    new CountryButton(this, country.countryName, country.countryUrl);
             final RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            );
 
             buttonParams.addRule(RelativeLayout.BELOW, lastId);
 
@@ -90,5 +94,4 @@ public class MainActivity extends ActivityFrameWork {
             });
         }
     }
-
 }

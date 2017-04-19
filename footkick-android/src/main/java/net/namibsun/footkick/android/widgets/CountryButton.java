@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import net.namibsun.footkick.android.content.CountryActivity;
 
 /**
@@ -35,7 +34,7 @@ import net.namibsun.footkick.android.content.CountryActivity;
  * to open that country's CountryActivity
  */
 @SuppressLint("ViewConstructor")
-public class CountryButton extends Button {
+public class CountryButton extends android.support.v7.widget.AppCompatButton {
 
     /**
      * Creates a new CountryButton and enables the OnclickListener
@@ -48,7 +47,7 @@ public class CountryButton extends Button {
         //Initializes button
         super(context);
         this.setText(countryName);
-        final String buttonLink = countryLink.split("http://www.livescore.com")[1];
+        final String buttonLink = countryLink.split("http://www.livescores.com")[1];
 
         //Set the OnclickListener
         this.setOnClickListener(new View.OnClickListener() {

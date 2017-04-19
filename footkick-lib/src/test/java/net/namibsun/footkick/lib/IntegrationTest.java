@@ -19,9 +19,31 @@ This file is part of footkick.
     You should have received a copy of the GNU General Public License
     along with footkick. If not, see <http://www.gnu.org/licenses/>.
 */
+package net.namibsun.footkick.lib;
 
-rootProject.name = 'footkick'
-include ':footkick-java'
-include ':footkick-android'
-include ':footkick-lib'
+import org.junit.Test;
+import java.io.IOException;
+import net.namibsun.footkick.lib.structures.LeagueTable;
+import net.namibsun.footkick.lib.scraper.Country;
+import net.namibsun.footkick.lib.scraper.CountryLister;
 
+
+/**
+ * Basic test to make sure that the scraper works
+ */
+public class IntegrationTest {
+
+    /**
+     * Tests fetching the Bundesliga Scores
+     * @throws IOException if a, well, IOException occurs
+     */
+    @Test
+    public void testFetchinBundesligaResults() throws IOException {
+        LeagueTable table = new LeagueTable("germany", "bundesliga");
+        System.out.println(table.toMonoSpaceString());
+
+        for (Country c : CountryLister.getCountries().getCountries()) {
+            System.out.println(c.countryName);
+        }
+    }
+}
