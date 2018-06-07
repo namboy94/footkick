@@ -2,9 +2,9 @@
 
 |master|develop|
 |:----:|:-----:|
-|[![build status](https://gitlab.namibsun.net/namboy94/footkick/badges/master/build.svg)](https://gitlab.namibsun.net/namboy94/footkick/commits/master)|[![build status](https://gitlab.namibsun.net/namboy94/footkick/badges/develop/build.svg)](https://gitlab.namibsun.net/namboy94/footkick/commits/develop)|
+|[![build status](https://gitlab.namibsun.net/namibsun/android/footkick/badges/master/build.svg)](https://gitlab.namibsun.net/namibsun/android/footkick/commits/master)|[![build status](https://gitlab.namibsun.net/namibsun/android/footkick/badges/develop/build.svg)](https://gitlab.namibsun.net/namibsun/android/footkick/commits/develop)|
 
-![Logo](footkick-android/resources/playstore/art_assets/banner.png)
+![Logo](resources/logo/logo-readme.png)
 
 A Java Program and Android App that fetches online football information
 
@@ -21,10 +21,11 @@ CLI Usage:
 
 ## Further Information
 
-* [Changelog](https://gitlab.namibsun.net/namboy94/footkick/raw/master/CHANGELOG)
-* [Gitlab](https://gitlab.namibsun.net/namboy94/footkick)
+* [Changelog](CHANGELOG)
+* [Changelog (German)](CHANGELOG-de-DE)
+* [License (GPLv3)](LICENSE)
+* [Gitlab](https://gitlab.namibsun.net/namibsun/android/footkick)
 * [Github](https://github.com/namboy94/footkick)
+* [Progstats](https://progstats.namibsun.net/projects/footkick)
 * [Play Store Entry](https://play.google.com/store/apps/details?id=net.namibsun.footkick.android)
-* [Git Statistics (gitstats)](https://gitstats.namibsun.net/gitstats/footkick/index.html)
-* [Git Statistics (git_stats)](https://gitstats.namibsun.net/git_stats/footkick/index.html)
-* [Privacy Statement](footkick-android/resources/playstore/privacy_statement.txt)
+* [Privacy Statement](app/resources/playstore/privacy_statement.txt)
