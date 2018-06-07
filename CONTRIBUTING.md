@@ -1,4 +1,4 @@
-# Contributing to footkick
+# Contributing
 
 ## Copyright and Management
 
@@ -7,31 +7,6 @@ of this project and may steer the development process as he sees fit.
 
 Contributions will be attributed to the author of said code and the copyright will
 remain the author's.
-
-## Coding guidelines
-
-**Style**
-
-We feel that a unified coding style is important, which is why we require a linter to
-be used. In this case we just use ```gradle lint```.
-
-The following coding conventions should be upkept:
-
-* Indentation is done using 4 spaces.
-* Indentation is important. Always indent as if you were writing python code.
-* Line lengths are limited to 120 characters.
-* Brackets are placed like this:
-
-      if (condition) {
-          ...
-      }
-
-**Documentation**
-
-All classes, methods and class/instance variables should be described using Javadoc comments.
-
-Hard to understand parts of code within a method should always be commented
-accordingly.
 
 ## Contributing
 

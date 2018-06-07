@@ -52,7 +52,6 @@ public class CountryActivity extends ActivityFrameWork{
         Bundle bundle = this.getIntent().getExtras();
 
         this.layoutFile = R.layout.activity_country;
-        this.analyticsName = bundle.getString("country");
         this.screenName = bundle.getString("country");
         this.countryLink = bundle.getString("link");
 
@@ -77,7 +76,7 @@ public class CountryActivity extends ActivityFrameWork{
 
             //Add the buttons
             final LeagueButton leagueButton = new LeagueButton(this,
-                    this.analyticsName, league.leagueName, league.leagueUrl);
+                    "analyticsname", league.leagueName, league.leagueUrl);
             final RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);

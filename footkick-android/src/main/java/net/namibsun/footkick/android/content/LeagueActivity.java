@@ -54,7 +54,7 @@ public class LeagueActivity extends ActivityFrameWork{
     private String leagueLink;
 
     /**
-     * The current view type to be sent vie Analytics
+     * The current view type
      */
     private String currentView = "League Table";
 
@@ -68,7 +68,6 @@ public class LeagueActivity extends ActivityFrameWork{
         Bundle bundle = this.getIntent().getExtras();
 
         this.layoutFile = R.layout.activity_league;
-        this.analyticsName = bundle.getString("country") + " - " + bundle.getString("league");
         this.screenName = bundle.getString("league");
         this.leagueLink = bundle.getString("link");
 
@@ -84,9 +83,6 @@ public class LeagueActivity extends ActivityFrameWork{
                 else {
                     LeagueActivity.this.currentView = "League Table";
                 }
-                //analyticsTracker.setScreenName(
-                //    LeagueActivity.this.analyticsName + " - " + LeagueActivity.this.currentView);
-                //analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
             }
         };
 

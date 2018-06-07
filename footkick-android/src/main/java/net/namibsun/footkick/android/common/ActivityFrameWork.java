@@ -26,7 +26,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.IOException;
 
@@ -34,18 +33,10 @@ import java.io.IOException;
  * This is an Activity class that defines common functionality and attributes for all other
  * activities used in this App. The Activity does the following:
  *
- * 1. Initializes the Google Analytics tracker and automatically tracks whenever the
- *    onContinue method is called,
- *    i.e. whenever that activity is called into the foreground
- * 2. Loads a predetermined XML layout file
- * 3. Sets the ActionBars to the Activity's screenName
+ * 1. Loads a predetermined XML layout file
+ * 2. Sets the ActionBars to the Activity's screenName
  */
 public abstract class ActivityFrameWork extends AppCompatActivity {
-
-    /**
-     * The Google Analytics tracker
-     */
-    protected FirebaseAnalytics firebase;
 
     /**
      * The ID of the XML layout file
@@ -58,14 +49,8 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
     protected String screenName;
 
     /**
-     * The name of the activity that will be logged by Google Analytics
-     */
-    protected String analyticsName;
-
-
-    /**
      * The constructor (essentially) of the activity. It takes care of initializing the XML file,
-     * analytics tracker and action bar title
+     * and action bar title
      * @param savedInstanceState the saved instance sent by the Android OS
      */
     //To appease IntelliJ regarding the setting of the action bar title
@@ -81,9 +66,6 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
             this.setContentView(this.layoutFile);
         }
 
-        // Initializes the firebase analytics tracker
-        this.firebase = FirebaseAnalytics.getInstance(this);
-
         //For compatibility reasons, we try to set the support action bar and the action bar as well
         //One or the other always exists, depending on the version of android
         try {
@@ -97,13 +79,10 @@ public abstract class ActivityFrameWork extends AppCompatActivity {
 
     /**
      * Method that gets called whenever the activity comes into focus
-     * Google Analytics tracks whenever this is called and sends the name of the activity's
-     * analyticsName
      */
     @Override
     protected void onResume() {
         super.onResume();
-        this.firebase.setCurrentScreen(this, this.analyticsName, null);
     }
 
     /**

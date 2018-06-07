@@ -39,7 +39,7 @@ public class LeagueButton extends android.support.v7.widget.AppCompatButton {
     /**
      * Creates a new CountryLeagueButton and enables the OnclickListener
      * @param context the context from which the button will be called
-     * @param countryName the name of the league's country for analytics purposes
+     * @param countryName the name of the league's country
      * @param leagueName the name of the league
      * @param leagueLink the link to the site of the league
      */

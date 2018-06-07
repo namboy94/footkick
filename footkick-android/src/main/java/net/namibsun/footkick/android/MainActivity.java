@@ -48,7 +48,6 @@ public class MainActivity extends ActivityFrameWork {
 
         this.layoutFile = R.layout.activity_main;
         this.screenName = "Countries";
-        this.analyticsName = "Countries";
         super.onCreate(savedInstanceState);
     }
 
